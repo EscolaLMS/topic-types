@@ -91,8 +91,6 @@ class FixAssetCommand extends TestCase
 
         Artisan::call('escolalms:fix-topic-types-paths');
 
-        echo Artisan::output();
-
         Storage::disk('default')->assertMissing(['dummy.mp3', 'dummy.mp4', 'dummy.pdf', 'dummy.jpg', 'dummy.png']);
 
         Storage::disk('default')->assertExists([$audio_path, $image_path, $pdf_path, $video_path, $video_path2]);
