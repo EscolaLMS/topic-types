@@ -46,7 +46,7 @@ class FixColumnNameCommand extends TestCase
         $this->course_id = $course->id;
     }
 
-    public function test()
+    public function testService()
     {
         $this->expectException(\Exception::class);
         $this->expectException(\Error::class);
@@ -61,6 +61,30 @@ class FixColumnNameCommand extends TestCase
             // Artisan::call('escolalms:fix-type-column-name');
             $service = App::make(TopicTypeServiceContract::class);
             $service->fixTopicTypeColumnName();
+
+            $this->topic_video->refresh();
+
+            $this->assertEquals($this->topic_video->topicable->id, $this->topicable_video->id);
+        }
+    }
+
+    public function testCommand()
+    {
+        $this->expectException(\Exception::class);
+        $this->expectException(\Error::class);
+
+        $t = Topic::find($this->topic_video->id)
+            ->update(['topicable_type' => "EscolaLms\\Courses\\Models\\TopicContent\Video"]);
+
+        try {
+            $this->topic_video->refresh();
+        } finally {
+            $this->assertNull($this->topic_video->topicable);
+            Artisan::call('escolalms:fix-type-column-name');
+            /*
+            $service = App::make(TopicTypeServiceContract::class);
+            $service->fixTopicTypeColumnName();
+            */
 
             $this->topic_video->refresh();
 

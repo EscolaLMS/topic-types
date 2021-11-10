@@ -81,7 +81,7 @@ class FixAssetCommand extends TestCase
         $this->topic_video_id = $topic_video->id;
     }
 
-    public function test()
+    public function testService()
     {
         Storage::disk('default')->assertExists(['dummy.mp3', 'dummy.mp4', 'dummy.pdf', 'dummy.jpg', 'dummy.png']);
 
@@ -95,6 +95,26 @@ class FixAssetCommand extends TestCase
 
         $service = App::make(TopicTypeServiceContract::class);
         $service->fixAssetPaths();
+
+        Storage::disk('default')->assertMissing(['dummy.mp3', 'dummy.mp4', 'dummy.pdf', 'dummy.jpg', 'dummy.png']);
+
+        Storage::disk('default')->assertExists([$audio_path, $image_path, $pdf_path, $video_path, $video_path2]);
+    }
+
+    public function testCommand()
+    {
+        Storage::disk('default')->assertExists(['dummy.mp3', 'dummy.mp4', 'dummy.pdf', 'dummy.jpg', 'dummy.png']);
+
+        $audio_path = "courses/$this->course_id/topic/$this->topic_audio_id/dummy.mp3";
+        $image_path = "courses/$this->course_id/topic/$this->topic_image_id/dummy.jpg";
+        $pdf_path = "courses/$this->course_id/topic/$this->topic_pdf_id/dummy.pdf";
+        $video_path = "courses/$this->course_id/topic/$this->topic_video_id/dummy.mp4";
+        $video_path2 = "courses/$this->course_id/topic/$this->topic_video_id/dummy.png";
+
+        Artisan::call('escolalms:fix-topic-types-paths');
+
+        // $service = App::make(TopicTypeServiceContract::class);
+        // $service->fixAssetPaths();
 
         Storage::disk('default')->assertMissing(['dummy.mp3', 'dummy.mp4', 'dummy.pdf', 'dummy.jpg', 'dummy.png']);
 
