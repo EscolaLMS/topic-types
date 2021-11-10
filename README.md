@@ -1,5 +1,12 @@
 # Topic Types
 
+[![codecov](https://codecov.io/gh/EscolaLMS/topic-types/branch/main/graph/badge.svg?token=NRAN4R8AGZ)](https://codecov.io/gh/EscolaLMS/topic-types)
+[![phpunit](https://github.com/EscolaLMS/topic-types/actions/workflows/test.yml/badge.svg)](https://github.com/EscolaLMS/topic-types/actions/workflows/test.yml)
+[![downloads](https://img.shields.io/packagist/dt/escolalms/topic-types)](https://packagist.org/packages/escolalms/topic-types)
+[![downloads](https://img.shields.io/packagist/v/escolalms/topic-types)](https://packagist.org/packages/escolalms/topic-types)
+[![downloads](https://img.shields.io/packagist/l/escolalms/topic-types)](https://packagist.org/packages/escolalms/topic-types)
+[![Maintainability](https://api.codeclimate.com/v1/badges/0c9e2593fb30e2048f95/maintainability)](https://codeclimate.com/github/EscolaLMS/topic-types/maintainability)
+
 This repository stores code for EscolaLMS Content Topic types. At the moment there are the following types:
 
 - **Audio**.
