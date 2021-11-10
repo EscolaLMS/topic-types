@@ -5,7 +5,8 @@
 [![downloads](https://img.shields.io/packagist/dt/escolalms/topic-types)](https://packagist.org/packages/escolalms/topic-types)
 [![downloads](https://img.shields.io/packagist/v/escolalms/topic-types)](https://packagist.org/packages/escolalms/topic-types)
 [![downloads](https://img.shields.io/packagist/l/escolalms/topic-types)](https://packagist.org/packages/escolalms/topic-types)
-[![Maintainability](https://api.codeclimate.com/v1/badges/0c9e2593fb30e2048f95/maintainability)](https://codeclimate.com/github/EscolaLMS/topic-types/maintainability)
+[![Maintainability](https://api.codeclimate.com/v1/badges/81e4d5f0e97c892bdda8/maintainability)](https://codeclimate.com/github/EscolaLMS/topic-types/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/81e4d5f0e97c892bdda8/test_coverage)](https://codeclimate.com/github/EscolaLMS/topic-types/test_coverage)
 
 This repository stores code for EscolaLMS Content Topic types. At the moment there are the following types:
 
