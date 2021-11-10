@@ -50,12 +50,17 @@ class FixColumnNameCommand extends TestCase
     {
         $this->expectException(\Exception::class);
         $this->expectException(\Error::class);
+
+        $t = Topic::find($this->topic_video->id)
+            ->update(['topicable_type' => "EscolaLms\\Courses\\Models\\TopicContent\Video"]);
+
         try {
-            $this->topic_video->topicable_type = "EscolaLms\\Courses\\Models\\TopicContent\Video";
-            $this->topic_video->save();
             $this->topic_video->refresh();
         } finally {
-            Artisan::call('escolalms:fix-type-column-name');
+            $this->assertNull($this->topic_video->topicable);
+            // Artisan::call('escolalms:fix-type-column-name');
+            $service = App::make(TopicTypeServiceContract::class);
+            $service->fixTopicTypeColumnName();
 
             $this->topic_video->refresh();
 

@@ -28,10 +28,16 @@ use EscolaLms\TopicTypes\Models\TopicContent\OEmbed;
 use EscolaLms\TopicTypes\Models\TopicContent\PDF;
 use EscolaLms\TopicTypes\Models\TopicContent\RichText;
 use EscolaLms\TopicTypes\Models\TopicContent\Video;
+use EscolaLms\TopicTypes\Services\Contracts\TopicTypeServiceContract;
+use EscolaLms\TopicTypes\Services\TopicTypeService;
 use Illuminate\Support\ServiceProvider;
 
 class EscolaLmsTopicTypesServiceProvider extends ServiceProvider
 {
+    public $singletons = [
+        TopicTypeServiceContract::class => TopicTypeService::class,
+    ];
+
     public function boot()
     {
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');

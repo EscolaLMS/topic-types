@@ -2,7 +2,7 @@
 
 namespace EscolaLms\TopicTypes\Commands;
 
-use EscolaLms\Courses\Models\Topic;
+use EscolaLms\TopicTypes\Services\Contracts\TopicTypeServiceContract;
 use Illuminate\Console\Command;
 
 class FixAssetPathsCommand extends Command
@@ -26,19 +26,14 @@ class FixAssetPathsCommand extends Command
      *
      * @return void
      */
-    public function handle()
+    public function handle(TopicTypeServiceContract $service)
     {
-        $i = 0;
+        $files = $service->fixAssetPaths();
+
         // I hate imperative programming, but I'm so lazy ....
-        foreach (Topic::all() as $topic) {
-            $topicable = $topic->topicable;
-            if (isset($topicable)) {
-                foreach ($topic->topicable->fixAssetPaths() as $fix) {
-                    $this->info('moving file from '.$fix[0].' to '.$fix[1]);
-                    ++$i;
-                }
-            }
+        foreach ($files as $file) {
+            $this->info('moving file from '.$file[0].' to '.$file[1]);
         }
-        $this->info('The command was successful! Number of fixed Topics '.$i);
+        $this->info('The command was successful! Number of fixed Topics '.count($files));
     }
 }

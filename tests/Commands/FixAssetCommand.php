@@ -10,7 +10,9 @@ use EscolaLms\TopicTypes\Models\TopicContent\Audio;
 use EscolaLms\TopicTypes\Models\TopicContent\Image;
 use EscolaLms\TopicTypes\Models\TopicContent\PDF;
 use EscolaLms\TopicTypes\Models\TopicContent\Video;
+use EscolaLms\TopicTypes\Services\Contracts\TopicTypeServiceContract;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Storage;
 
@@ -89,7 +91,10 @@ class FixAssetCommand extends TestCase
         $video_path = "courses/$this->course_id/topic/$this->topic_video_id/dummy.mp4";
         $video_path2 = "courses/$this->course_id/topic/$this->topic_video_id/dummy.png";
 
-        Artisan::call('escolalms:fix-topic-types-paths');
+        // Artisan::call('escolalms:fix-topic-types-paths');
+
+        $service = App::make(TopicTypeServiceContract::class);
+        $service->fixAssetPaths();
 
         Storage::disk('default')->assertMissing(['dummy.mp3', 'dummy.mp4', 'dummy.pdf', 'dummy.jpg', 'dummy.png']);
 

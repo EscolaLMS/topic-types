@@ -2,7 +2,7 @@
 
 namespace EscolaLms\TopicTypes\Commands;
 
-use EscolaLms\Courses\Models\Topic;
+use EscolaLms\TopicTypes\Services\Contracts\TopicTypeServiceContract;
 use Illuminate\Console\Command;
 
 class FixTopicTypeColumnName extends Command
@@ -26,17 +26,10 @@ class FixTopicTypeColumnName extends Command
      *
      * @return void
      */
-    public function handle()
+    public function handle(TopicTypeServiceContract $service)
     {
-        $i = 0;
+        $topics = $service->fixTopicTypeColumnName();
 
-        $topics = Topic::where('topicable_type', 'like', 'EscolaLms\\\\Courses\\\\Models\\\\TopicContent%')->get();
-
-        foreach ($topics as $topic) {
-            $topic->topicable_type = str_replace('EscolaLms\Courses\Models\TopicContent', "EscolaLms\TopicTypes\Models\TopicContent", $topic->topicable_type);
-            $topic->save();
-            ++$i;
-        }
-        $this->info('The command was successful! Number of fixed Topics '.$i);
+        $this->info('The command was successful! Number of fixed Topics '.$topics);
     }
 }
