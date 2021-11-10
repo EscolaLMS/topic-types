@@ -29,4 +29,9 @@ abstract class AbstractTopicContent extends Model implements TopicContentContrac
     {
         return $this->morphOne(Topic::class, 'topicable');
     }
+
+    public function fixAssetPaths(): array
+    {
+        return [];
+    }
 }

@@ -39,4 +39,10 @@ class RichText extends AbstractTopicContent
     {
         return \EscolaLms\TopicTypes\Database\Factories\TopicContent\RichTextFactory::new();
     }
+
+    public function fixAssetPaths(): array
+    {
+        return [];
+        // // https://stackoverflow.com/questions/44227270/regex-to-parse-image-link-in-markdown
+    }
 }

@@ -69,4 +69,23 @@ class Image extends AbstractTopicFileContent
             $this->height = $sizes[1];
         }
     }
+
+    public function fixAssetPaths(): array
+    {
+        $topic = $this->topic;
+        $course = $topic->lesson->course;
+        $basename = basename($this->value);
+        $destination = sprintf('courses/%d/topic/%d/%s', $course->id, $topic->id, $basename);
+        $results = [];
+
+        if (strpos($this->value, $destination) === false) {
+            // TODO disk should be configurable
+            Storage::disk('local')->move($this->value, $destination);
+            $results[] = [$this->value, $destination];
+            $this->value = $destination;
+            $this->save();
+        }
+
+        return $results;
+    }
 }

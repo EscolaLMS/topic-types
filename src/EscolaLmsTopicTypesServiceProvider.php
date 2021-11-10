@@ -5,6 +5,8 @@ namespace EscolaLms\TopicTypes;
 use EscolaLms\Courses\Http\Resources\TopicAdminResource;
 use EscolaLms\Courses\Http\Resources\TopicResource;
 use EscolaLms\Courses\Repositories\TopicRepository;
+use EscolaLms\TopicTypes\Commands\FixAssetPathsCommand;
+use EscolaLms\TopicTypes\Commands\FixTopicTypeColumnName;
 use EscolaLms\TopicTypes\Http\Resources\TopicType\Admin\AudioResource as AdminAudioResource;
 use EscolaLms\TopicTypes\Http\Resources\TopicType\Admin\H5PResource as AdminH5PResource;
 use EscolaLms\TopicTypes\Http\Resources\TopicType\Admin\ImageResource as AdminImageResource;
@@ -33,6 +35,13 @@ class EscolaLmsTopicTypesServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
+
+        if ($this->app->runningInConsole()) {
+            $this->commands([
+                FixTopicTypeColumnName::class,
+                FixAssetPathsCommand::class,
+        ]);
+        }
     }
 
     public function register()
