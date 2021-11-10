@@ -77,10 +77,10 @@ class Image extends AbstractTopicFileContent
         $basename = basename($this->value);
         $destination = sprintf('courses/%d/topic/%d/%s', $course->id, $topic->id, $basename);
         $results = [];
+        $disk = Storage::disk('default');
 
-        if (strpos($this->value, $destination) === false) {
-            // TODO disk should be configurable
-            Storage::disk('local')->move($this->value, $destination);
+        if (strpos($this->value, $destination) === false && $disk->exists($this->value)) {
+            $disk->move($this->value, $destination);
             $results[] = [$this->value, $destination];
             $this->value = $destination;
             $this->save();
