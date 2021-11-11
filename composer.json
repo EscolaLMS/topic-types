@@ -5,7 +5,6 @@
   "require": {
     "php": ">=7.4",
     "davidbadura/faker-markdown-generator": "^1.1",
-    "escolalms/courses": "^0.3",
     "laravel/framework": ">=8.0"
   },
   "require-dev": {

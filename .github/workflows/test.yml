@@ -28,7 +28,10 @@ jobs:
         run: cp env/mysql/* .
 
       - name: Update composer
-        run: COMPOSER_ROOT_VERSION=0.9.9 composer update
+        run: composer update
+
+      - name: require courses
+        run: COMPOSER_ROOT_VERSION=0.9.9 composer require escolalms/courses
 
       - name: Clear config
         run: vendor/bin/testbench config:clear
@@ -64,7 +67,10 @@ jobs:
         run: cp env/mysql/* .
 
       - name: Update composer
-        run: COMPOSER_ROOT_VERSION=0.9.9 composer update
+        run: composer update
+
+      - name: require courses
+        run: COMPOSER_ROOT_VERSION=0.9.9 composer require escolalms/courses
 
       - name: Clear config
         run: vendor/bin/testbench config:clear
@@ -96,7 +102,10 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Update composer
-        run: COMPOSER_ROOT_VERSION=0.9.9 composer update
+        run: composer update
+
+      - name: require courses
+        run: COMPOSER_ROOT_VERSION=0.9.9 composer require escolalms/courses
 
       - name: Setup environment
         run: cp env/postgres/* .

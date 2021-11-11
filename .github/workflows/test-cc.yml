@@ -38,7 +38,7 @@ jobs:
         run: cp -r env/codecov/. .
 
       - name: Update composer
-        run: COMPOSER_ROOT_VERSION=0.9.9 composer update
+        run: composer update
 
       - name: Clear config
         run: vendor/bin/testbench config:clear
@@ -47,7 +47,10 @@ jobs:
         run: vendor/bin/testbench migrate:fresh
 
       - name: require phpunit-github-actions-printer
-        run: COMPOSER_ROOT_VERSION=0.9.9 composer require --dev mheap/phpunit-github-actions-printer
+        run: composer require --dev mheap/phpunit-github-actions-printer
+
+      - name: require courses
+        run: COMPOSER_ROOT_VERSION=0.9.9 composer require escolalms/courses
 
       - name: Run tests
         run: XDEBUG_MODE=coverage vendor/bin/phpunit  --coverage-clover coverage.xml --printer mheap\\GithubActionsReporter\\Printer
