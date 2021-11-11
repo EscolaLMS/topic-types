@@ -10,6 +10,7 @@ class TopicTypeService implements TopicTypeServiceContract
     public function fixAssetPaths(): array
     {
         $results = [];
+
         // I hate imperative programming, but I'm so lazy ....
         foreach (Topic::all() as $topic) {
             $topicable = $topic->topicable;

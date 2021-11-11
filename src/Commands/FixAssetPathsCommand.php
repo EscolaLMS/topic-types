@@ -19,7 +19,7 @@ class FixAssetPathsCommand extends Command
      *
      * @var string
      */
-    protected $description = 'Fixes all topic types paths so they are always in course/{id} folder';
+    protected $description = 'Fixes all topic types paths so they are always in courses/{id} folder';
 
     /**
      * Execute the console command.

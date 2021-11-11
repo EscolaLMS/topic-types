@@ -79,7 +79,9 @@ class Image extends AbstractTopicFileContent
         $results = [];
 
         if (strpos($this->value, $destination) === false && Storage::exists($this->value)) {
-            Storage::move($this->value, $destination);
+            if (!Storage::exists($destination)) {
+                Storage::move($this->value, $destination);
+            }
             $results[] = [$this->value, $destination];
             $this->value = $destination;
             $this->save();

@@ -68,12 +68,14 @@ class EscolaLmsTopicTypesServiceProvider extends ServiceProvider
         TopicResource::registerContentClass(RichText::class, RichTextResource::class);
         TopicResource::registerContentClass(Video::class, VideoResource::class);
 
-        TopicExportResource::registerContentClass(Audio::class, ExportAudioResource::class);
-        TopicExportResource::registerContentClass(H5P::class, ExportH5PResource::class);
-        TopicExportResource::registerContentClass(Image::class, ExportImageResource::class);
-        TopicExportResource::registerContentClass(OEmbed::class, ExportOEmbedResource::class);
-        TopicExportResource::registerContentClass(PDF::class, ExportPDFResource::class);
-        TopicExportResource::registerContentClass(RichText::class, ExportRichTextResource::class);
-        TopicExportResource::registerContentClass(Video::class, ExportVideoResource::class);
+        if (class_exists("EscolaLms\Courses\Http\Resources\TopicExportResource")) {
+            TopicExportResource::registerContentClass(Audio::class, ExportAudioResource::class);
+            TopicExportResource::registerContentClass(H5P::class, ExportH5PResource::class);
+            TopicExportResource::registerContentClass(Image::class, ExportImageResource::class);
+            TopicExportResource::registerContentClass(OEmbed::class, ExportOEmbedResource::class);
+            TopicExportResource::registerContentClass(PDF::class, ExportPDFResource::class);
+            TopicExportResource::registerContentClass(RichText::class, ExportRichTextResource::class);
+            TopicExportResource::registerContentClass(Video::class, ExportVideoResource::class);
+        }
     }
 }
