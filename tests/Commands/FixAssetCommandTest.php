@@ -28,12 +28,12 @@ class FixAssetCommand extends TestCase
         $this->user->guard_name = 'api';
         $this->user->assignRole('tutor');
 
-        Storage::fake('default');
-        Storage::disk('default')->put('dummy.mp4', 'Some dummy data');
-        Storage::disk('default')->put('dummy.mp3', 'Some dummy data');
-        Storage::disk('default')->put('dummy.jpg', 'Some dummy data');
-        Storage::disk('default')->put('dummy.png', 'Some dummy data');
-        Storage::disk('default')->put('dummy.pdf', 'Some dummy data');
+        Storage::fake(config('filesystems.default'));
+        Storage::put('dummy.mp4', 'Some dummy data');
+        Storage::put('dummy.mp3', 'Some dummy data');
+        Storage::put('dummy.jpg', 'Some dummy data');
+        Storage::put('dummy.png', 'Some dummy data');
+        Storage::put('dummy.pdf', 'Some dummy data');
 
         $course = Course::factory()->create([
             'author_id' => $this->user->id,
@@ -83,7 +83,7 @@ class FixAssetCommand extends TestCase
 
     public function testService()
     {
-        Storage::disk('default')->assertExists(['dummy.mp3', 'dummy.mp4', 'dummy.pdf', 'dummy.jpg', 'dummy.png']);
+        Storage::assertExists(['dummy.mp3', 'dummy.mp4', 'dummy.pdf', 'dummy.jpg', 'dummy.png']);
 
         $audio_path = "courses/$this->course_id/topic/$this->topic_audio_id/dummy.mp3";
         $image_path = "courses/$this->course_id/topic/$this->topic_image_id/dummy.jpg";
@@ -96,14 +96,14 @@ class FixAssetCommand extends TestCase
         $service = App::make(TopicTypeServiceContract::class);
         $service->fixAssetPaths();
 
-        Storage::disk('default')->assertMissing(['dummy.mp3', 'dummy.mp4', 'dummy.pdf', 'dummy.jpg', 'dummy.png']);
+        Storage::assertMissing(['dummy.mp3', 'dummy.mp4', 'dummy.pdf', 'dummy.jpg', 'dummy.png']);
 
-        Storage::disk('default')->assertExists([$audio_path, $image_path, $pdf_path, $video_path, $video_path2]);
+        Storage::assertExists([$audio_path, $image_path, $pdf_path, $video_path, $video_path2]);
     }
 
     public function testCommand()
     {
-        Storage::disk('default')->assertExists(['dummy.mp3', 'dummy.mp4', 'dummy.pdf', 'dummy.jpg', 'dummy.png']);
+        Storage::assertExists(['dummy.mp3', 'dummy.mp4', 'dummy.pdf', 'dummy.jpg', 'dummy.png']);
 
         $audio_path = "courses/$this->course_id/topic/$this->topic_audio_id/dummy.mp3";
         $image_path = "courses/$this->course_id/topic/$this->topic_image_id/dummy.jpg";
@@ -116,8 +116,8 @@ class FixAssetCommand extends TestCase
         // $service = App::make(TopicTypeServiceContract::class);
         // $service->fixAssetPaths();
 
-        Storage::disk('default')->assertMissing(['dummy.mp3', 'dummy.mp4', 'dummy.pdf', 'dummy.jpg', 'dummy.png']);
+        Storage::assertMissing(['dummy.mp3', 'dummy.mp4', 'dummy.pdf', 'dummy.jpg', 'dummy.png']);
 
-        Storage::disk('default')->assertExists([$audio_path, $image_path, $pdf_path, $video_path, $video_path2]);
+        Storage::assertExists([$audio_path, $image_path, $pdf_path, $video_path, $video_path2]);
     }
 }

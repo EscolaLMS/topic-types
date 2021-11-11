@@ -9,7 +9,6 @@ use EscolaLms\Courses\Tests\TestCase;
 use EscolaLms\TopicTypes\Models\TopicContent\Video;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\Storage;
 
 class FixColumnNameCommand extends TestCase
 {
@@ -22,9 +21,6 @@ class FixColumnNameCommand extends TestCase
         $this->user = config('auth.providers.users.model')::factory()->create();
         $this->user->guard_name = 'api';
         $this->user->assignRole('tutor');
-
-        Storage::fake('default');
-        Storage::disk('default')->put('dummy.mp4', 'Some dummy data');
 
         $course = Course::factory()->create([
             'author_id' => $this->user->id,
