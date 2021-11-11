@@ -7,6 +7,11 @@ use EscolaLms\TopicTypes\Services\Contracts\TopicTypeServiceContract;
 
 class TopicTypeService implements TopicTypeServiceContract
 {
+    public static function sanitizePath(string $path): string
+    {
+        return preg_replace('/courses\/[0-9]+\//', '', $path);
+    }
+
     public function fixAssetPaths(): array
     {
         $results = [];
