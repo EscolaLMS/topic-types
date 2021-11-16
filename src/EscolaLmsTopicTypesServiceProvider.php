@@ -7,6 +7,8 @@ use EscolaLms\Courses\Http\Resources\TopicResource;
 use EscolaLms\Courses\Repositories\TopicRepository;
 use EscolaLms\TopicTypes\Commands\FixAssetPathsCommand;
 use EscolaLms\TopicTypes\Commands\FixTopicTypeColumnName;
+use EscolaLms\TopicTypes\Helpers\Markdown;
+use EscolaLms\TopicTypes\Helpers\Path;
 use EscolaLms\TopicTypes\Http\Resources\TopicType\Client\AudioResource;
 use EscolaLms\TopicTypes\Http\Resources\TopicType\Client\H5PResource;
 use EscolaLms\TopicTypes\Http\Resources\TopicType\Client\ImageResource;
@@ -36,6 +38,11 @@ class EscolaLmsTopicTypesServiceProvider extends ServiceProvider
 {
     public $singletons = [
         TopicTypeServiceContract::class => TopicTypeService::class,
+    ];
+
+    public $bindings = [
+        'markdown-helper' => Markdown::class,
+        'export-path' => Path::class,
     ];
 
     public function boot()

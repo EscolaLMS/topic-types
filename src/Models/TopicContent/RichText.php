@@ -2,6 +2,7 @@
 
 namespace EscolaLms\TopicTypes\Models\TopicContent;
 
+use EscolaLms\TopicTypes\Facades\Markdown;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 /**
@@ -42,7 +43,17 @@ class RichText extends AbstractTopicContent
 
     public function fixAssetPaths(): array
     {
-        return [];
-        // // https://stackoverflow.com/questions/44227270/regex-to-parse-image-link-in-markdown
+        $topic = $this->topic;
+        $course = $topic->lesson->course;
+        $destination_prefix = sprintf('courses/%d/topic/%d/', $course->id, $topic->id);
+
+        $result = Markdown::convertImagesPathsForImageApi($this->value, $destination_prefix);
+
+        if ($result['value'] !== $this->value) {
+            $this->value = $result['value'];
+            $this->save();
+        }
+
+        return $result['results'];
     }
 }
