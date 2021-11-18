@@ -2,26 +2,28 @@
 
 namespace EscolaLms\TopicTypes;
 
-use EscolaLms\Courses\Http\Resources\TopicExportResource;
-use EscolaLms\Courses\Http\Resources\TopicResource;
-use EscolaLms\Courses\Repositories\TopicRepository;
+use EscolaLms\Courses\Facades\Topic;
 use EscolaLms\TopicTypes\Commands\FixAssetPathsCommand;
 use EscolaLms\TopicTypes\Commands\FixTopicTypeColumnName;
 use EscolaLms\TopicTypes\Helpers\Markdown;
 use EscolaLms\TopicTypes\Helpers\Path;
-use EscolaLms\TopicTypes\Http\Resources\TopicType\Client\AudioResource;
-use EscolaLms\TopicTypes\Http\Resources\TopicType\Client\H5PResource;
-use EscolaLms\TopicTypes\Http\Resources\TopicType\Client\ImageResource;
-use EscolaLms\TopicTypes\Http\Resources\TopicType\Client\OEmbedResource;
-use EscolaLms\TopicTypes\Http\Resources\TopicType\Client\PDFResource;
-use EscolaLms\TopicTypes\Http\Resources\TopicType\Client\RichTextResource;
-use EscolaLms\TopicTypes\Http\Resources\TopicType\Client\VideoResource;
+use EscolaLms\TopicTypes\Http\Resources\TopicType\Admin\AudioResource as AdminAudioResource;
+use EscolaLms\TopicTypes\Http\Resources\TopicType\Admin\H5PResource as AdminH5PResource;
+use EscolaLms\TopicTypes\Http\Resources\TopicType\Admin\ImageResource as AdminImageResource;
+use EscolaLms\TopicTypes\Http\Resources\TopicType\Admin\OEmbedResource as AdminOEmbedResource;
+use EscolaLms\TopicTypes\Http\Resources\TopicType\Admin\PDFResource as AdminPDFResource;
+use EscolaLms\TopicTypes\Http\Resources\TopicType\Admin\VideoResource as AdminVideoResource;
+use EscolaLms\TopicTypes\Http\Resources\TopicType\Client\AudioResource as ClientAudioResource;
+use EscolaLms\TopicTypes\Http\Resources\TopicType\Client\H5PResource as ClientH5PResource;
+use EscolaLms\TopicTypes\Http\Resources\TopicType\Client\ImageResource as ClientImageResource;
+use EscolaLms\TopicTypes\Http\Resources\TopicType\Client\OEmbedResource as ClientOEmbedResource;
+use EscolaLms\TopicTypes\Http\Resources\TopicType\Client\PDFResource as ClientPDFResource;
+use EscolaLms\TopicTypes\Http\Resources\TopicType\Client\VideoResource as ClientVideoResource;
 use EscolaLms\TopicTypes\Http\Resources\TopicType\Export\AudioResource as ExportAudioResource;
 use EscolaLms\TopicTypes\Http\Resources\TopicType\Export\H5PResource as ExportH5PResource;
 use EscolaLms\TopicTypes\Http\Resources\TopicType\Export\ImageResource as ExportImageResource;
 use EscolaLms\TopicTypes\Http\Resources\TopicType\Export\OEmbedResource as ExportOEmbedResource;
 use EscolaLms\TopicTypes\Http\Resources\TopicType\Export\PDFResource as ExportPDFResource;
-use EscolaLms\TopicTypes\Http\Resources\TopicType\Export\RichTextResource as ExportRichTextResource;
 use EscolaLms\TopicTypes\Http\Resources\TopicType\Export\VideoResource as ExportVideoResource;
 use EscolaLms\TopicTypes\Models\TopicContent\Audio;
 use EscolaLms\TopicTypes\Models\TopicContent\H5P;
@@ -59,30 +61,50 @@ class EscolaLmsTopicTypesServiceProvider extends ServiceProvider
 
     public function register()
     {
-        TopicRepository::registerContentClass(Audio::class);
-        TopicRepository::registerContentClass(Video::class);
-        TopicRepository::registerContentClass(Image::class);
-        TopicRepository::registerContentClass(RichText::class);
-        TopicRepository::registerContentClass(H5P::class);
-        TopicRepository::registerContentClass(OEmbed::class);
-        TopicRepository::registerContentClass(PDF::class);
+        Topic::registerContentClasses([
+            Audio::class, Video::class, Image::class, RichText::class, H5P::class, OEmbed::class, PDF::class,
+        ]);
 
-        TopicResource::registerContentClass(Audio::class, AudioResource::class);
-        TopicResource::registerContentClass(H5P::class, H5PResource::class);
-        TopicResource::registerContentClass(Image::class, ImageResource::class);
-        TopicResource::registerContentClass(OEmbed::class, OEmbedResource::class);
-        TopicResource::registerContentClass(PDF::class, PDFResource::class);
-        TopicResource::registerContentClass(RichText::class, RichTextResource::class);
-        TopicResource::registerContentClass(Video::class, VideoResource::class);
+        Topic::registerResourceClasses(Audio::class, [
+            'client' => ClientAudioResource::class,
+            'admin' => AdminAudioResource::class,
+            'export' => ExportAudioResource::class,
+        ]);
 
-        if (class_exists("EscolaLms\Courses\Http\Resources\TopicExportResource")) {
-            TopicExportResource::registerContentClass(Audio::class, ExportAudioResource::class);
-            TopicExportResource::registerContentClass(H5P::class, ExportH5PResource::class);
-            TopicExportResource::registerContentClass(Image::class, ExportImageResource::class);
-            TopicExportResource::registerContentClass(OEmbed::class, ExportOEmbedResource::class);
-            TopicExportResource::registerContentClass(PDF::class, ExportPDFResource::class);
-            TopicExportResource::registerContentClass(RichText::class, ExportRichTextResource::class);
-            TopicExportResource::registerContentClass(Video::class, ExportVideoResource::class);
-        }
+        Topic::registerResourceClasses(H5P::class, [
+            'client' => ClientH5PResource::class,
+            'admin' => AdminH5PResource::class,
+            'export' => ExportH5PResource::class,
+        ]);
+
+        Topic::registerResourceClasses(Image::class, [
+            'client' => ClientImageResource::class,
+            'admin' => AdminImageResource::class,
+            'export' => ExportImageResource::class,
+        ]);
+
+        Topic::registerResourceClasses(OEmbed::class, [
+            'client' => ClientOEmbedResource::class,
+            'admin' => AdminOEmbedResource::class,
+            'export' => ExportOEmbedResource::class,
+        ]);
+
+        Topic::registerResourceClasses(PDF::class, [
+            'client' => ClientPDFResource::class,
+            'admin' => AdminPDFResource::class,
+            'export' => ExportPDFResource::class,
+        ]);
+
+        Topic::registerResourceClasses(RichText::class, [
+            'client' => ClientRichTextResource::class,
+            'admin' => AdminRichTextResource::class,
+            'export' => ExportRichTextResource::class,
+        ]);
+
+        Topic::registerResourceClasses(Video::class, [
+            'client' => ClientVideoResource::class,
+            'admin' => AdminVideoResource::class,
+            'export' => ExportVideoResource::class,
+        ]);
     }
 }
