@@ -15,7 +15,7 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Storage;
 
-class TopicTutorCreateApiTest extends TestCase
+class TopicTypesTutorCreateApiTest extends TestCase
 {
     use DatabaseTransactions;
 

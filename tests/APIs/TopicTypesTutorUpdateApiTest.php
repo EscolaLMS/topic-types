@@ -13,7 +13,7 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Storage;
 
-class TopicTutorUpdateApiTest extends TestCase
+class TopicTypesTutorUpdateApiTest extends TestCase
 {
     use DatabaseTransactions;
 

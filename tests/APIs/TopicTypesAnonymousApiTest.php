@@ -8,7 +8,7 @@ use EscolaLms\Courses\Models\Topic;
 use EscolaLms\Courses\Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
-class TopicAnonymousApiTest extends TestCase
+class TopicTypesAnonymousApiTest extends TestCase
 {
     use DatabaseTransactions;
 
@@ -18,21 +18,21 @@ class TopicAnonymousApiTest extends TestCase
 
         $course = Course::factory()->create();
         $lesson = Lesson::factory()->create([
-            'course_id' => $course->id
+            'course_id' => $course->id,
         ]);
         $this->topic = Topic::factory()->create([
-            'lesson_id' => $lesson->id
+            'lesson_id' => $lesson->id,
         ]);
     }
 
     /**
      * @test
      */
-    public function test_read_topic()
+    public function testReadTopic()
     {
         $this->response = $this->json(
             'GET',
-            '/api/admin/topics/' . $this->topic->id
+            '/api/admin/topics/'.$this->topic->id
         );
 
         $this->response->assertStatus(401);
@@ -41,11 +41,11 @@ class TopicAnonymousApiTest extends TestCase
     /**
      * @test
      */
-    public function test_delete_topic()
+    public function testDeleteTopic()
     {
         $this->response = $this->json(
             'DELETE',
-            '/api/admin/topics/' . $this->topic->id
+            '/api/admin/topics/'.$this->topic->id
         );
 
         $this->response->assertStatus(401);
@@ -54,11 +54,11 @@ class TopicAnonymousApiTest extends TestCase
     /**
      * @test
      */
-    public function test_update_topic()
+    public function testUpdateTopic()
     {
         $this->response = $this->json(
             'POST',
-            '/api/admin/topics/' . $this->topic->id
+            '/api/admin/topics/'.$this->topic->id
         );
 
         $this->response->assertStatus(401);
@@ -67,7 +67,7 @@ class TopicAnonymousApiTest extends TestCase
     /**
      * @test
      */
-    public function test_read_topic_types()
+    public function testReadTopicTypes()
     {
         $this->response = $this->json(
             'GET',

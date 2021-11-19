@@ -9,7 +9,7 @@ use EscolaLms\Courses\Models\Topic;
 use EscolaLms\Courses\Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
-class TopicTutorApiTest extends TestCase
+class TopicTypesTutorApiTest extends TestCase
 {
     use /*ApiTestTrait,*/ DatabaseTransactions;
 
