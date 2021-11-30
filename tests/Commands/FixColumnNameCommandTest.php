@@ -10,6 +10,7 @@ use EscolaLms\TopicTypes\Models\TopicContent\Video;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\App;
+use EscolaLms\TopicTypes\Services\Contracts\TopicTypeServiceContract;
 
 class FixColumnNameCommand extends TestCase
 {
