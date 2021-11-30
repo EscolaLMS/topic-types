@@ -9,6 +9,7 @@ use EscolaLms\Courses\Tests\TestCase;
 use EscolaLms\TopicTypes\Models\TopicContent\Video;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\App;
 
 class FixColumnNameCommand extends TestCase
 {
