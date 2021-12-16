@@ -2,7 +2,7 @@
 
 namespace EscolaLms\TopicTypes\Models\TopicContent;
 
-use EscolaLms\TopicTypes\Events\VideoUpdated;
+use EscolaLms\TopicTypes\Events\EscolaLmsTopicTypeChangedTemplateEvent;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Facades\Storage;
 
@@ -83,7 +83,7 @@ class Video extends AbstractTopicFileContent
     {
         static::saved(function (Video $video) {
             if ($video->wasRecentlyCreated || $video->wasChanged('value')) {
-                event(new VideoUpdated($video));
+                event(new EscolaLmsTopicTypeChangedTemplateEvent($video));
             }
         });
     }

@@ -6,7 +6,7 @@ use EscolaLms\Courses\Database\Seeders\CoursesPermissionSeeder;
 use EscolaLms\Courses\Models\Course;
 use EscolaLms\Courses\Models\Lesson;
 use EscolaLms\Courses\Tests\TestCase;
-use EscolaLms\TopicTypes\Events\VideoUpdated;
+use EscolaLms\TopicTypes\Events\EscolaLmsTopicTypeChangedTemplateEvent;
 use EscolaLms\TopicTypes\Models\TopicContent\Audio;
 use EscolaLms\TopicTypes\Models\TopicContent\Image;
 use EscolaLms\TopicTypes\Models\TopicContent\RichText;
@@ -135,7 +135,7 @@ class TopicTypesTutorCreateApiTest extends TestCase
     public function testCreateTopicVideo()
     {
         Storage::fake('local');
-        Event::fake([VideoUpdated::class]);
+        Event::fake([EscolaLmsTopicTypeChangedTemplateEvent::class]);
 
         $file = UploadedFile::fake()->image('avatar.mp4');
 
@@ -164,7 +164,7 @@ class TopicTypesTutorCreateApiTest extends TestCase
             'value' => $path,
         ]);
 
-        Event::assertDispatched(VideoUpdated::class);
+        Event::assertDispatched(EscolaLmsTopicTypeChangedTemplateEvent::class);
     }
 
     public function testCreateTopicRichtext()

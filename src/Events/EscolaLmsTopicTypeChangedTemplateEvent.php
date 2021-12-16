@@ -6,7 +6,7 @@ use EscolaLms\TopicTypes\Models\TopicContent\Video;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class VideoUpdated
+class EscolaLmsTopicTypeChangedTemplateEvent
 {
     use Dispatchable;
     use SerializesModels;

@@ -7,7 +7,7 @@ use EscolaLms\Courses\Models\Course;
 use EscolaLms\Courses\Models\Lesson;
 use EscolaLms\Courses\Models\Topic;
 use EscolaLms\Courses\Tests\TestCase;
-use EscolaLms\TopicTypes\Events\VideoUpdated;
+use EscolaLms\TopicTypes\Events\EscolaLmsTopicTypeChangedTemplateEvent;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Event;
@@ -194,7 +194,7 @@ class TopicTypesTutorUpdateApiTest extends TestCase
     public function testUpdateTopicVideo()
     {
         Storage::fake('local');
-        Event::fake([VideoUpdated::class]);
+        Event::fake([EscolaLmsTopicTypeChangedTemplateEvent::class]);
 
         $file = UploadedFile::fake()->create('avatar.mp4');
 
@@ -224,7 +224,7 @@ class TopicTypesTutorUpdateApiTest extends TestCase
             'value' => $path,
         ]);
 
-        Event::assertDispatched(VideoUpdated::class);
+        Event::assertDispatched(EscolaLmsTopicTypeChangedTemplateEvent::class);
     }
 
     public function testUpdateTopicRichtext()
