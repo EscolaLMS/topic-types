@@ -83,7 +83,7 @@ class Video extends AbstractTopicFileContent
     {
         static::saved(function (Video $video) {
             if ($video->wasRecentlyCreated || $video->wasChanged('value')) {
-                event(new EscolaLmsTopicTypeChangedTemplateEvent($video));
+                event(new EscolaLmsTopicTypeChangedTemplateEvent(auth()->user(), $video));
             }
         });
     }
