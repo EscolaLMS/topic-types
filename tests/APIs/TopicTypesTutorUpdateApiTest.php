@@ -45,10 +45,7 @@ class TopicTypesTutorUpdateApiTest extends TestCase
         Event::fake();
         $file = UploadedFile::fake()->image('avatar.jpg');
 
-        $this->response = $this->withHeaders([
-            'Content' => 'multipart/form-data',
-            'Accept' => 'application/json',
-        ])->actingAs($this->user, 'api')->post(
+        $this->response = $this->actingAs($this->user, 'api')->postJson(
             '/api/admin/topics/'.$this->topic->id,
             [
                 'title' => 'Hello World',
