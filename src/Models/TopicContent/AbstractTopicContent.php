@@ -22,6 +22,8 @@ abstract class AbstractTopicContent extends Model implements TopicContentContrac
 
     protected static function booted()
     {
+        parent::booted();
+        Auth::check();
         $user = Auth::user();
         static::saved(function (AbstractTopicContent $topicContent) use ($user) {
             if ($topicContent->wasRecentlyCreated || $topicContent->wasChanged('value')) {
