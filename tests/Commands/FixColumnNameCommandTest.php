@@ -5,7 +5,7 @@ namespace Tests\Commands;
 use EscolaLms\Courses\Models\Course;
 use EscolaLms\Courses\Models\Lesson;
 use EscolaLms\Courses\Models\Topic;
-use EscolaLms\Courses\Tests\TestCase;
+use EscolaLms\TopicTypes\Tests\TestCase;
 use EscolaLms\TopicTypes\Models\TopicContent\Video;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Artisan;
@@ -46,7 +46,7 @@ class FixColumnNameCommand extends TestCase
 
     public function testService()
     {
-        // TODO FIXME 
+        // TODO FIXME
         // $this->expectException(\Exception::class);
         // $this->expectException(\Error::class);
 
@@ -56,7 +56,7 @@ class FixColumnNameCommand extends TestCase
         try {
             $this->topic_video->refresh();
         } finally {
-            // TODO FIXME 
+            // TODO FIXME
             // $this->assertNull($this->topic_video->topicable);
             // Artisan::call('escolalms:fix-type-column-name');
             $service = App::make(TopicTypeServiceContract::class);
@@ -70,7 +70,7 @@ class FixColumnNameCommand extends TestCase
 
     public function testCommand()
     {
-        // TODO FIXME 
+        // TODO FIXME
         // $this->expectException(\Exception::class);
         // $this->expectException(\Error::class);
 
@@ -80,7 +80,7 @@ class FixColumnNameCommand extends TestCase
         try {
             $this->topic_video->refresh();
         } finally {
-            // TODO FIXME 
+            // TODO FIXME
             // $this->assertNull($this->topic_video->topicable);
             Artisan::call('escolalms:fix-type-column-name');
             /*

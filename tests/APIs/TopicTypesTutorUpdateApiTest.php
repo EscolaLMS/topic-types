@@ -6,8 +6,9 @@ use EscolaLms\Courses\Database\Seeders\CoursesPermissionSeeder;
 use EscolaLms\Courses\Models\Course;
 use EscolaLms\Courses\Models\Lesson;
 use EscolaLms\Courses\Models\Topic;
-use EscolaLms\Courses\Tests\TestCase;
+use EscolaLms\TopicTypes\Tests\TestCase;
 use EscolaLms\TopicTypes\Events\EscolaLmsTopicTypeChangedTemplateEvent;
+use EscolaLms\TopicTypes\Models\TopicContent\Image;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Event;
@@ -52,7 +53,7 @@ class TopicTypesTutorUpdateApiTest extends TestCase
             [
                 'title' => 'Hello World',
                 'lesson_id' => $this->topic->lesson_id,
-                'topicable_type' => 'EscolaLms\TopicTypes\Models\TopicContent\Image',
+                'topicable_type' => Image::class,
                 'value' => $file,
             ]
         );
