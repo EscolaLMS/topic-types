@@ -7,6 +7,7 @@ use EscolaLms\TopicTypes\Events\EscolaLmsTopicTypeChangedTemplateEvent;
 use EscolaLms\TopicTypes\Models\Contracts\TopicContentContract;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
+use Illuminate\Support\Facades\Auth;
 
 abstract class AbstractTopicContent extends Model implements TopicContentContract
 {
@@ -21,9 +22,10 @@ abstract class AbstractTopicContent extends Model implements TopicContentContrac
 
     protected static function booted()
     {
-        static::saved(function (AbstractTopicContent $topicContent) {
-            if (($topicContent->wasRecentlyCreated || $topicContent->wasChanged('value'))) {
-                event(new EscolaLmsTopicTypeChangedTemplateEvent(auth()->user(), $topicContent));
+        $user = Auth::user();
+        static::saved(function (AbstractTopicContent $topicContent) use ($user) {
+            if ($topicContent->wasRecentlyCreated || $topicContent->wasChanged('value')) {
+                event(new EscolaLmsTopicTypeChangedTemplateEvent($user, $topicContent));
             }
         });
     }
