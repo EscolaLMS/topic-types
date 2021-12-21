@@ -79,15 +79,6 @@ class Video extends AbstractTopicFileContent
         return null;
     }
 
-    protected static function booted()
-    {
-        static::saved(function (Video $video) {
-            if ($video->wasRecentlyCreated || $video->wasChanged('value')) {
-                event(new EscolaLmsTopicTypeChangedTemplateEvent(auth()->user(), $video));
-            }
-        });
-    }
-
     public function fixAssetPaths(): array
     {
         $topic = $this->topic;

@@ -2,6 +2,7 @@
 
 namespace EscolaLms\TopicTypes\Events;
 
+use EscolaLms\TopicTypes\Models\TopicContent\AbstractTopicContent;
 use EscolaLms\TopicTypes\Models\TopicContent\Video;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Foundation\Events\Dispatchable;
@@ -12,18 +13,18 @@ class EscolaLmsTopicTypeChangedTemplateEvent
     use Dispatchable;
     use SerializesModels;
 
-    private Video $video;
+    private AbstractTopicContent $topicContent;
     private Authenticatable $user;
 
-    public function __construct(Authenticatable $user, Video $video)
+    public function __construct(Authenticatable $user, AbstractTopicContent $topicContent)
     {
-        $this->video = $video;
+        $this->topicContent = $topicContent;
         $this->user = $user;
     }
 
-    public function getVideo(): Video
+    public function getTopicContent(): AbstractTopicContent
     {
-        return $this->video;
+        return $this->topicContent;
     }
 
     public function getUser(): Authenticatable

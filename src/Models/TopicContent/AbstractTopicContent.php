@@ -3,6 +3,7 @@
 namespace EscolaLms\TopicTypes\Models\TopicContent;
 
 use EscolaLms\Courses\Models\Topic;
+use EscolaLms\TopicTypes\Events\EscolaLmsTopicTypeChangedTemplateEvent;
 use EscolaLms\TopicTypes\Models\Contracts\TopicContentContract;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
@@ -17,6 +18,15 @@ abstract class AbstractTopicContent extends Model implements TopicContentContrac
         'id' => 'integer',
         'value' => 'string',
     ];
+
+    protected static function booted()
+    {
+        static::saved(function (AbstractTopicContent $topicContent) {
+            if (($topicContent->wasRecentlyCreated || $topicContent->wasChanged('value')) && auth()->user()) {
+                event(new EscolaLmsTopicTypeChangedTemplateEvent(auth()->user(), $topicContent));
+            }
+        });
+    }
 
     public static function rules(): array
     {
