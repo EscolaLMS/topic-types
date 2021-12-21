@@ -42,7 +42,7 @@ class TopicTypesTutorUpdateApiTest extends TestCase
     public function testUpdateTopicImage()
     {
         Storage::fake('local');
-//        Event::fake();
+        Event::fake(EscolaLmsTopicTypeChangedTemplateEvent::class);
         $file = UploadedFile::fake()->image('avatar.jpg');
 
         $this->response = $this->withHeaders([
@@ -70,15 +70,15 @@ class TopicTypesTutorUpdateApiTest extends TestCase
         $this->assertDatabaseHas('topic_images', [
             'value' => $path,
         ]);
-//        Event::assertDispatched(EscolaLmsTopicTypeChangedTemplateEvent::class, function ($event) {
-//            return $event->getUser() === $this->user && $event->getTopicContent();
-//        });
+        Event::assertDispatched(EscolaLmsTopicTypeChangedTemplateEvent::class, function ($event) {
+            return $event->getUser() === $this->user && $event->getTopicContent();
+        });
     }
 
     public function testUpdateTopicAudio()
     {
         Storage::fake('local');
-        Event::fake();
+        Event::fake(EscolaLmsTopicTypeChangedTemplateEvent::class);
         $file = UploadedFile::fake()->create('avatar.mp3');
 
         $this->response = $this->withHeaders([
@@ -113,7 +113,7 @@ class TopicTypesTutorUpdateApiTest extends TestCase
     public function testUpdateTopicAudioWithNewFile()
     {
         Storage::fake('local');
-        Event::fake();
+        Event::fake(EscolaLmsTopicTypeChangedTemplateEvent::class);
         $file = UploadedFile::fake()->create('avatar.mp3');
 
         $this->response = $this->withHeaders([
@@ -204,7 +204,7 @@ class TopicTypesTutorUpdateApiTest extends TestCase
     public function testUpdateTopicVideo()
     {
         Storage::fake('local');
-        Event::fake();
+        Event::fake(EscolaLmsTopicTypeChangedTemplateEvent::class);
 
         $file = UploadedFile::fake()->create('avatar.mp4');
 
@@ -241,7 +241,7 @@ class TopicTypesTutorUpdateApiTest extends TestCase
 
     public function testUpdateTopicRichtext()
     {
-        Event::fake();
+        Event::fake(EscolaLmsTopicTypeChangedTemplateEvent::class);
         $this->response = $this->withHeaders([
             'Content' => 'application/x-www-form-urlencoded',
             'Accept' => 'application/json',
@@ -273,7 +273,7 @@ class TopicTypesTutorUpdateApiTest extends TestCase
     public function testUpdateTopicPdf()
     {
         Storage::fake('local');
-        Event::fake();
+        Event::fake(EscolaLmsTopicTypeChangedTemplateEvent::class);
         $file = UploadedFile::fake()->create('test.pdf');
 
         $this->response = $this->withHeaders([
@@ -326,7 +326,7 @@ class TopicTypesTutorUpdateApiTest extends TestCase
 
     public function testUpdateTopicWithJson()
     {
-        Event::fake();
+        Event::fake(EscolaLmsTopicTypeChangedTemplateEvent::class);
         $this->response = $this->withHeaders([
             'Content' => 'application/x-www-form-urlencoded',
             'Accept' => 'application/json',
