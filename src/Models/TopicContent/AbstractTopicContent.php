@@ -22,7 +22,7 @@ abstract class AbstractTopicContent extends Model implements TopicContentContrac
     protected static function booted()
     {
         static::saved(function (AbstractTopicContent $topicContent) {
-            if (($topicContent->wasRecentlyCreated || $topicContent->wasChanged('value')) && auth()->user()) {
+            if (($topicContent->wasRecentlyCreated || $topicContent->wasChanged('value'))) {
                 event(new EscolaLmsTopicTypeChangedTemplateEvent(auth()->user(), $topicContent));
             }
         });
