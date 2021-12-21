@@ -24,8 +24,11 @@ abstract class AbstractTopicContent extends Model implements TopicContentContrac
     {
         $user = Auth::user();
         static::saved(function (AbstractTopicContent $topicContent) use ($user) {
-            if ($topicContent->wasRecentlyCreated || $topicContent->wasChanged('value')){
-                var_dump($user->id);
+            if (
+                ($topicContent->wasRecentlyCreated || $topicContent->wasChanged('value')) &&
+                $user
+            )
+            {
                 event(new EscolaLmsTopicTypeChangedTemplateEvent($user, $topicContent));
             }
         });
