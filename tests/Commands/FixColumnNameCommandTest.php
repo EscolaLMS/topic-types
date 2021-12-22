@@ -5,7 +5,7 @@ namespace Tests\Commands;
 use EscolaLms\Courses\Models\Course;
 use EscolaLms\Courses\Models\Lesson;
 use EscolaLms\Courses\Models\Topic;
-use EscolaLms\TopicTypes\Tests\TestCase;
+use EscolaLms\Courses\Tests\TestCase;
 use EscolaLms\TopicTypes\Models\TopicContent\Video;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Artisan;
