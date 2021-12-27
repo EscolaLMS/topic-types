@@ -12,7 +12,7 @@ class VideoResource extends JsonResource implements TopicTypeResourceContract
     {
         return [
             'value' => TopicTypeService::sanitizePath($this->value),
-            'poster' => TopicTypeService::sanitizePath($this->poster),
+            'poster' => $this->poster ? TopicTypeService::sanitizePath($this->poster) : null,
             'width' => $this->width,
             'height' => $this->height,
             'created_at' => $this->created_at,
