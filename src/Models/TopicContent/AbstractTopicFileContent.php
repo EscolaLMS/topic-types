@@ -2,7 +2,7 @@
 
 namespace EscolaLms\TopicTypes\Models\TopicContent;
 
-use EscolaLms\TopicTypes\Models\Contracts\TopicFileContentContract;
+use EscolaLms\Courses\Models\Contracts\TopicFileContentContract;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;

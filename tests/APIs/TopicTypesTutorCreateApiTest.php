@@ -5,6 +5,7 @@ namespace Tests\APIs;
 use EscolaLms\Courses\Database\Seeders\CoursesPermissionSeeder;
 use EscolaLms\Courses\Models\Course;
 use EscolaLms\Courses\Models\Lesson;
+use EscolaLms\TopicTypes\Models\TopicContent\Video;
 use EscolaLms\TopicTypes\Tests\TestCase;
 use EscolaLms\TopicTypes\Events\EscolaLmsTopicTypeChangedTemplateEvent;
 use EscolaLms\TopicTypes\Models\TopicContent\Audio;
@@ -146,7 +147,7 @@ class TopicTypesTutorCreateApiTest extends TestCase
             [
                 'title' => 'Hello World',
                 'lesson_id' => $this->lesson->id,
-                'topicable_type' => 'EscolaLms\TopicTypes\Models\TopicContent\Video',
+                'topicable_type' => Video::class,
                 'value' => $file,
             ]
         );
@@ -200,7 +201,7 @@ class TopicTypesTutorCreateApiTest extends TestCase
             '/api/admin/topics',
             [
                 'title' => 'Hello World',
-                'topicable_type' => 'EscolaLms\TopicTypes\Models\TopicContent\RichText',
+                'topicable_type' => RichText::class,
                 'value' => 'lorem ipsum',
             ]
         );
@@ -217,7 +218,7 @@ class TopicTypesTutorCreateApiTest extends TestCase
             [
                 'title' => 'Hello World',
                 'lesson_id' => $this->lesson->id,
-                'topicable_type' => 'EscolaLms\TopicTypes\Models\TopicContent\Image',
+                'topicable_type' => Image::class,
                 'value' => 'file',
             ]
         );
@@ -234,7 +235,7 @@ class TopicTypesTutorCreateApiTest extends TestCase
             [
                 'title' => 'Hello World',
                 'lesson_id' => $this->lesson->id,
-                'topicable_type' => 'EscolaLms\TopicTypes\Models\TopicContent\Audio',
+                'topicable_type' => Audio::class,
                 'value' => 'file',
             ]
         );
@@ -253,7 +254,7 @@ class TopicTypesTutorCreateApiTest extends TestCase
             [
                 'title' => 'Hello World',
                 'lesson_id' => $this->lesson->id,
-                'topicable_type' => 'EscolaLms\TopicTypes\Models\TopicContent\Video',
+                'topicable_type' => Video::class,
                 'value' => 'file',
             ]
         );

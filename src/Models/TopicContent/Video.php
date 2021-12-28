@@ -2,7 +2,6 @@
 
 namespace EscolaLms\TopicTypes\Models\TopicContent;
 
-use EscolaLms\TopicTypes\Events\EscolaLmsTopicTypeChangedTemplateEvent;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Facades\Storage;
 

@@ -51,7 +51,7 @@ class FixColumnNameCommand extends TestCase
         // $this->expectException(\Error::class);
 
         $t = Topic::find($this->topic_video->id)
-            ->update(['topicable_type' => "EscolaLms\\Courses\\Models\\TopicContent\Video"]);
+            ->update(['topicable_type' => Video::class]);
 
         try {
             $this->topic_video->refresh();
@@ -75,7 +75,7 @@ class FixColumnNameCommand extends TestCase
         // $this->expectException(\Error::class);
 
         $t = Topic::find($this->topic_video->id)
-            ->update(['topicable_type' => "EscolaLms\\Courses\\Models\\TopicContent\Video"]);
+            ->update(['topicable_type' => Video::class]);
 
         try {
             $this->topic_video->refresh();

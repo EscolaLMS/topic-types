@@ -62,6 +62,7 @@ class EscolaLmsTopicTypesServiceProvider extends ServiceProvider
             Audio::class, Video::class, Image::class, RichText::class, H5P::class, OEmbed::class, PDF::class,
         ]);
 
+
         Topic::registerResourceClasses(Audio::class, [
             'client' => ClientAudioResource::class,
             'admin' => AdminAudioResource::class,
