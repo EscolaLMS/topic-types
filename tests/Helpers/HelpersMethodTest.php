@@ -2,8 +2,8 @@
 
 namespace Tests\Helpers;
 
-use EscolaLms\Cart\Models\Course;
 use EscolaLms\Courses\Database\Factories\LessonFactory;
+use EscolaLms\Courses\Models\Course;
 use EscolaLms\Courses\Models\Topic;
 use EscolaLms\TopicTypes\Facades\Markdown;
 use EscolaLms\TopicTypes\Tests\TestCase;
