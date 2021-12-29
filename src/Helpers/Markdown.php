@@ -54,7 +54,9 @@ class Markdown
                 }
 
                 return str_replace($match[2], $destination, $match[0]);
-            }, $input);
+            },
+            $input
+        );
 
         return [
             'value' => $value,
@@ -99,8 +101,7 @@ class Markdown
         $destination = sprintf($destinationPrefix . '%s', Str::slug(basename($filepath)));
         Storage::put($destination, file_get_contents($filepath));
         $pathInfo = pathinfo($destination);
-        if (
-            !array_key_exists(self::EXT_STRING_NAME, $pathInfo) ||
+        if (!array_key_exists(self::EXT_STRING_NAME, $pathInfo) ||
             (
                 array_key_exists(self::EXT_STRING_NAME, $pathInfo) &&
                 !in_array(
