@@ -21,7 +21,8 @@ abstract class AbstractTopicFileContent extends AbstractTopicContent implements 
                     return in_array('file', $fieldRules) || in_array('image', $fieldRules);
                 }
 
-                return strpos('file', $fieldRules) !== false || strpos('image', $fieldRules) !== false;
+                return  strpos('file', $fieldRules) !== false ||
+                        strpos('image', $fieldRules) !== false;
             })
             ->keys()
             ->toArray();
@@ -30,10 +31,9 @@ abstract class AbstractTopicFileContent extends AbstractTopicContent implements 
     public function generateStoragePath(?string $basePath = null): string
     {
         if (empty($basePath)) {
+            $basePath = 'topic-content/' . $this->getKey() . '/';
             if ($this->topic) {
                 $basePath = $this->topic->storage_directory;
-            } else {
-                $basePath = 'topic-content/' . $this->getKey() . '/';
             }
         }
 

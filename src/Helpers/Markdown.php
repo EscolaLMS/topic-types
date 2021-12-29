@@ -10,17 +10,29 @@ class Markdown
     public const EXT_STRING_NAME = 'extension';
     public const QUERY_STRING_NAME = 'query';
 
+    public const SCHEME_STRING_NAME = 'scheme';
+    public const PORT_STRING_NAME = 'port';
+    public const USER_STRING_NAME = 'user';
+    public const PASS_STRING_NAME = 'pass';
+    public const FRAGMENT_STRING_NAME = 'fragment';
+
     protected function unParseUrl(array $parsedUrl): string
     {
-        $parsedUrl['scheme'] = isset($parsedUrl['scheme']) ? $parsedUrl['scheme'] . '://' : '';
-        $parsedUrl['port'] = isset($parsedUrl['port']) ? ':' . $parsedUrl['port'] : '';
-        $user = isset($parsedUrl['user']) ? $parsedUrl['user'] : '';
-        $pass = isset($parsedUrl['pass']) ? ':' . $parsedUrl['pass'] : '';
-        $parsedUrl['pass'] = ($user || $pass) ? "$pass@"  : '';
+        $parsedUrl[self::SCHEME_STRING_NAME] = isset($parsedUrl[self::SCHEME_STRING_NAME]) ?
+            $parsedUrl[self::SCHEME_STRING_NAME] . '://' :
+            '';
+        $parsedUrl[self::PORT_STRING_NAME] = isset($parsedUrl[self::PORT_STRING_NAME]) ?
+            ':' . $parsedUrl[self::PORT_STRING_NAME] :
+            '';
+        $user = isset($parsedUrl[self::USER_STRING_NAME]) ? $parsedUrl[self::USER_STRING_NAME] : '';
+        $pass = isset($parsedUrl[self::PASS_STRING_NAME]) ? ':' . $parsedUrl[self::PASS_STRING_NAME] : '';
+        $parsedUrl[self::PASS_STRING_NAME] = ($user || $pass) ? "$pass@"  : '';
         $parsedUrl[self::QUERY_STRING_NAME] = isset($parsedUrl[self::QUERY_STRING_NAME]) ?
             '?' . urldecode($parsedUrl[self::QUERY_STRING_NAME]) :
             '';
-        $parsedUrl['fragment'] = isset($parsedUrl['fragment']) ? '#' . $parsedUrl['fragment'] : '';
+        $parsedUrl[self::FRAGMENT_STRING_NAME] = isset($parsedUrl[self::FRAGMENT_STRING_NAME]) ?
+            '#' . $parsedUrl[self::FRAGMENT_STRING_NAME] :
+            '';
         return implode($parsedUrl);
     }
 
@@ -31,18 +43,18 @@ class Markdown
         $value = preg_replace_callback(
             '/!\[(.*)\]\s?\((.*)()(.*)\)/',
             function ($match) use ($destinationPrefix, &$results) {
-            $filepath = $match[2] ?? null;
-            $basename = basename($filepath);
-            $destination = sprintf($destinationPrefix . '%s', $basename);
-            // three scenarios
-            if (strpos($filepath, 'api/images/img') !== false) {
-                $results[] = $this->convertFilePathByApiPattern($destinationPrefix, $filepath, $destination);
-            } elseif (strpos($filepath, 'http') !== false) {
-                $results[] = $this->convertFilePathByHttp($destinationPrefix, $filepath, $destination);
-            }
+                $filepath = $match[2] ?? null;
+                $basename = basename($filepath);
+                $destination = sprintf($destinationPrefix . '%s', $basename);
+                // three scenarios
+                if (strpos($filepath, 'api/images/img') !== false) {
+                    $results[] = $this->convertFilePathByApiPattern($destinationPrefix, $filepath, $destination);
+                } elseif (strpos($filepath, 'http') !== false) {
+                    $results[] = $this->convertFilePathByHttp($destinationPrefix, $filepath, $destination);
+                }
 
-            return str_replace($match[2], $destination, $match[0]);
-        }, $input);
+                return str_replace($match[2], $destination, $match[0]);
+            }, $input);
 
         return [
             'value' => $value,
@@ -77,6 +89,7 @@ class Markdown
                 )),
             ]
         ));
+
         return $results;
     }
 
@@ -86,12 +99,14 @@ class Markdown
         $destination = sprintf($destinationPrefix . '%s', Str::slug(basename($filepath)));
         Storage::put($destination, file_get_contents($filepath));
         $pathInfo = pathinfo($destination);
-        if (!array_key_exists(self::EXT_STRING_NAME, $pathInfo) ||
+        if (
+            !array_key_exists(self::EXT_STRING_NAME, $pathInfo) ||
             (
                 array_key_exists(self::EXT_STRING_NAME, $pathInfo) &&
                 !in_array(
                     $pathInfo[self::EXT_STRING_NAME],
-                    ['apng', 'avif', 'gif', 'jpg', 'jpeg', 'jfif', 'pjpeg', 'pjp', 'png', 'svg', 'webp'])
+                    ['apng', 'avif', 'gif', 'jpg', 'jpeg', 'jfif', 'pjpeg', 'pjp', 'png', 'svg', 'webp']
+                )
             )
         ) {
             $info = getimagesize(Storage::path($destination));
@@ -103,6 +118,7 @@ class Markdown
             $destination = $destination . '.' . $ext[1];
         }
         $destination = url('api/images/img?path=') . $destination;
+
         return [$filepath, $destination];
     }
 

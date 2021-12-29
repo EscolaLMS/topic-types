@@ -33,7 +33,11 @@ class TopicTypeService implements TopicTypeServiceContract
         $index = 0;
         $topics = Topic::where('topicable_type', 'like', 'EscolaLms\\\\Courses\\\\Models\\\\TopicContent%')->get();
         foreach ($topics as $topic) {
-            $topic->topicable_type = str_replace('EscolaLms\Courses\Models\TopicContent', "EscolaLms\TopicTypes\Models\TopicContent", $topic->topicable_type);
+            $topic->topicable_type = str_replace(
+                'EscolaLms\Courses\Models\TopicContent',
+                "EscolaLms\TopicTypes\Models\TopicContent",
+                $topic->topicable_type
+            );
             $topic->save();
             ++$index;
         }
