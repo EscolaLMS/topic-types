@@ -7,7 +7,7 @@ use Illuminate\Support\Str;
 
 class Markdown
 {
-    private function unparseUrl($parsedUrl)
+    protected function unparseUrl($parsedUrl)
     {
         $scheme = isset($parsedUrl['scheme']) ? $parsedUrl['scheme'] . '://' : '';
         $host = isset($parsedUrl['host']) ? $parsedUrl['host'] : '';
