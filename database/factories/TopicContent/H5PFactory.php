@@ -26,8 +26,7 @@ class H5PFactory extends Factory
         }
 
         return [
-            //'topic_id' => $this->faker->word,
-            'value' => isset($h5p) ? $h5p ::inRandomOrder()->first()->id : 0,
+            'value' => isset($h5p) ? $h5p::inRandomOrder()->first()->id : 0,
             // ID to h5p content
         ];
     }

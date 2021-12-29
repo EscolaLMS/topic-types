@@ -40,36 +40,29 @@ class CoursesWithTopicSeeder extends Seeder
     {
         $this->faker = $this->makeFaker();
         $this->faker->addProvider(new FakerProvider($this->faker));
-
         $randomTags = [$this->faker->name, $this->faker->name, $this->faker->name, $this->faker->name, $this->faker->name, $this->faker->name];
-
         if (class_exists(EscolaLms\HeadlessH5P\Models\H5PContent::class)) {
             $hasH5P = H5PContent::first() !== null;
         } else {
             $hasH5P = false;
         }
-
         $path = storage_path('app/public/tutor_avatar.jpg');
-
-        copy(__DIR__.'/avatar.jpg', $path);
-
+        copy(__DIR__ . '/avatar.jpg', $path);
         $tutors = User::role('tutor')->get();
-
         foreach ($tutors as $tutor) {
             $tutor->update([
                 'path_avatar' => 'tutor_avatar.jpg',
                 'bio' => $this->faker->markdown(),
             ]);
         }
-
         $courses = Course::factory()
-            ->count(rand(5, 10))
+            ->count(random_int(5, 10))
             ->afterCreating(function (Course $course) use ($hasH5P) {
                 Lesson::factory()
-                    ->count(rand(2, 5))
+                    ->count(random_int(2, 5))
                     ->afterCreating(function (Lesson $lesson) use ($hasH5P) {
                         Topic::factory()
-                            ->count(rand(4, 8))
+                            ->count(random_int(4, 8))
                             ->afterCreating(function (Topic $topic) use ($hasH5P) {
                                 $content = $this->getRandomRichContent($hasH5P);
                                 if (method_exists($content, 'updatePath')) {
@@ -77,17 +70,14 @@ class CoursesWithTopicSeeder extends Seeder
                                 } else {
                                     $content = $content->create();
                                 }
-
                                 $topic->topicable()->associate($content)->save();
-
-                                TopicResource::factory()->count(rand(1, 3))->forTopic($topic)->create();
+                                TopicResource::factory()->count(random_int(1, 3))->forTopic($topic)->create();
                             })
                             ->create(['lesson_id' => $lesson->id]);
                     })
                     ->create(['course_id' => $course->id]);
             })
             ->create();
-
         /** @var Course $course */
         foreach ($courses as $course) {
             $this->seedTags($course, $randomTags);

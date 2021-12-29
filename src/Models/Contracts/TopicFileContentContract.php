@@ -10,7 +10,7 @@ interface TopicFileContentContract
 
     public function getUrlAttribute(): string;
 
-    public function generateStoragePath(?string $base_path = null): string;
+    public function generateStoragePath(?string $basePath = null): string;
 
     public function getStoragePathFinalSegment(): string;
 

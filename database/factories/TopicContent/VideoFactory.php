@@ -30,17 +30,19 @@ class VideoFactory extends Factory
         ];
     }
 
-    public function updatePath($id)
+    public function updatePath(int $videoId)
     {
-        return $this->state(function (array $attributes) use ($id) {
+        return $this->state(function (array $attributes) use ($videoId) {
             $word = $this->faker->word;
-            $filename = "topic/$id/".$word.'.mp4';
-            $filename_poster = "topic/$id/".$word.'.jpg';
+            $filename = "topic/$videoId/".$word.'.mp4';
+            $filename_poster = "topic/$videoId/".$word.'.jpg';
             $dest = storage_path("app/public/$filename");
             $dest_poster = storage_path("app/public/$filename_poster");
             $destDir = dirname($dest);
-            if (!is_dir($destDir)) {
-                mkdir($destDir, 0777, true);
+            if (!is_dir($destDir) ||
+                (mkdir($destDir, 0777, true) && !is_dir($destDir))
+            ) {
+                throw new \RuntimeException(sprintf('Directory "%s" was not created', $destDir));
             }
             copy(realpath(__DIR__.'/../../mocks/1.mp4'), $dest);
             copy(realpath(__DIR__.'/../../mocks/poster.jpg'), $dest_poster);

@@ -2,6 +2,7 @@
 
 namespace EscolaLms\TopicTypes\Database\Factories\TopicContent;
 
+use EscolaLms\TopicTypes\Database\Factories\TopicContent\Components\FileHelper;
 use EscolaLms\TopicTypes\Models\TopicContent\PDF;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -26,20 +27,10 @@ class PdfFactory extends Factory
         ];
     }
 
-    public function updatePath($id)
+    public function updatePath(int $pdfId)
     {
-        return $this->state(function (array $attributes) use ($id) {
-            $filename = "topic/$id/{$this->faker->word}.pdf";
-            $dest = storage_path("app/public/$filename");
-            $destDir = dirname($dest);
-            if (!is_dir($destDir)) {
-                mkdir($destDir, 0777, true);
-            }
-            copy(realpath(__DIR__.'/../../mocks/1.pdf'), $dest);
-
-            return [
-                'value' => $filename,
-            ];
+        return $this->state(function (array $attributes) use ($pdfId) {
+            return FileHelper::uploadFile($pdfId, $this->faker->word, 'pdf');
         });
     }
 }

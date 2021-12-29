@@ -2,6 +2,7 @@
 
 namespace EscolaLms\TopicTypes\Database\Factories\TopicContent;
 
+use EscolaLms\TopicTypes\Database\Factories\TopicContent\Components\FileHelper;
 use EscolaLms\TopicTypes\Models\TopicContent\Audio;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -28,20 +29,10 @@ class AudioFactory extends Factory
         ];
     }
 
-    public function updatePath($id)
+    public function updatePath(int $audioId)
     {
-        return $this->state(function (array $attributes) use ($id) {
-            $filename = "topic/$id/".$this->faker->word.'.mp3';
-            $dest = storage_path("app/public/$filename");
-            $destDir = dirname($dest);
-            if (!is_dir($destDir)) {
-                mkdir($destDir, 0777, true);
-            }
-            copy(realpath(__DIR__.'/../../mocks/1.mp3'), $dest);
-
-            return [
-                'value' => $filename,
-            ];
+        return $this->state(function (array $attributes) use ($audioId) {
+            return FileHelper::uploadFile($audioId, $this->faker->word, 'mp3');
         });
     }
 }

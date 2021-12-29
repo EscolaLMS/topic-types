@@ -50,55 +50,45 @@ class EscolaLmsTopicTypesServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
-
         if ($this->app->runningInConsole()) {
             $this->commands([
                 FixTopicTypeColumnName::class,
                 FixAssetPathsCommand::class,
-        ]);
+            ]);
         }
-
         Topic::registerContentClasses([
             Audio::class, Video::class, Image::class, RichText::class, H5P::class, OEmbed::class, PDF::class,
         ]);
-
-
         Topic::registerResourceClasses(Audio::class, [
             'client' => ClientAudioResource::class,
             'admin' => AdminAudioResource::class,
             'export' => ExportAudioResource::class,
         ]);
-
         Topic::registerResourceClasses(H5P::class, [
             'client' => ClientH5PResource::class,
             'admin' => AdminH5PResource::class,
             'export' => ExportH5PResource::class,
         ]);
-
         Topic::registerResourceClasses(Image::class, [
             'client' => ClientImageResource::class,
             'admin' => AdminImageResource::class,
             'export' => ExportImageResource::class,
         ]);
-
         Topic::registerResourceClasses(OEmbed::class, [
             'client' => ClientOEmbedResource::class,
             'admin' => AdminOEmbedResource::class,
             'export' => ExportOEmbedResource::class,
         ]);
-
         Topic::registerResourceClasses(PDF::class, [
             'client' => ClientPDFResource::class,
             'admin' => AdminPDFResource::class,
             'export' => ExportPDFResource::class,
         ]);
-
         Topic::registerResourceClasses(RichText::class, [
             'client' => ClientRichTextResource::class,
             'admin' => AdminRichTextResource::class,
             'export' => ExportRichTextResource::class,
         ]);
-
         Topic::registerResourceClasses(Video::class, [
             'client' => ClientVideoResource::class,
             'admin' => AdminVideoResource::class,

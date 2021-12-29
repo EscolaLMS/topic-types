@@ -15,28 +15,29 @@ abstract class AbstractTopicFileContent extends AbstractTopicContent implements 
     public function getFileKeyNames(): array
     {
         return Collection::make($this->rules())
-            ->filter(function ($field_rules) {
-                if (is_array($field_rules)) {
-                    return in_array('file', $field_rules) || in_array('image', $field_rules);
+            ->filter(function ($fieldRules) {
+                if (is_array($fieldRules)) {
+
+                    return in_array('file', $fieldRules) || in_array('image', $fieldRules);
                 }
 
-                return strpos('file', $field_rules) !== false || strpos('image', $field_rules) !== false;
+                return strpos('file', $fieldRules) !== false || strpos('image', $fieldRules) !== false;
             })
             ->keys()
             ->toArray();
     }
 
-    public function generateStoragePath(?string $base_path = null): string
+    public function generateStoragePath(?string $basePath = null): string
     {
-        if (empty($base_path)) {
+        if (empty($basePath)) {
             if ($this->topic) {
-                $base_path = $this->topic->storage_directory;
+                $basePath = $this->topic->storage_directory;
             } else {
-                $base_path = 'topic-content/'.$this->getKey().'/';
+                $basePath = 'topic-content/' . $this->getKey() . '/';
             }
         }
 
-        return $base_path.$this->getStoragePathFinalSegment();
+        return $basePath . $this->getStoragePathFinalSegment();
     }
 
     public function getUrlAttribute(): string
@@ -46,9 +47,9 @@ abstract class AbstractTopicFileContent extends AbstractTopicContent implements 
 
     public function storeUploadsFromRequest(FormRequest $request, ?string $path = null): self
     {
-        foreach ($this->getFileKeyNames() as $file_key) {
-            if ($request->hasFile($file_key)) {
-                $this->storeUpload($request->file($file_key), $file_key, $path);
+        foreach ($this->getFileKeyNames() as $fileKey) {
+            if ($request->hasFile($fileKey)) {
+                $this->storeUpload($request->file($fileKey), $fileKey, $path);
             }
         }
         $this->processUploadedFiles();
