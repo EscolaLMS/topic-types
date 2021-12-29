@@ -7,26 +7,30 @@ use Illuminate\Support\Str;
 
 class Markdown
 {
-    protected function unparseUrl($parsedUrl)
+    public const EXT_STRING_NAME = 'extension';
+    public const QUERY_STRING_NAME = 'query';
+
+    protected function unParseUrl(array $parsedUrl): string
     {
-        $scheme = isset($parsedUrl['scheme']) ? $parsedUrl['scheme'] . '://' : '';
-        $host = isset($parsedUrl['host']) ? $parsedUrl['host'] : '';
-        $port = isset($parsedUrl['port']) ? ':'.$parsedUrl['port'] : '';
+        $parsedUrl['scheme'] = isset($parsedUrl['scheme']) ? $parsedUrl['scheme'] . '://' : '';
+        $parsedUrl['port'] = isset($parsedUrl['port']) ? ':' . $parsedUrl['port'] : '';
         $user = isset($parsedUrl['user']) ? $parsedUrl['user'] : '';
         $pass = isset($parsedUrl['pass']) ? ':' . $parsedUrl['pass'] : '';
-        $pass = ($user || $pass) ? "$pass@" : '';
-        $path = isset($parsedUrl['path']) ? $parsedUrl['path'] : '';
-        $query = isset($parsedUrl['query']) ? '?' . urldecode($parsedUrl['query']) : '';
-        $fragment = isset($parsedUrl['fragment']) ? '#' . $parsedUrl['fragment'] : '';
-
-        return "$scheme$user$pass$host$port$path$query$fragment";
+        $parsedUrl['pass'] = ($user || $pass) ? "$pass@"  : '';
+        $parsedUrl[self::QUERY_STRING_NAME] = isset($parsedUrl[self::QUERY_STRING_NAME]) ?
+            '?' . urldecode($parsedUrl[self::QUERY_STRING_NAME]) :
+            '';
+        $parsedUrl['fragment'] = isset($parsedUrl['fragment']) ? '#' . $parsedUrl['fragment'] : '';
+        return implode($parsedUrl);
     }
 
     public function convertImagesPathsForImageApi(string $input, string $destinationPrefix): array
     {
         $results = [];
         // https://gist.github.com/rohit00082002/2773368 might be better
-        $value = preg_replace_callback('/!\[(.*)\]\s?\((.*)()(.*)\)/', function ($match) use ($destinationPrefix, &$results) {
+        $value = preg_replace_callback(
+            '/!\[(.*)\]\s?\((.*)()(.*)\)/',
+            function ($match) use ($destinationPrefix, &$results) {
             $filepath = $match[2] ?? null;
             $basename = basename($filepath);
             $destination = sprintf($destinationPrefix . '%s', $basename);
@@ -46,12 +50,15 @@ class Markdown
         ];
     }
 
-    private function convertFilePathByApiPattern(string $destinationPrefix, string $filepath, string &$destination): array
-    {
+    private function convertFilePathByApiPattern(
+        string $destinationPrefix,
+        string $filepath,
+        string &$destination
+    ): array {
         // image is served by images API, default, just checking path
         $string = $filepath;
         $pattern = parse_url($string);
-        parse_str($pattern['query'], $vars);
+        parse_str($pattern[self::QUERY_STRING_NAME], $vars);
         $filepath = $vars['path'];
         $basename = basename($filepath);
         $destination = sprintf($destinationPrefix . '%s', $basename);
@@ -59,10 +66,10 @@ class Markdown
             Storage::disk('public')->move($filepath, $destination);
         }
         $results = [$filepath, $destination];
-        $destination = $this->unparseUrl(array_merge(
+        $destination = $this->unParseUrl(array_merge(
             $pattern,
             [
-                'query' => http_build_query(array_merge(
+                self::QUERY_STRING_NAME => http_build_query(array_merge(
                     $vars,
                     [
                         'path' => urldecode($destination),
@@ -79,7 +86,14 @@ class Markdown
         $destination = sprintf($destinationPrefix . '%s', Str::slug(basename($filepath)));
         Storage::put($destination, file_get_contents($filepath));
         $pathInfo = pathinfo($destination);
-        if (!array_key_exists('extension', $pathInfo) || (array_key_exists('extension', $pathInfo) && !in_array($pathInfo['extension'], ['apng', 'avif', 'gif', 'jpg', 'jpeg', 'jfif', 'pjpeg', 'pjp', 'png', 'svg', 'webp']))) {
+        if (!array_key_exists(self::EXT_STRING_NAME, $pathInfo) ||
+            (
+                array_key_exists(self::EXT_STRING_NAME, $pathInfo) &&
+                !in_array(
+                    $pathInfo[self::EXT_STRING_NAME],
+                    ['apng', 'avif', 'gif', 'jpg', 'jpeg', 'jfif', 'pjpeg', 'pjp', 'png', 'svg', 'webp'])
+            )
+        ) {
             $info = getimagesize(Storage::path($destination));
             $ext = explode('/', $info['mime']);
             if (Storage::exists($destination . '.' . $ext[1])) {
@@ -99,7 +113,7 @@ class Markdown
             if (strpos($filepath, 'api/images/img') !== false) {
                 // image is served by images API, default, just checking path
                 $pattern = parse_url($filepath);
-                parse_str($pattern['query'], $vars);
+                parse_str($pattern[self::QUERY_STRING_NAME], $vars);
                 $destination = $vars['path'];
 
                 return str_replace($match[2], $destination, $match[0]);
