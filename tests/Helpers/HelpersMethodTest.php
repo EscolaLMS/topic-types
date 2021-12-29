@@ -2,8 +2,8 @@
 
 namespace Tests\Helpers;
 
-use EscolaLms\Courses\Database\Factories\LessonFactory;
 use EscolaLms\Courses\Models\Course;
+use EscolaLms\Courses\Models\Lesson;
 use EscolaLms\Courses\Models\Topic;
 use EscolaLms\TopicTypes\Facades\Markdown;
 use EscolaLms\TopicTypes\Tests\TestCase;
@@ -14,7 +14,7 @@ class HelpersMethodTest extends TestCase
     {
         parent::setUp();
         Course::factory()->create();
-        LessonFactory::factory()->create();
+        Lesson::factory()->create();
         $this->topic = Topic::factory()->create();
     }
 
