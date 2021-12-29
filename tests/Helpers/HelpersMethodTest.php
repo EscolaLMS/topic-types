@@ -7,27 +7,34 @@ use EscolaLms\Courses\Models\Lesson;
 use EscolaLms\Courses\Models\Topic;
 use EscolaLms\TopicTypes\Facades\Markdown;
 use EscolaLms\TopicTypes\Tests\TestCase;
-use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 
 class HelpersMethodTest extends TestCase
 {
     protected function setUp(): void
     {
         parent::setUp();
-        Course::factory()->create();
-        Lesson::factory()->create();
-        $this->topic = Topic::factory()->create();
+        $this->course = Course::factory()->create();
+        $this->lesson = Lesson::factory([
+            'course_id' => $this->course->getKey()
+        ])->create();
+        $this->topic = Topic::factory([
+            'lesson_id' => $this->lesson->getKey()
+        ])->create();
     }
 
-    public function testConvertImagesMethos()
+    public function testConvertImagesApi()
     {
         $topic = $this->topic;
         $course = $topic->lesson->course;
-        $markdown = new MarkdownTest();
-        $parseUrl = $markdown->verifyParseUrl([
-            "path" => "api/images/img",
-            "query" => "path=courses%2F{$course->id}%2Ftopic%2F{$topic->id}%2Ftest"
-        ]);
-        $this->assertTrue($parseUrl === "api/images/img?path=courses/{$course->id}/topic/{$topic->id}/test");
+        $file = 'test.jpg';
+        $destinationPrefix = sprintf('course/%d/topic/%d/', $course->id, $topic->id);
+        Storage::disk('public')->makeDirectory($destinationPrefix);
+        copy(__DIR__ . '/test.jpg', Storage::disk('public')->path($destinationPrefix . $file));
+        $result = Markdown::convertImagesPathsForImageApi("![Image] (api/images/img?path={$file})", $destinationPrefix);
+        $this->assertArrayHasKey('results', $result);
+        $this->assertTrue(is_array($result['results']));
+        $this->assertTrue(isset($result['results'][0]) && is_array($result['results'][0]));
     }
+
 }
