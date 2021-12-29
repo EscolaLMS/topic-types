@@ -8,6 +8,7 @@ use EscolaLms\Courses\Models\Topic;
 use EscolaLms\TopicTypes\Facades\Markdown;
 use EscolaLms\TopicTypes\Tests\TestCase;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\UploadedFile;
 
 class HelpersMethodTest extends TestCase
 {
@@ -36,5 +37,4 @@ class HelpersMethodTest extends TestCase
         $this->assertTrue(is_array($result['results']));
         $this->assertTrue(isset($result['results'][0]) && is_array($result['results'][0]));
     }
-
 }
