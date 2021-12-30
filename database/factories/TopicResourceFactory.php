@@ -40,7 +40,6 @@ class TopicResourceFactory extends Factory
             $destDir = dirname($dest);
             if (!is_dir($destDir) || (!mkdir($destDir, 0777, true) && !is_dir($destDir))) {
                 throw new DirectoryNotFoundException(sprintf('Directory "%s" was not created', $destDir));
-
             }
             copy(realpath(__DIR__.'/../mocks/1.pdf'), $dest);
 
