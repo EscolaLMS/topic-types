@@ -17,6 +17,7 @@ use EscolaLms\TopicTypes\Models\TopicContent\Image;
 use EscolaLms\TopicTypes\Models\TopicContent\OEmbed;
 use EscolaLms\TopicTypes\Models\TopicContent\PDF;
 use EscolaLms\TopicTypes\Models\TopicContent\RichText;
+use EscolaLms\TopicTypes\Models\TopicContent\ScormSco;
 use EscolaLms\TopicTypes\Models\TopicContent\Video;
 use Illuminate\Database\Seeder;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -27,7 +28,7 @@ class CoursesWithTopicSeeder extends Seeder
 
     private function getRandomRichContent($withH5P = false)
     {
-        $classes = [RichText::factory(), Audio::factory(), Video::factory(), Image::factory(), OEmbed::factory(), PDF::factory()];
+        $classes = [RichText::factory(), Audio::factory(), Video::factory(), Image::factory(), OEmbed::factory(), PDF::factory(), ScormSco::factory()];
 
         if ($withH5P) {
             $classes[] = H5P::factory();
