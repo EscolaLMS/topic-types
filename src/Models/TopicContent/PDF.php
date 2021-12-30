@@ -3,7 +3,6 @@
 namespace EscolaLms\TopicTypes\Models\TopicContent;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Support\Facades\Storage;
 
 /**
  * @OA\Schema(

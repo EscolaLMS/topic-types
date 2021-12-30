@@ -3,7 +3,7 @@
 namespace EscolaLms\TopicTypes\Database\Factories\TopicContent\Components;
 
 use Illuminate\Support\Facades\Storage;
-use RuntimeException;
+use Symfony\Component\Finder\Exception\DirectoryNotFoundException;
 
 class FileHelper
 {
@@ -13,7 +13,7 @@ class FileHelper
         $dest = Storage::disk('public')->path($filename);
         $destDir = dirname($dest);
         if (!is_dir($destDir) || (mkdir($destDir, 0777, true) && !is_dir($destDir))) {
-            throw new RuntimeException(sprintf('Directory "%s" was not created', $destDir));
+            throw new DirectoryNotFoundException(sprintf('Directory "%s" was not created', $destDir));
         }
         copy(realpath(__DIR__.'/../../mocks/1.' . $ext), $dest);
 

@@ -97,7 +97,6 @@ class Markdown
 
     private function convertFilePathByHttp(string $destinationPrefix, string $filepath, string &$destination): array
     {
-        //  remote file, download and switch to image API;
         $destination = sprintf($destinationPrefix . '%s', Str::slug(basename($filepath)));
         Storage::put($destination, file_get_contents($filepath));
         $pathInfo = pathinfo($destination);

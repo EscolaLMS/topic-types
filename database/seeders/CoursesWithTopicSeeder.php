@@ -81,10 +81,9 @@ class CoursesWithTopicSeeder extends Seeder
                             ->afterCreating(function (Topic $topic) use ($hasH5P) {
                                 $content = $this->getRandomRichContent($hasH5P);
                                 if (method_exists($content, 'updatePath')) {
-                                    $content = $content->updatePath($topic->id)->create();
-                                } else {
-                                    $content = $content->create();
+                                    $content = $content->updatePath($topic->id);
                                 }
+                                $content = $content->create();
                                 $topic->topicable()->associate($content)->save();
                                 TopicResource::factory()->count(random_int(1, 3))->forTopic($topic)->create();
                             })

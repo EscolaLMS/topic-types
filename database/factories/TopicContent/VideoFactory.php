@@ -5,7 +5,7 @@ namespace EscolaLms\TopicTypes\Database\Factories\TopicContent;
 use EscolaLms\TopicTypes\Models\TopicContent\Video;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Storage;
-use RuntimeException;
+use Symfony\Component\Finder\Exception\DirectoryNotFoundException;
 
 class VideoFactory extends Factory
 {
@@ -42,7 +42,7 @@ class VideoFactory extends Factory
             $destPoster = Storage::disk('public')->path($filenamePoster);
             $destDir = dirname($dest);
             if (!is_dir($destDir) || (mkdir($destDir, 0777, true) && !is_dir($destDir))) {
-                throw new RuntimeException(sprintf('Directory "%s" was not created', $destDir));
+                throw new DirectoryNotFoundException(sprintf('Directory "%s" was not created', $destDir));
             }
             copy(realpath(__DIR__.'/../../mocks/1.mp4'), $dest);
             copy(realpath(__DIR__.'/../../mocks/poster.jpg'), $destPoster);

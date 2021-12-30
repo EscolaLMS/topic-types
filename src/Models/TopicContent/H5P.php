@@ -7,7 +7,7 @@ use EscolaLms\TopicTypes\Database\Factories\TopicContent\H5PFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Storage;
-use RuntimeException;
+use Symfony\Component\Finder\Exception\DirectoryNotFoundException;
 
 /**
  * @OA\Schema(
@@ -59,7 +59,9 @@ class H5P extends AbstractTopicContent
         $destinationPath = $disk->path($destination);
         $concurrentDirectory = dirname($destinationPath);
         if (!mkdir($concurrentDirectory, 0777, true) && !is_dir($concurrentDirectory)) {
-            throw new RuntimeException(sprintf('Directory "%s" was not created', $concurrentDirectory));
+            throw new DirectoryNotFoundException(
+                sprintf('Directory "%s" was not created', $concurrentDirectory)
+            );
         }
         copy($filepath, $destinationPath);
         return [[$filepath, $destinationPath]];
