@@ -22,7 +22,7 @@ class ScormScoFactory extends Factory
     public function definition()
     {
         return [
-            'value' => $this->faker->uuid,
+            'value' => 0,
         ];
     }
 }
