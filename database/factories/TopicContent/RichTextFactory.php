@@ -2,6 +2,7 @@
 
 namespace EscolaLms\TopicTypes\Database\Factories\TopicContent;
 
+use DavidBadura\FakerMarkdownGenerator\FakerProvider;
 use EscolaLms\TopicTypes\Database\Factories\TopicContent\Enums\TextHelperEnum;
 use EscolaLms\TopicTypes\Models\TopicContent\RichText;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -29,7 +30,7 @@ class RichTextFactory extends Factory
      */
     public function definition()
     {
-        $this->faker->addProvider(new \DavidBadura\FakerMarkdownGenerator\FakerProvider($this->faker));
+        $this->faker->addProvider(new FakerProvider($this->faker));
         return [
             //'topic_id' => $this->faker->word,
             'value' => $this->faker->markdown,

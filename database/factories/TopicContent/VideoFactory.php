@@ -4,6 +4,8 @@ namespace EscolaLms\TopicTypes\Database\Factories\TopicContent;
 
 use EscolaLms\TopicTypes\Models\TopicContent\Video;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Facades\Storage;
+use RuntimeException;
 
 class VideoFactory extends Factory
 {
@@ -19,7 +21,7 @@ class VideoFactory extends Factory
      *
      * @return array
      */
-    public function definition()
+    public function definition(): array
     {
         return [
             //'topic_id' => $this->faker->word,
@@ -30,26 +32,24 @@ class VideoFactory extends Factory
         ];
     }
 
-    public function updatePath(int $videoId)
+    public function updatePath(int $videoId): VideoFactory
     {
-        return $this->state(function (array $attributes) use ($videoId) {
+        return $this->state(function () use ($videoId) {
             $word = $this->faker->word;
-            $filename = "topic/$videoId/".$word.'.mp4';
-            $filename_poster = "topic/$videoId/".$word.'.jpg';
-            $dest = storage_path("app/public/$filename");
-            $dest_poster = storage_path("app/public/$filename_poster");
+            $filename = "topic/$videoId/" . $word . '.mp4';
+            $filenamePoster = "topic/$videoId/" . $word . '.jpg';
+            $dest = Storage::disk('public')->path($filename);
+            $destPoster = Storage::disk('public')->path($filenamePoster);
             $destDir = dirname($dest);
-            if (!is_dir($destDir) ||
-                (mkdir($destDir, 0777, true) && !is_dir($destDir))
-            ) {
-                throw new \RuntimeException(sprintf('Directory "%s" was not created', $destDir));
+            if (!is_dir($destDir) || (mkdir($destDir, 0777, true) && !is_dir($destDir))) {
+                throw new RuntimeException(sprintf('Directory "%s" was not created', $destDir));
             }
             copy(realpath(__DIR__.'/../../mocks/1.mp4'), $dest);
-            copy(realpath(__DIR__.'/../../mocks/poster.jpg'), $dest_poster);
+            copy(realpath(__DIR__.'/../../mocks/poster.jpg'), $destPoster);
 
             return [
                 'value' => $filename,
-                'poster' => $filename_poster,
+                'poster' => $filenamePoster,
             ];
         });
     }

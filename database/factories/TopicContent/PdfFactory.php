@@ -29,7 +29,7 @@ class PdfFactory extends Factory
 
     public function updatePath(int $pdfId)
     {
-        return $this->state(function (array $attributes) use ($pdfId) {
+        return $this->state(function () use ($pdfId) {
             return FileHelper::uploadFile($pdfId, $this->faker->word, 'pdf');
         });
     }

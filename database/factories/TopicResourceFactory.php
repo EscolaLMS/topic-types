@@ -5,6 +5,8 @@ namespace EscolaLms\TopicTypes\Database\Factories;
 use EscolaLms\Courses\Models\Topic;
 use EscolaLms\Courses\Models\TopicResource;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Facades\Storage;
+use RuntimeException;
 
 class TopicResourceFactory extends Factory
 {
@@ -30,14 +32,14 @@ class TopicResourceFactory extends Factory
 
     public function forTopic(Topic $topic)
     {
-        return $this->state(function (array $attributes) use ($topic) {
-            $topic_id = $topic->getKey();
-            $path = "public/topic/{$topic_id}/resources/";
+        return $this->state(function () use ($topic) {
+            $topicId = $topic->getKey();
+            $path = "topic/{$topicId}/resources/";
             $filename = "{$this->faker->word}.pdf";
-            $dest = storage_path('app/'.$path.$filename);
+            $dest = Storage::disk('public')->path($path . $filename);
             $destDir = dirname($dest);
-            if (!is_dir($destDir)) {
-                mkdir($destDir, 0777, true);
+            if (!is_dir($destDir) || (!mkdir($destDir, 0777, true) && !is_dir($destDir))) {
+                throw new RuntimeException(sprintf('Directory "%s" was not created', $destDir));
             }
             copy(realpath(__DIR__.'/../mocks/1.pdf'), $dest);
 

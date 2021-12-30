@@ -19,17 +19,27 @@ use EscolaLms\TopicTypes\Models\TopicContent\PDF;
 use EscolaLms\TopicTypes\Models\TopicContent\RichText;
 use EscolaLms\TopicTypes\Models\TopicContent\ScormSco;
 use EscolaLms\TopicTypes\Models\TopicContent\Video;
+use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Seeder;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\Storage;
 
 class CoursesWithTopicSeeder extends Seeder
 {
     use WithFaker;
 
-    private function getRandomRichContent($withH5P = false)
+    private function getRandomRichContent(bool $withH5P = false): Factory
     {
-        $classes = [RichText::factory(), Audio::factory(), Video::factory(), Image::factory(), OEmbed::factory(), PDF::factory(), ScormSco::factory()];
-
+        $classes = [
+            RichText::factory(),
+            Audio::factory(),
+            Video::factory(),
+            Image::factory(),
+            OEmbed::factory(),
+            PDF::factory(),
+            ScormSco::factory(),
+        ];
         if ($withH5P) {
             $classes[] = H5P::factory();
         }
@@ -41,13 +51,19 @@ class CoursesWithTopicSeeder extends Seeder
     {
         $this->faker = $this->makeFaker();
         $this->faker->addProvider(new FakerProvider($this->faker));
-        $randomTags = [$this->faker->name, $this->faker->name, $this->faker->name, $this->faker->name, $this->faker->name, $this->faker->name];
+        $randomTags = [
+            $this->faker->name,
+            $this->faker->name,
+            $this->faker->name,
+            $this->faker->name,
+            $this->faker->name,
+            $this->faker->name
+        ];
+        $hasH5P = false;
         if (class_exists(EscolaLms\HeadlessH5P\Models\H5PContent::class)) {
             $hasH5P = H5PContent::first() !== null;
-        } else {
-            $hasH5P = false;
         }
-        $path = storage_path('app/public/tutor_avatar.jpg');
+        $path = Storage::disk('public')->path('tutor_avatar.jpg');
         copy(__DIR__ . '/avatar.jpg', $path);
         $tutors = User::role('tutor')->get();
         foreach ($tutors as $tutor) {
@@ -86,7 +102,7 @@ class CoursesWithTopicSeeder extends Seeder
         }
     }
 
-    private function seedTags($model, $randomTags)
+    private function seedTags(Model $model, array $randomTags): void
     {
         for ($i = 0; $i < 3; ++$i) {
             Tag::create([
