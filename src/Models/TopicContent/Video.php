@@ -2,6 +2,7 @@
 
 namespace EscolaLms\TopicTypes\Models\TopicContent;
 
+use EscolaLms\TopicTypes\Database\Factories\TopicContent\VideoFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Facades\Storage;
 
@@ -61,7 +62,7 @@ class Video extends AbstractTopicFileContent
 
     protected static function newFactory()
     {
-        return \EscolaLms\TopicTypes\Database\Factories\TopicContent\VideoFactory::new();
+        return VideoFactory::new();
     }
 
     public function getStoragePathFinalSegment(): string
@@ -82,26 +83,33 @@ class Video extends AbstractTopicFileContent
     {
         $topic = $this->topic;
         $course = $topic->lesson->course;
-        $destination_value = sprintf('courses/%d/topic/%d/%s', $course->id, $topic->id, basename($this->value));
-        $destination_poster = sprintf('courses/%d/topic/%d/%s', $course->id, $topic->id, basename($this->poster));
+        $destinationValue = sprintf(
+            'courses/%d/topic/%d/%s',
+            $course->id,
+            $topic->id,
+            basename($this->value)
+        );
+        $destinationPoster = sprintf(
+            'courses/%d/topic/%d/%s',
+            $course->id,
+            $topic->id,
+            basename($this->poster)
+        );
         $results = [];
-
-        if (strpos($this->value, $destination_value) === false && Storage::exists($this->value)) {
-            if (!Storage::exists($destination_value)) {
-                Storage::move($this->value, $destination_value);
+        if (strpos($this->value, $destinationValue) === false && Storage::exists($this->value)) {
+            if (!Storage::exists($destinationValue)) {
+                Storage::move($this->value, $destinationValue);
             }
-            $results[] = [$this->value, $destination_value];
-            $this->value = $destination_value;
+            $results[] = [$this->value, $destinationValue];
+            $this->value = $destinationValue;
         }
-
-        if (strpos($this->poster, $destination_poster) === false && Storage::exists($this->poster)) {
-            if (!Storage::exists($destination_poster)) {
-                Storage::move($this->poster, $destination_poster);
+        if (strpos($this->poster, $destinationPoster) === false && Storage::exists($this->poster)) {
+            if (!Storage::exists($destinationPoster)) {
+                Storage::move($this->poster, $destinationPoster);
             }
-            $results[] = [$this->poster, $destination_poster];
-            $this->poster = $destination_poster;
+            $results[] = [$this->poster, $destinationPoster];
+            $this->poster = $destinationPoster;
         }
-
         if (count($results)) {
             $this->save();
         }

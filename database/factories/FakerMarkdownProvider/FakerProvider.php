@@ -10,22 +10,17 @@ class FakerProvider extends FakerMarkdownGeneratorFakerProvider
     public static function markdown()
     {
         $parts = [];
-
         do {
             $parts[] = self::markdownH1();
-
             if (self::randomDigit() > 3) {
                 $parts[] = self::markdownP();
             }
-
             if (self::randomDigit() > 3) {
                 $parts[] = self::markdownBlockquote();
             }
-
             if (self::randomDigit() > 3) {
                 $parts[] = self::markdownBulletedList();
             }
-
             if (self::randomDigit() > 3) {
                 $parts[] = self::markdownNumberedList();
             }

@@ -31,7 +31,7 @@ class AudioFactory extends Factory
 
     public function updatePath(int $audioId)
     {
-        return $this->state(function (array $attributes) use ($audioId) {
+        return $this->state(function () use ($audioId) {
             return FileHelper::uploadFile($audioId, $this->faker->word, 'mp3');
         });
     }

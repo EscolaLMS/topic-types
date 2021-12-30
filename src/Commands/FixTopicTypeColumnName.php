@@ -19,7 +19,8 @@ class FixTopicTypeColumnName extends Command
      *
      * @var string
      */
-    protected $description = 'Fixes Topicable DBs column name from old `EscolaLms\Courses\Models\TopicContent\XXX` to `EscolaLms\TopicTypes\Models\TopicContent\XXX`';
+    protected $description = 'Fixes Topicable DBs column name from old
+    `EscolaLms\Courses\Models\TopicContent\XXX` to `EscolaLms\TopicTypes\Models\TopicContent\XXX`';
 
     /**
      * Execute the console command.
@@ -29,7 +30,6 @@ class FixTopicTypeColumnName extends Command
     public function handle(TopicTypeServiceContract $service)
     {
         $topics = $service->fixTopicTypeColumnName();
-
-        $this->info('The command was successful! Number of fixed Topics '.$topics);
+        $this->info('The command was successful! Number of fixed Topics ' . $topics);
     }
 }

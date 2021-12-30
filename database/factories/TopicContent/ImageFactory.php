@@ -32,7 +32,7 @@ class ImageFactory extends Factory
 
     public function updatePath(int $imageId)
     {
-        return $this->state(function (array $attributes) use ($imageId) {
+        return $this->state(function () use ($imageId) {
             return FileHelper::uploadFile($imageId, $this->faker->word);
         });
     }
