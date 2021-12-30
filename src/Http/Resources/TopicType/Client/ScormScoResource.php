@@ -1,6 +1,6 @@
 <?php
 
-namespace EscolaLms\TopicTypes\Http\Resources\TopicType\Admin;
+namespace EscolaLms\TopicTypes\Http\Resources\TopicType\Client;
 
 use EscolaLms\TopicTypes\Http\Resources\TopicType\Contacts\TopicTypeResourceContract;
 use Illuminate\Http\Resources\Json\JsonResource;
