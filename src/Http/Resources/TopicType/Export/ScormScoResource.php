@@ -4,6 +4,7 @@ namespace EscolaLms\TopicTypes\Http\Resources\TopicType\Export;
 
 use EscolaLms\TopicTypes\Http\Resources\TopicType\Contacts\TopicTypeResourceContract;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Peopleaps\Scorm\Model\ScormScoModel;
 
 class ScormScoResource extends JsonResource implements TopicTypeResourceContract
 {
@@ -15,7 +16,7 @@ class ScormScoResource extends JsonResource implements TopicTypeResourceContract
         return [
             'id' => $this->id,
             'value' => $this->value,
-            'uuid' => $this->uuid,
+            'uuid' => ScormScoModel::find($this->value)->uuid,
             'scorm_file' => $destination,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
