@@ -44,7 +44,6 @@ class ScormSco extends AbstractTopicContent
         return \EscolaLms\TopicTypes\Database\Factories\TopicContent\ScormScoFactory::new();
     }
 
-
     public function fixAssetPaths(): array
     {
         $topic = $this->topic;
