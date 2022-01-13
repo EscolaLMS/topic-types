@@ -23,6 +23,7 @@ class ScormScoFactory extends Factory
     {
         return [
             'value' => 0,
+            'uuid' => $this->faker->uuid
         ];
     }
 }
