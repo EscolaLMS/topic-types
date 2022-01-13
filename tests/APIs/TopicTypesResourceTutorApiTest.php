@@ -10,6 +10,7 @@ use EscolaLms\TopicTypes\Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class TopicTypesResourceTutorApiTest extends TestCase
 {
@@ -47,7 +48,7 @@ class TopicTypesResourceTutorApiTest extends TestCase
 
         $data = json_decode($this->response->getContent());
 
-        $fullpath = $data->data->path.$data->data->name;
+        $fullpath = $data->data->path;
 
         Storage::disk('local')->assertExists($fullpath);
 
@@ -74,7 +75,7 @@ class TopicTypesResourceTutorApiTest extends TestCase
 
         $data = json_decode($this->response->getContent());
 
-        $fullpath = $data->data->path.$data->data->name;
+        $fullpath = $data->data->path;
 
         Storage::disk('local')->assertExists($fullpath);
 
@@ -115,7 +116,7 @@ class TopicTypesResourceTutorApiTest extends TestCase
 
         $data = json_decode($this->response->getContent());
         $id = $data->data->id;
-        $fullpath = $data->data->path.$data->data->name;
+        $fullpath = $data->data->path;
 
         Storage::disk('local')->assertExists($fullpath);
         $this->assertDatabaseHas('topic_resources', [
@@ -148,7 +149,7 @@ class TopicTypesResourceTutorApiTest extends TestCase
 
         $data = json_decode($this->response->getContent());
         $id = $data->data->id;
-        $fullpath = $data->data->path.$data->data->name;
+        $fullpath = $data->data->path;
 
         Storage::disk('local')->assertExists($fullpath);
         $this->assertDatabaseHas('topic_resources', [
@@ -161,7 +162,7 @@ class TopicTypesResourceTutorApiTest extends TestCase
         ]);
         $this->response->assertStatus(200);
 
-        $newpath = $data->data->path.'test-renamed.pdf';
+        $newpath = Str::replace('test', 'test-renamed', $data->data->path);
 
         Storage::disk('local')->assertMissing($fullpath);
         Storage::disk('local')->assertExists($newpath);
