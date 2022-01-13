@@ -4,7 +4,6 @@ namespace EscolaLms\TopicTypes\Models\TopicContent;
 
 use EscolaLms\Scorm\Services\Contracts\ScormServiceContract;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Peopleaps\Scorm\Model\ScormScoModel;
 use Symfony\Component\Finder\Exception\DirectoryNotFoundException;
@@ -56,20 +55,19 @@ class ScormSco extends AbstractTopicContent
         $service = app(ScormServiceContract::class);
         $zipPath = $service->zipScorm(ScormScoModel::find($this->value)->scorm->getKey());
 
-        $disk = Storage::disk('local'); // this is always 'local' for scorm // TODO check
-        if ($disk->exists($destination)) {
-            $disk->delete($destination);
+        if (Storage::exists($destination)) {
+            Storage::delete($destination);
         }
-        $destinationPath = $disk->path($destination);
+        $destinationPath = $destination;
         $concurrentDirectory = dirname($destinationPath);
 
-        if (!mkdir($concurrentDirectory, 0777, true) && !is_dir($concurrentDirectory)) {
+        if (!is_dir($concurrentDirectory) && !mkdir($concurrentDirectory, 0777, true)) {
             throw new DirectoryNotFoundException(
                 sprintf('Directory "%s" was not created', $concurrentDirectory)
             );
         }
 
-        copy($zipPath, $destinationPath);
+        Storage::move($zipPath, $destinationPath);
 
         return [[$zipPath, $destinationPath]];
     }
