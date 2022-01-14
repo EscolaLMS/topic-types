@@ -17,6 +17,7 @@ use EscolaLms\TopicTypes\Models\TopicContent\Image;
 use EscolaLms\TopicTypes\Models\TopicContent\OEmbed;
 use EscolaLms\TopicTypes\Models\TopicContent\PDF;
 use EscolaLms\TopicTypes\Models\TopicContent\RichText;
+use EscolaLms\TopicTypes\Models\TopicContent\ScormSco;
 use EscolaLms\TopicTypes\Models\TopicContent\Video;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Model;
@@ -36,7 +37,8 @@ class CoursesWithTopicSeeder extends Seeder
             Video::factory(),
             Image::factory(),
             OEmbed::factory(),
-            PDF::factory()
+            PDF::factory(),
+            ScormSco::factory(),
         ];
         if ($withH5P) {
             $classes[] = H5P::factory();

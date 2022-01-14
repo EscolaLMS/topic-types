@@ -38,9 +38,8 @@ class TopicResourceFactory extends Factory
             $filename = "{$this->faker->word}.pdf";
             $dest = Storage::disk('public')->path($path . $filename);
             $destDir = dirname($dest);
-            if (!is_dir($destDir) || (!mkdir($destDir, 0777, true) && !is_dir($destDir))) {
+            if (!is_dir($destDir) && (mkdir($destDir, 0777, true) && !is_dir($destDir))) {
                 throw new DirectoryNotFoundException(sprintf('Directory "%s" was not created', $destDir));
-
             }
             copy(realpath(__DIR__.'/../mocks/1.pdf'), $dest);
 
