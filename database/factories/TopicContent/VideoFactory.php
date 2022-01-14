@@ -41,11 +41,12 @@ class VideoFactory extends Factory
             $dest = Storage::disk('public')->path($filename);
             $destPoster = Storage::disk('public')->path($filenamePoster);
             $destDir = dirname($dest);
-            if (!is_dir($destDir) || (mkdir($destDir, 0777, true) && !is_dir($destDir))) {
+            if (!is_dir($destDir) && (mkdir($destDir, 0777, true) && !is_dir($destDir))) {
                 throw new DirectoryNotFoundException(sprintf('Directory "%s" was not created', $destDir));
             }
-            copy(realpath(__DIR__.'/../../mocks/1.mp4'), $dest);
-            copy(realpath(__DIR__.'/../../mocks/poster.jpg'), $destPoster);
+            $mocksPath = realpath(__DIR__.'/../../mocks');
+            copy($mocksPath . '/1.mp4', $dest);
+            copy($mocksPath . '/poster.jpg', $destPoster);
 
             return [
                 'value' => $filename,
