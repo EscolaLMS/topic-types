@@ -12,11 +12,13 @@ class ScormScoResource extends JsonResource implements TopicTypeResourceContract
     {
         $topic = $this->topic;
         $destination = sprintf('topic/%d/%s', $topic->id, 'export.zip');
+        $scormSco = ScormScoModel::find($this->value);
 
         return [
             'id' => $this->id,
             'value' => $this->value,
-            'uuid' => ScormScoModel::find($this->value)->uuid,
+            'uuid' => $scormSco->uuid,
+            'identifier' => $scormSco->identifier,
             'scorm_file' => $destination,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
