@@ -3,6 +3,7 @@
 namespace Tests\APIs;
 
 use EscolaLms\Courses\Database\Seeders\CoursesPermissionSeeder;
+use EscolaLms\Courses\Events\VideoUpdated;
 use EscolaLms\Courses\Models\Course;
 use EscolaLms\Courses\Models\Lesson;
 use EscolaLms\Courses\Models\Topic;
@@ -204,7 +205,7 @@ class TopicTypesTutorUpdateApiTest extends TestCase
     public function testUpdateTopicVideo()
     {
         Storage::fake('local');
-        Event::fake(TopicTypeChanged::class);
+        Event::fake([TopicTypeChanged::class, VideoUpdated::class]);
 
         $file = UploadedFile::fake()->create('avatar.mp4');
 
@@ -237,6 +238,7 @@ class TopicTypesTutorUpdateApiTest extends TestCase
         Event::assertDispatched(TopicTypeChanged::class, function ($event) {
             return $event->getUser() === $this->user && $event->getTopicContent();
         });
+        Event::assertDispatched(VideoUpdated::class);
     }
 
     public function testUpdateTopicRichtext()

@@ -61,8 +61,14 @@ class ScormSco extends AbstractTopicContent
 
     public function fixAssetPaths(): array
     {
+        $scormSco = ScormScoModel::find($this->value);
+        if (!$scormSco) {
+            return [];
+        }
+
         $topic = $this->topic;
         $course = $topic->lesson->course;
+
         $destination = sprintf('courses/%d/topic/%d/%s', $course->id, $topic->id, 'export.zip');
 
         /** @var ScormServiceContract $service */

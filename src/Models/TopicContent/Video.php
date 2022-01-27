@@ -2,6 +2,7 @@
 
 namespace EscolaLms\TopicTypes\Models\TopicContent;
 
+use EscolaLms\Courses\Events\VideoUpdated;
 use EscolaLms\TopicTypes\Database\Factories\TopicContent\VideoFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Facades\Storage;
@@ -120,5 +121,16 @@ class Video extends AbstractTopicFileContent
     public function getMorphClass()
     {
         return self::class;
+    }
+
+    protected static function booted()
+    {
+        parent::booted();
+
+        static::updated(function (Video $video) {
+            if ($video->wasChanged('value')) {
+                VideoUpdated::dispatch($video);
+            }
+        });
     }
 }
