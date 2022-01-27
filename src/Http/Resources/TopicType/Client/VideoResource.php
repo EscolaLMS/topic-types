@@ -10,11 +10,10 @@ class VideoResource extends JsonResource implements TopicTypeResourceContract
 {
     public function toArray($request)
     {
-        $urlValue = $this->hls ?: $this->value;
         return [
             'id' => $this->id,
-            'value' => $urlValue,
-            'url' => Storage::disk('local')->url($urlValue),
+            'value' => $this->value,
+            'url' => $this->value ? Storage::disk('local')->url($this->value) : null,
             'poster' => $this->poster,
             'poster_url' => $this->poster ? Storage::disk('local')->url($this->poster) : null,
             'width' => $this->width,
