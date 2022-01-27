@@ -3,6 +3,7 @@
 namespace EscolaLms\TopicTypes\Database\Seeders;
 
 use EscolaLms\Auth\Models\User;
+use EscolaLms\Auth\Models\UserSetting;
 use EscolaLms\Categories\Models\Category;
 use EscolaLms\Courses\Database\Factories\FakerMarkdownProvider\FakerProvider;
 use EscolaLms\Courses\Models\Course;
@@ -23,6 +24,7 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Seeder;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Storage;
 
 class CoursesWithTopicSeeder extends Seeder
@@ -69,7 +71,12 @@ class CoursesWithTopicSeeder extends Seeder
         foreach ($tutors as $tutor) {
             $tutor->update([
                 'path_avatar' => 'tutor_avatar.jpg',
-                'bio' => $this->faker->markdown(),
+            ]);
+
+            UserSetting::factory()->createOne([
+                'user_id' => $tutor->getKey(),
+                'key' => 'additional_field:' . Config::get('escolalms_courses.tutor_bio_field', 'bio'),
+                'value' => $this->faker->markdown(),
             ]);
         }
         $courses = Course::factory()
