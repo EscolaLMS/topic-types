@@ -2,8 +2,8 @@
 
 namespace EscolaLms\TopicTypes\Models\TopicContent;
 
-use EscolaLms\Courses\Events\VideoUpdated;
 use EscolaLms\TopicTypes\Database\Factories\TopicContent\VideoFactory;
+use EscolaLms\TopicTypes\Events\VideoUpdated;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Facades\Storage;
 
