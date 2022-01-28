@@ -75,7 +75,7 @@ class CoursesWithTopicSeeder extends Seeder
 
             UserSetting::factory()->createOne([
                 'user_id' => $tutor->getKey(),
-                'key' => 'additional_field:' . Config::get('escolalms_courses.tutor_bio_field', 'bio'),
+                'key' => 'additional_field:bio',
                 'value' => $this->faker->markdown(),
             ]);
         }
