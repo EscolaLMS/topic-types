@@ -6,6 +6,8 @@ use EscolaLms\Courses\Database\Seeders\CoursesPermissionSeeder;
 use EscolaLms\Courses\Models\Course;
 use EscolaLms\Courses\Models\Lesson;
 use EscolaLms\Courses\Models\Topic;
+use EscolaLms\TopicTypes\Models\TopicContent\Audio;
+use EscolaLms\TopicTypes\Models\TopicContent\Video;
 use EscolaLms\TopicTypes\Tests\TestCase;
 use EscolaLms\TopicTypes\Events\TopicTypeChanged;
 use EscolaLms\TopicTypes\Models\TopicContent\Image;
@@ -371,6 +373,115 @@ class TopicTypesTutorUpdateApiTest extends TestCase
         $data = $this->response->json();
 
         $this->assertEquals(['foo' => 'foobar'], $data['data']['lessons'][0]['topics'][0]['json']);
+        Event::assertDispatched(TopicTypeChanged::class, function ($event) {
+            return $event->getUser() === $this->user && $event->getTopicContent();
+        });
+    }
+
+    public function testUpdateTopicImageWithReusableFile()
+    {
+        Storage::fake('local');
+        Event::fake(TopicTypeChanged::class);
+
+        $imagePath = "course/{$this->course->getKey()}/reusable/image.jpg";
+        Storage::makeDirectory("course/{$this->course->getKey()}/reusable");
+        copy(__DIR__ . '/../mocks/image.jpg', Storage::path($imagePath));
+
+        $this->response = $this->actingAs($this->user, 'api')->postJson(
+            '/api/admin/topics/'.$this->topic->id,
+            [
+                'title' => 'Hello World',
+                'lesson_id' => $this->topic->lesson_id,
+                'topicable_type' => Image::class,
+                'value' => $imagePath,
+            ]
+        )->assertStatus(200);
+
+        $data = json_decode($this->response->getContent());
+        $path = $data->data->topicable->value;
+
+        $this->assertEquals($imagePath, $path);
+        Storage::assertExists($path);
+
+        $this->assertDatabaseHas('topic_images', [
+            'value' => $imagePath,
+        ]);
+
+        Event::assertDispatched(TopicTypeChanged::class, function ($event) {
+            return $event->getUser() === $this->user && $event->getTopicContent();
+        });
+    }
+
+    public function testUpdateTopicAudioWithReusableFile()
+    {
+        Storage::fake('local');
+        Event::fake(TopicTypeChanged::class);
+
+        $audioPath = "course/{$this->course->getKey()}/reusable/audio.mp3";
+        Storage::makeDirectory("course/{$this->course->getKey()}/reusable");
+        copy(__DIR__ . '/../mocks/audio.mp3', Storage::path($audioPath));
+
+        $this->response = $this->actingAs($this->user, 'api')->postJson(
+            '/api/admin/topics/' . $this->topic->id,
+            [
+                'title' => 'Hello World',
+                'lesson_id' => $this->topic->lesson_id,
+                'topicable_type' => Audio::class,
+                'value' => $audioPath,
+            ]
+        )->assertStatus(200);
+
+        $data = json_decode($this->response->getContent());
+        $path = $data->data->topicable->value;
+
+        $this->assertEquals($audioPath, $path);
+        Storage::assertExists($path);
+
+        $this->assertDatabaseHas('topic_audios', [
+            'value' => $path,
+        ]);
+
+        Event::assertDispatched(TopicTypeChanged::class, function ($event) {
+            return $event->getUser() === $this->user && $event->getTopicContent();
+        });
+    }
+
+    public function testUpdateTopicVideoWithReusableFile()
+    {
+        Storage::fake('local');
+        Event::fake(TopicTypeChanged::class);
+
+        $videoPath = "course/{$this->course->getKey()}/reusable/video.mp4";
+        $posterPath = "course/{$this->course->getKey()}/reusable/image.jpg";
+        Storage::makeDirectory("course/{$this->course->getKey()}/reusable");
+        copy(__DIR__ . '/../mocks/video.mp4', Storage::path($videoPath));
+        copy(__DIR__ . '/../mocks/image.jpg', Storage::path($posterPath));
+
+        $this->response = $this->actingAs($this->user, 'api')->postJson(
+            '/api/admin/topics/' . $this->topic->id,
+            [
+                'title' => 'Hello World',
+                'lesson_id' => $this->topic->lesson_id,
+                'topicable_type' => Video::class,
+                'value' => $videoPath,
+                'poster' => $posterPath,
+            ]
+        )->assertStatus(200);
+
+        $data = json_decode($this->response->getContent());
+        $savedVideoPath = $data->data->topicable->value;
+        $savedPosterPath = $data->data->topicable->poster;
+
+        $this->assertEquals($videoPath, $savedVideoPath);
+        $this->assertEquals($posterPath, $savedPosterPath);
+        Storage::assertExists($savedVideoPath);
+        Storage::assertExists($savedPosterPath);
+
+        $this->assertDatabaseHas('topic_videos', [
+            'value' => $videoPath,
+            'poster' => $posterPath,
+        ]);
+
         Event::assertDispatched(TopicTypeChanged::class, function ($event) {
             return $event->getUser() === $this->user && $event->getTopicContent();
         });

@@ -3,6 +3,7 @@
 namespace EscolaLms\TopicTypes\Models\TopicContent;
 
 use EscolaLms\Courses\Models\Contracts\TopicFileContentContract;
+use EscolaLms\Files\Helpers\FileHelper;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
@@ -49,6 +50,9 @@ abstract class AbstractTopicFileContent extends AbstractTopicContent implements 
         foreach ($this->getFileKeyNames() as $fileKey) {
             if ($request->hasFile($fileKey)) {
                 $this->storeUpload($request->file($fileKey), $fileKey, $path);
+            }
+            if ($request->input($fileKey)) {
+                $this->{$fileKey} = FileHelper::getFilePath($request->input($fileKey));
             }
         }
         $this->processUploadedFiles();
