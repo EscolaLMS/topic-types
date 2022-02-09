@@ -50,8 +50,7 @@ abstract class AbstractTopicFileContent extends AbstractTopicContent implements 
         foreach ($this->getFileKeyNames() as $fileKey) {
             if ($request->hasFile($fileKey)) {
                 $this->storeUpload($request->file($fileKey), $fileKey, $path);
-            }
-            if ($request->input($fileKey)) {
+            } else {
                 $this->{$fileKey} = FileHelper::getFilePath($request->input($fileKey));
             }
         }
