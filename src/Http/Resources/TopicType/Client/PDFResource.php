@@ -13,7 +13,7 @@ class PDFResource extends JsonResource implements TopicTypeResourceContract
         return [
             'id' => $this->id,
             'value' => $this->value,
-            'url' => Storage::disk('local')->url($this->value),
+            'url' => Storage::url($this->value),
         ];
     }
 }
