@@ -13,9 +13,9 @@ class TopicTypeChanged
     use SerializesModels;
 
     private AbstractTopicContent $topicContent;
-    private Authenticatable $user;
+    private ?Authenticatable $user;
 
-    public function __construct(Authenticatable $user, AbstractTopicContent $topicContent)
+    public function __construct(?Authenticatable $user, AbstractTopicContent $topicContent)
     {
         $this->topicContent = $topicContent;
         $this->user = $user;
@@ -26,7 +26,7 @@ class TopicTypeChanged
         return $this->topicContent;
     }
 
-    public function getUser(): Authenticatable
+    public function getUser(): ?Authenticatable
     {
         return $this->user;
     }
