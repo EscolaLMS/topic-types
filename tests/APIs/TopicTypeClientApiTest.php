@@ -15,9 +15,12 @@ use EscolaLms\TopicTypes\Models\TopicContent\RichText;
 use EscolaLms\TopicTypes\Models\TopicContent\ScormSco;
 use EscolaLms\TopicTypes\Models\TopicContent\Video;
 use EscolaLms\TopicTypes\Tests\TestCase;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class TopicTypeClientApiTest extends TestCase
 {
+    use DatabaseTransactions;
+
     protected function setUp(): void
     {
         parent::setUp();
