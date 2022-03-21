@@ -5,6 +5,11 @@ namespace Tests\APIs;
 use EscolaLms\Courses\Database\Seeders\CoursesPermissionSeeder;
 use EscolaLms\Courses\Models\Course;
 use EscolaLms\Courses\Models\Lesson;
+use EscolaLms\TopicTypes\Database\Factories\TopicContent\Components\ScormScoHelper;
+use EscolaLms\TopicTypes\Database\Factories\TopicContent\ScormScoFactory;
+use EscolaLms\TopicTypes\Models\TopicContent\H5P;
+use EscolaLms\TopicTypes\Models\TopicContent\OEmbed;
+use EscolaLms\TopicTypes\Models\TopicContent\ScormSco;
 use EscolaLms\TopicTypes\Models\TopicContent\Video;
 use EscolaLms\TopicTypes\Tests\TestCase;
 use EscolaLms\TopicTypes\Events\TopicTypeChanged;
@@ -15,6 +20,8 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Storage;
+use EscolaLms\HeadlessH5P\Models\H5PContent;
+use EscolaLms\HeadlessH5P\Models\H5PLibrary;
 
 class TopicTypesTutorCreateApiTest extends TestCase
 {
@@ -43,27 +50,21 @@ class TopicTypesTutorCreateApiTest extends TestCase
 
         $file = UploadedFile::fake()->image('avatar.jpg');
 
-        $this->response = $this->actingAs($this->user, 'api')->withHeaders([
-            'Accept' => 'application/json',
-        ])->post(
-            '/api/admin/topics',
-            [
+        $this->response = $this->actingAs($this->user, 'api')
+            ->withHeaders(['Accept' => 'application/json',])
+            ->post('/api/admin/topics', [
                 'title' => 'Hello World',
                 'lesson_id' => $this->lesson->id,
                 'topicable_type' => Image::class,
                 'value' => $file,
-            ]
-        );
+            ]);
 
         $this->response->assertStatus(201);
 
-        $data = json_decode($this->response->getContent());
+        $data = $this->response->getData()->data;
+        $path = $data->topicable->value;
 
-        $topicId = $data->data->id;
-        $path = $data->data->topicable->value;
-
-        Storage::disk('local')->assertExists('/'.$path);
-
+        Storage::disk('local')->assertExists('/' . $path);
         $this->assertDatabaseHas('topic_images', [
             'value' => $path,
         ]);
@@ -75,27 +76,21 @@ class TopicTypesTutorCreateApiTest extends TestCase
 
         $file = UploadedFile::fake()->create('avatar.mp3');
 
-        $this->response = $this->actingAs($this->user, 'api')->withHeaders([
-            'Accept' => 'application/json',
-        ])->post(
-            '/api/admin/topics',
-            [
+        $this->response = $this->actingAs($this->user, 'api')
+            ->withHeaders(['Accept' => 'application/json',])
+            ->post('/api/admin/topics', [
                 'title' => 'Hello World',
                 'lesson_id' => $this->lesson->id,
                 'topicable_type' => Audio::class,
                 'value' => $file,
-            ]
-        );
+            ]);
 
         $this->response->assertStatus(201);
 
-        $data = json_decode($this->response->getContent());
+        $data = $this->response->getData()->data;
+        $path = $data->topicable->value;
 
-        $topicId = $data->data->id;
-        $path = $data->data->topicable->value;
-
-        Storage::disk('local')->assertExists('/'.$path);
-
+        Storage::disk('local')->assertExists('/' . $path);
         $this->assertDatabaseHas('topic_audios', [
             'value' => $path,
         ]);
@@ -107,27 +102,21 @@ class TopicTypesTutorCreateApiTest extends TestCase
 
         $file = UploadedFile::fake()->create('test.pdf');
 
-        $this->response = $this->actingAs($this->user, 'api')->withHeaders([
-            'Accept' => 'application/json',
-        ])->post(
-            '/api/admin/topics',
-            [
+        $this->response = $this->actingAs($this->user, 'api')
+            ->withHeaders(['Accept' => 'application/json'])
+            ->post('/api/admin/topics', [
                 'title' => 'Hello World',
                 'lesson_id' => $this->lesson->id,
                 'topicable_type' => 'EscolaLms\TopicTypes\Models\TopicContent\PDF',
                 'value' => $file,
-            ]
-        );
+            ]);
 
         $this->response->assertStatus(201);
 
-        $data = json_decode($this->response->getContent());
-
-        $topicId = $data->data->id;
-        $path = $data->data->topicable->value;
+        $data = $this->response->getData()->data;
+        $path = $data->topicable->value;
 
         Storage::disk('local')->assertExists('/'.$path);
-
         $this->assertDatabaseHas('topic_pdfs', [
             'value' => $path,
         ]);
@@ -140,27 +129,21 @@ class TopicTypesTutorCreateApiTest extends TestCase
 
         $file = UploadedFile::fake()->image('avatar.mp4');
 
-        $this->response = $this->actingAs($this->user, 'api')->withHeaders([
-            'Accept' => 'application/json',
-        ])->post(
-            '/api/admin/topics',
-            [
+        $this->response = $this->actingAs($this->user, 'api')
+            ->withHeaders(['Accept' => 'application/json'])
+            ->post('/api/admin/topics', [
                 'title' => 'Hello World',
                 'lesson_id' => $this->lesson->id,
                 'topicable_type' => Video::class,
                 'value' => $file,
-            ]
-        );
+            ]);
 
         $this->response->assertStatus(201);
 
-        $data = json_decode($this->response->getContent());
-
-        $topicId = $data->data->id;
-        $path = $data->data->topicable->value;
+        $data = $this->response->getData()->data;
+        $path = $data->topicable->value;
 
         Storage::disk('local')->assertExists('/'.$path);
-
         $this->assertDatabaseHas('topic_videos', [
             'value' => $path,
         ]);
@@ -170,27 +153,103 @@ class TopicTypesTutorCreateApiTest extends TestCase
 
     public function testCreateTopicRichtext()
     {
-        $this->response = $this->actingAs($this->user, 'api')->withHeaders([
-            'Accept' => 'application/json',
-        ])->post(
-            '/api/admin/topics',
-            [
+        $this->response = $this->actingAs($this->user, 'api')
+            ->withHeaders(['Accept' => 'application/json'])
+            ->post('/api/admin/topics', [
                 'title' => 'Hello World',
                 'lesson_id' => $this->lesson->id,
                 'topicable_type' => RichText::class,
                 'value' => 'lorem ipsum',
-            ]
-        );
+            ]);
         $this->response->assertStatus(201);
 
-        $data = json_decode($this->response->getContent());
-
-        $topicId = $data->data->id;
-        $path = $data->data->topicable->value;
+        $data = $this->response->getData()->data;
+        $value = $data->topicable->value;
 
         $this->assertDatabaseHas('topic_richtexts', [
-            'value' => $path,
+            'value' => $value,
         ]);
+    }
+
+    public function testCreateTopicH5P()
+    {
+        Event::fake(TopicTypeChanged::class);
+
+        $library = H5PLibrary::factory()->create();
+        $content = H5PContent::factory()->create([
+            'library_id' => $library->id,
+        ]);
+
+        $this->response = $this->actingAs($this->user, 'api')
+            ->withHeaders(['Accept' => 'application/json'])
+            ->post('/api/admin/topics', [
+                'title' => 'Hello World',
+                'lesson_id' => $this->lesson->id,
+                'topicable_type' => H5P::class,
+                'value' => $content->getKey(),
+            ]);
+
+        $this->response->assertStatus(201);
+
+        $data = $this->response->getData()->data;
+        $value = $data->topicable->value;
+
+        $this->assertDatabaseHas('topic_h5ps', [
+            'value' => $value,
+        ]);
+
+        Event::assertDispatched(TopicTypeChanged::class);
+    }
+
+    public function testCreateTopicScormSco()
+    {
+        Event::fake(TopicTypeChanged::class);
+        $scormSco = ScormScoHelper::getScormSco();
+
+        $this->response = $this->actingAs($this->user, 'api')
+            ->withHeaders(['Accept' => 'application/json'])
+            ->post('/api/admin/topics', [
+                'title' => 'Hello World',
+                'lesson_id' => $this->lesson->id,
+                'topicable_type' => ScormSco::class,
+                'value' => $scormSco->getKey(),
+            ]);
+
+        $this->response->assertStatus(201);
+
+        $data = $this->response->getData()->data;
+        $value = $data->topicable->value;
+
+        $this->assertDatabaseHas('topic_scorm_scos', [
+            'value' => $value,
+        ]);
+
+        Event::assertDispatched(TopicTypeChanged::class);
+    }
+
+    public function testCreateTopicOEmbed()
+    {
+        Event::fake(TopicTypeChanged::class);
+
+        $this->response = $this->actingAs($this->user, 'api')
+            ->withHeaders(['Accept' => 'application/json'])
+            ->post('/api/admin/topics', [
+                'title' => 'Hello World',
+                'lesson_id' => $this->lesson->id,
+                'topicable_type' => OEmbed::class,
+                'value' => 'https://youtu.be/b-mGA4V2LK0',
+            ]);
+
+        $this->response->assertStatus(201);
+
+        $data = $this->response->getData()->data;
+        $value = $data->topicable->value;
+
+        $this->assertDatabaseHas('topic_oembeds', [
+            'value' => $value,
+        ]);
+
+        Event::assertDispatched(TopicTypeChanged::class);
     }
 
     public function testCreateTopicNoLesson()

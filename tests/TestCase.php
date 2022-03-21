@@ -39,8 +39,8 @@ class TestCase extends \EscolaLms\Courses\Tests\TestCase
             AuthServiceProvider::class,
             EscolaLmsScormServiceProvider::class,
             EscolaLmsTagsServiceProvider::class,
-            EscolaLmsTopicTypesServiceProvider::class,
             HeadlessH5PServiceProvider::class,
+            EscolaLmsTopicTypesServiceProvider::class,
         ];
     }
 
