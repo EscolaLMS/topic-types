@@ -28,7 +28,7 @@ class FixAssetCommand extends TestCase
         $this->user->guard_name = 'api';
         $this->user->assignRole('tutor');
 
-        Storage::fake(config('filesystems.default'));
+        Storage::fake('test');
         Storage::put('dummy.mp4', 'Some dummy data');
         Storage::put('dummy.mp3', 'Some dummy data');
         Storage::put('dummy.jpg', 'Some dummy data');
