@@ -5,8 +5,6 @@ namespace Tests\Commands;
 use EscolaLms\Courses\Models\Course;
 use EscolaLms\Courses\Models\Lesson;
 use EscolaLms\Courses\Models\Topic;
-use EscolaLms\TopicTypes\Models\TopicContent\OEmbed;
-use EscolaLms\TopicTypes\Models\TopicContent\RichText;
 use EscolaLms\TopicTypes\Tests\TestCase;
 use EscolaLms\TopicTypes\Models\TopicContent\Audio;
 use EscolaLms\TopicTypes\Models\TopicContent\Image;
@@ -20,7 +18,7 @@ use Illuminate\Support\Facades\Storage;
 
 class FixAssetCommand extends TestCase
 {
-    use DatabaseTransactions;
+    use /*ApiTestTrait,*/DatabaseTransactions;
 
     protected function setUp(): void
     {
@@ -30,7 +28,7 @@ class FixAssetCommand extends TestCase
         $this->user->guard_name = 'api';
         $this->user->assignRole('tutor');
 
-        Storage::fake('test');
+        Storage::fake(config('filesystems.default'));
         Storage::put('dummy.mp4', 'Some dummy data');
         Storage::put('dummy.mp3', 'Some dummy data');
         Storage::put('dummy.jpg', 'Some dummy data');
@@ -55,12 +53,6 @@ class FixAssetCommand extends TestCase
         $topic_video = Topic::factory()->create([
             'lesson_id' => $lesson->id,
         ]);
-        $topic_richtext = Topic::factory()->create([
-            'lesson_id' => $lesson->id,
-        ]);
-        $topic_oembed = Topic::factory()->create([
-            'lesson_id' => $lesson->id,
-        ]);
 
         $topicable_audio = Audio::factory()->create([
             'value' => 'dummy.mp3',
@@ -75,15 +67,11 @@ class FixAssetCommand extends TestCase
             'value' => 'dummy.mp4',
             'poster' => 'dummy.png',
         ]);
-        $topicable_richtext = RichText::factory()->create();
-        $topicable_oembed = OEmbed::factory()->create();
 
         $topic_audio->topicable()->associate($topicable_audio)->save();
         $topic_image->topicable()->associate($topicable_image)->save();
         $topic_pdf->topicable()->associate($topicable_pdf)->save();
         $topic_video->topicable()->associate($topicable_video)->save();
-        $topic_richtext->topicable()->associate($topicable_richtext)->save();
-        $topic_oembed->topicable()->associate($topicable_oembed)->save();
 
         $this->course_id = $course->id;
 
@@ -91,36 +79,45 @@ class FixAssetCommand extends TestCase
         $this->topic_image_id = $topic_image->id;
         $this->topic_pdf_id = $topic_pdf->id;
         $this->topic_video_id = $topic_video->id;
-        $this->topic_richtext_id = $topic_richtext->id;
     }
 
     public function testService()
     {
         Storage::assertExists(['dummy.mp3', 'dummy.mp4', 'dummy.pdf', 'dummy.jpg', 'dummy.png']);
 
-        $service = App::make(TopicTypeServiceContract::class);
-        $service->fixAssetPaths();
-
-        $this->assertAssetPathFix();
-    }
-
-    public function testCommand()
-    {
-        Storage::assertExists(['dummy.mp3', 'dummy.mp4', 'dummy.pdf', 'dummy.jpg', 'dummy.png']);
-        Artisan::call('escolalms:fix-topic-types-paths');
-
-        $this->assertAssetPathFix();
-    }
-
-    private function assertAssetPathFix(): void
-    {
         $audio_path = "courses/$this->course_id/topic/$this->topic_audio_id/dummy.mp3";
         $image_path = "courses/$this->course_id/topic/$this->topic_image_id/dummy.jpg";
         $pdf_path = "courses/$this->course_id/topic/$this->topic_pdf_id/dummy.pdf";
         $video_path = "courses/$this->course_id/topic/$this->topic_video_id/dummy.mp4";
         $video_path2 = "courses/$this->course_id/topic/$this->topic_video_id/dummy.png";
 
+        // Artisan::call('escolalms:fix-topic-types-paths');
+
+        $service = App::make(TopicTypeServiceContract::class);
+        $service->fixAssetPaths();
+
         Storage::assertMissing(['dummy.mp3', 'dummy.mp4', 'dummy.pdf', 'dummy.jpg', 'dummy.png']);
+
+        Storage::assertExists([$audio_path, $image_path, $pdf_path, $video_path, $video_path2]);
+    }
+
+    public function testCommand()
+    {
+        Storage::assertExists(['dummy.mp3', 'dummy.mp4', 'dummy.pdf', 'dummy.jpg', 'dummy.png']);
+
+        $audio_path = "courses/$this->course_id/topic/$this->topic_audio_id/dummy.mp3";
+        $image_path = "courses/$this->course_id/topic/$this->topic_image_id/dummy.jpg";
+        $pdf_path = "courses/$this->course_id/topic/$this->topic_pdf_id/dummy.pdf";
+        $video_path = "courses/$this->course_id/topic/$this->topic_video_id/dummy.mp4";
+        $video_path2 = "courses/$this->course_id/topic/$this->topic_video_id/dummy.png";
+
+        Artisan::call('escolalms:fix-topic-types-paths');
+
+        // $service = App::make(TopicTypeServiceContract::class);
+        // $service->fixAssetPaths();
+
+        Storage::assertMissing(['dummy.mp3', 'dummy.mp4', 'dummy.pdf', 'dummy.jpg', 'dummy.png']);
+
         Storage::assertExists([$audio_path, $image_path, $pdf_path, $video_path, $video_path2]);
     }
 }
