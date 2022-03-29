@@ -69,7 +69,7 @@ class ScormSco extends AbstractTopicContent
         $topic = $this->topic;
         $course = $topic->lesson->course;
 
-        $destination = sprintf('courses/%d/topic/%d/%s', $course->id, $topic->id, 'export.zip');
+        $destination = sprintf('course/%d/topic/%d/%s', $course->id, $topic->id, 'export.zip');
 
         /** @var ScormServiceContract $service */
         $service = app(ScormServiceContract::class);

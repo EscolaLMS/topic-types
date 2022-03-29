@@ -84,13 +84,13 @@ class Video extends AbstractTopicFileContent
         $topic = $this->topic;
         $course = $topic->lesson->course;
         $destinationValue = sprintf(
-            'courses/%d/topic/%d/%s',
+            'course/%d/topic/%d/%s',
             $course->id,
             $topic->id,
             basename($this->value)
         );
         $destinationPoster = sprintf(
-            'courses/%d/topic/%d/%s',
+            'course/%d/topic/%d/%s',
             $course->id,
             $topic->id,
             basename($this->poster)

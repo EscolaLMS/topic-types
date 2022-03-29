@@ -72,12 +72,6 @@ class CoursesWithTopicSeeder extends Seeder
             $tutor->update([
                 'path_avatar' => 'tutor_avatar.jpg',
             ]);
-
-            UserSetting::factory()->createOne([
-                'user_id' => $tutor->getKey(),
-                'key' => 'additional_field:bio',
-                'value' => $this->faker->markdown(),
-            ]);
         }
         $courses = Course::factory()
             ->count(random_int(5, 10))

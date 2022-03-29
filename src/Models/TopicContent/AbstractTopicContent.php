@@ -25,7 +25,7 @@ abstract class AbstractTopicContent extends AbstractTopicContentExtend implement
         $topic = $this->topic;
         $course = $topic->lesson->course;
         $basename = basename($this->value);
-        $destination = sprintf('courses/%d/topic/%d/%s', $course->id, $topic->id, $basename);
+        $destination = sprintf('course/%d/topic/%d/%s', $course->id, $topic->id, $basename);
         $results = [];
         if (strpos($this->value, $destination) === false && Storage::exists($this->value)) {
             if (!Storage::exists($destination)) {

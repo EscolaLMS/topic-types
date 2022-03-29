@@ -49,7 +49,7 @@ class H5P extends AbstractTopicContent
     {
         $topic = $this->topic;
         $course = $topic->lesson->course;
-        $destination = sprintf('courses/%d/topic/%d/%s', $course->id, $topic->id, 'export.h5p');
+        $destination = sprintf('course/%d/topic/%d/%s', $course->id, $topic->id, 'export.h5p');
         $contentRepository = App::make(H5PContentRepositoryContract::class);
         $filepath = $contentRepository->download($this->value);
         $disk = Storage::disk('local'); // this is always 'local' for h5p

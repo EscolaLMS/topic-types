@@ -2,6 +2,7 @@
 
 namespace EscolaLms\TopicTypes\Database\Factories\TopicContent;
 
+use EscolaLms\Courses\Facades\Topic;
 use EscolaLms\TopicTypes\Models\TopicContent\Video;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Storage;
@@ -35,9 +36,10 @@ class VideoFactory extends Factory
     public function updatePath(int $videoId): VideoFactory
     {
         return $this->state(function () use ($videoId) {
+            $topic = Topic::find($videoId);
             $word = $this->faker->word;
-            $filename = "topic/$videoId/" . $word . '.mp4';
-            $filenamePoster = "topic/$videoId/" . $word . '.jpg';
+            $filename = $topic->storage_directory . $word . '.mp4';
+            $filenamePoster = $topic->storage_directory . $word . '.jpg';
             $dest = Storage::disk('public')->path($filename);
             $destPoster = Storage::disk('public')->path($filenamePoster);
             $destDir = dirname($dest);
