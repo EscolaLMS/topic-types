@@ -126,11 +126,11 @@ class FixAssetCommand extends TestCase
 
     private function assertAssetPathFix(): void
     {
-        $audio_path = "course/$this->course_id/topic/$this->topic_audio_id/dummy.mp3";
-        $image_path = "course/$this->course_id/topic/$this->topic_image_id/dummy.jpg";
-        $pdf_path = "course/$this->course_id/topic/$this->topic_pdf_id/dummy.pdf";
-        $video_path = "course/$this->course_id/topic/$this->topic_video_id/dummy.mp4";
-        $video_path2 = "course/$this->course_id/topic/$this->topic_video_id/dummy.png";
+        $audio_path = "course/$this->course_id/topic/$this->topic_audio_id/audio/dummy.mp3";
+        $image_path = "course/$this->course_id/topic/$this->topic_image_id/image/dummy.jpg";
+        $pdf_path = "course/$this->course_id/topic/$this->topic_pdf_id/pdf/dummy.pdf";
+        $video_path = "course/$this->course_id/topic/$this->topic_video_id/video/dummy.mp4";
+        $video_path2 = "course/$this->course_id/topic/$this->topic_video_id/video/dummy.png";
         $h5p_path = "course/$this->course_id/topic/$this->topic_h5p_id/export.h5p";
 
         Storage::assertMissing(['dummy.mp3', 'dummy.mp4', 'dummy.pdf', 'dummy.jpg', 'dummy.png']);

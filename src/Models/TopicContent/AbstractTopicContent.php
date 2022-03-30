@@ -25,7 +25,7 @@ abstract class AbstractTopicContent extends AbstractTopicContentExtend implement
         $topic = $this->topic;
         $course = $topic->lesson->course;
         $basename = basename($this->value);
-        $destination = sprintf('course/%d/topic/%d/%s', $course->id, $topic->id, $basename);
+        $destination = sprintf('course/%d/topic/%d/%s/%s', $course->id, $topic->id, $this->getStoragePathFinalSegment(), $basename);
         $results = [];
         if (strpos($this->value, $destination) === false && Storage::exists($this->value)) {
             if (!Storage::exists($destination)) {
@@ -37,5 +37,10 @@ abstract class AbstractTopicContent extends AbstractTopicContentExtend implement
         }
 
         return $results;
+    }
+
+    public function getStoragePathFinalSegment(): string
+    {
+        return '';
     }
 }
