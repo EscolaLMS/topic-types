@@ -3,6 +3,7 @@
 namespace EscolaLms\TopicTypes\Models\TopicContent;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Storage;
 
 /**
@@ -63,7 +64,13 @@ class Image extends AbstractTopicFileContent
 
     protected function processUploadedFiles(): void
     {
-        $sizes = getimagesize(Storage::path($this->value));
+        $imagePath = Storage::path($this->value);
+
+        if (Config::get('filesystems.default') === 's3') {
+            $imagePath = Storage::url($this->value);
+        }
+
+        $sizes = getimagesize($imagePath);
         if ($sizes) {
             $this->width = $sizes[0];
             $this->height = $sizes[1];
