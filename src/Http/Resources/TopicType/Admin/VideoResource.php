@@ -16,9 +16,9 @@ class VideoResource extends JsonResource implements TopicTypeResourceContract
         $fields = [
             'id' => $this->id,
             'value' => $this->value,
-            'url' => $this->value ? Storage::disk('local')->url($this->value) : null,
+            'url' => $this->value ? Storage::url($this->value) : null,
             'poster' => $this->poster,
-            'poster_url' => $this->poster ? Storage::disk('local')->url($this->poster) : null,
+            'poster_url' => $this->poster ? Storage::url($this->poster) : null,
             'width' => $this->width,
             'height' => $this->height,
             'created_at' => $this->created_at,
