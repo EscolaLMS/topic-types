@@ -54,6 +54,14 @@ jobs:
       - name: Publish things
         run: vendor/bin/testbench migrate:fresh
 
+      - name: Generate keys
+        run: |
+          vendor/bin/testbench passport:keys --force
+          vendor/bin/testbench passport:client --personal --no-interaction
+
+      - name: copy keys
+        run: cp vendor/escolalms/lrs/src/../../storage/*.key vendor/orchestra/testbench-core/laravel/storage/
+
       - name: Run tests
         run: XDEBUG_MODE=coverage vendor/bin/phpunit  --coverage-clover coverage.xml --printer mheap\\GithubActionsReporter\\Printer
 

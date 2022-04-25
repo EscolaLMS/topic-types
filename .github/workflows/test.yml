@@ -124,17 +124,13 @@ jobs:
       - name: Update composer
         run: composer update
 
+      - name: create folder for passport keys
+        run: |
+          mkdir storage
+          mkdir vendor/escolalms/lrs/src/../../storage/
+
       - name: Setup environment
         run: cp env/postgres/* .
-
-      - name: Clear config
-        run: vendor/bin/testbench config:clear
-
-      - name: Publish things
-        run: vendor/bin/testbench migrate:fresh
-
-      - name: Run tests
-        run: vendor/bin/phpunit
 
       - name: Clear config
         run: vendor/bin/testbench config:clear
