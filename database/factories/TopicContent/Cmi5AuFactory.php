@@ -18,5 +18,4 @@ class Cmi5AuFactory extends Factory
             'value' => isset($cmi5Au) ? $cmi5Au->id : Cmi5AuHelper::getCmi5Au()->getKey(),
         ];
     }
-
 }
