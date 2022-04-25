@@ -40,6 +40,11 @@ jobs:
       - name: Update composer
         run: composer update
 
+      - name: create folder for passport keys
+        run: |
+          mkdir storage
+          mkdir vendor/escolalms/lrs/src/../../storage/
+
       - name: require phpunit-github-actions-printer
         run: composer require --dev mheap/phpunit-github-actions-printer
 

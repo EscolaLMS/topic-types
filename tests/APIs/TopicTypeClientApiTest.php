@@ -7,6 +7,7 @@ use EscolaLms\Courses\Models\Course;
 use EscolaLms\Courses\Models\Lesson;
 use EscolaLms\Courses\Models\Topic;
 use EscolaLms\TopicTypes\Models\TopicContent\Audio;
+use EscolaLms\TopicTypes\Models\TopicContent\Cmi5Au;
 use EscolaLms\TopicTypes\Models\TopicContent\H5P;
 use EscolaLms\TopicTypes\Models\TopicContent\Image;
 use EscolaLms\TopicTypes\Models\TopicContent\OEmbed;
@@ -45,13 +46,14 @@ class TopicTypeClientApiTest extends TestCase
             [RichText::class],
             [ScormSco::class],
             [Video::class],
+            [Cmi5Au::class],
         ];
     }
 
     /**
      * @dataProvider topicTypeDataProvider
      */
-    public function testGetTopic($class)
+    public function testGetTopic($class): void
     {
         $model = $class::factory()->create();
         $this->topic->topicable()->associate($model)->save();

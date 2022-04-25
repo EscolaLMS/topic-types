@@ -8,10 +8,14 @@ use EscolaLms\Courses\Models\Lesson;
 use EscolaLms\Courses\Models\Topic;
 use EscolaLms\HeadlessH5P\Models\H5PContent;
 use EscolaLms\HeadlessH5P\Models\H5PLibrary;
+use EscolaLms\TopicTypes\Database\Factories\TopicContent\Components\Cmi5AuHelper;
+use EscolaLms\TopicTypes\Database\Factories\TopicContent\Components\ScormScoHelper;
 use EscolaLms\TopicTypes\Models\TopicContent\Audio;
+use EscolaLms\TopicTypes\Models\TopicContent\Cmi5Au;
 use EscolaLms\TopicTypes\Models\TopicContent\H5P;
 use EscolaLms\TopicTypes\Models\TopicContent\OEmbed;
 use EscolaLms\TopicTypes\Models\TopicContent\RichText;
+use EscolaLms\TopicTypes\Models\TopicContent\ScormSco;
 use EscolaLms\TopicTypes\Models\TopicContent\Video;
 use EscolaLms\TopicTypes\Tests\TestCase;
 use EscolaLms\TopicTypes\Events\TopicTypeChanged;
@@ -576,6 +580,66 @@ class TopicTypesTutorUpdateApiTest extends TestCase
 
         $this->assertDatabaseHas('topic_richtexts', [
             'value' => 'abc',
+        ]);
+
+        Event::assertDispatched(TopicTypeChanged::class, function ($event) {
+            return $event->getUser() === $this->user && $event->getTopicContent();
+        });
+    }
+
+    public function testUpdateTopicScormSco(): void
+    {
+        Storage::fake('local');
+        Event::fake(TopicTypeChanged::class);
+
+        $scormSco = ScormScoHelper::getScormSco();
+
+        $this->response = $this->actingAs($this->user, 'api')->postJson(
+            '/api/admin/topics/' . $this->topic->id,
+            [
+                'title' => 'Hello World',
+                'lesson_id' => $this->topic->lesson_id,
+                'topicable_type' => ScormSco::class,
+                'value' => $scormSco->getKey(),
+            ]
+        );
+
+        $value = $this->response->getData()->data->topicable->value;
+
+        $this->assertEquals($scormSco->getKey(), $value);
+
+        $this->assertDatabaseHas('topic_scorm_scos', [
+            'value' => $scormSco->getKey(),
+        ]);
+
+        Event::assertDispatched(TopicTypeChanged::class, function ($event) {
+            return $event->getUser() === $this->user && $event->getTopicContent();
+        });
+    }
+
+    public function testUpdateTopicCmi5Au(): void
+    {
+        Storage::fake('local');
+        Event::fake(TopicTypeChanged::class);
+
+        $cmi5Au = Cmi5AuHelper::getCmi5Au();
+
+        $this->response = $this->actingAs($this->user, 'api')->postJson(
+            '/api/admin/topics/' . $this->topic->id,
+            [
+                'title' => 'Hello World',
+                'lesson_id' => $this->topic->lesson_id,
+                'topicable_type' => Cmi5Au::class,
+                'value' => $cmi5Au->getKey(),
+            ]
+        );
+
+        $value = $this->response->getData()->data->topicable->value;
+
+        $this->assertEquals($cmi5Au->getKey(), $value);
+
+        $this->assertDatabaseHas('topic_cmi5_aus', [
+            'value' => $cmi5Au->getKey(),
         ]);
 
         Event::assertDispatched(TopicTypeChanged::class, function ($event) {

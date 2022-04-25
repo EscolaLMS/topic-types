@@ -5,6 +5,7 @@ namespace EscolaLms\TopicTypes\Tests;
 use EscolaLms\Auth\EscolaLmsAuthServiceProvider;
 use EscolaLms\Auth\Tests\Models\Client;
 use EscolaLms\Categories\EscolaLmsCategoriesServiceProvider;
+use EscolaLms\Cmi5\EscolaLmsCmi5ServiceProvider;
 use EscolaLms\Courses\AuthServiceProvider;
 use EscolaLms\Courses\EscolaLmsCourseServiceProvider;
 use EscolaLms\Courses\Tests\Models\User as UserTest;
@@ -41,6 +42,7 @@ class TestCase extends \EscolaLms\Courses\Tests\TestCase
             EscolaLmsScormServiceProvider::class,
             EscolaLmsTagsServiceProvider::class,
             HeadlessH5PServiceProvider::class,
+            EscolaLmsCmi5ServiceProvider::class,
             EscolaLmsTopicTypesServiceProvider::class,
             EscolaLmsCoursesImportExportServiceProvider::class,
         ];

@@ -7,7 +7,8 @@
     "davidbadura/faker-markdown-generator": "^1.1",
     "escolalms/headless-h5p": "^0",
     "laravel/framework": ">=8.0",
-    "escolalms/courses": "^0"
+    "escolalms/courses": "^0",
+    "escolalms/cmi5": "^0"
   },
   "require-dev": {
     "phpunit/phpunit": "^9.0",
@@ -34,6 +35,15 @@
       "EscolaLms\\TopicTypes\\Tests\\": "tests",
       "EscolaLms\\TopicTypes\\Database\\Factories\\": "database/factories",
       "EscolaLms\\TopicTypes\\Database\\Seeders\\": "database/seeders"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "EscolaLms\\TopicTypes\\": "src",
+      "EscolaLms\\TopicTypes\\Tests\\": "tests",
+      "EscolaLms\\TopicTypes\\Database\\Factories\\": "database/factories",
+      "EscolaLms\\TopicTypes\\Database\\Seeders\\": "database/seeders",
+      "App\\Exceptions\\": "tests/Exceptions"
     }
   },
   "extra": {
