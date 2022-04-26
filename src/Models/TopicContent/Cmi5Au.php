@@ -48,4 +48,15 @@ class Cmi5Au extends AbstractTopicContent
     {
         return Cmi5AuFactory::new();
     }
+
+    public function fixAssetPaths(): array
+    {
+        // TODO
+        return [];
+    }
+
+    public function getMorphClass()
+    {
+        return self::class;
+    }
 }

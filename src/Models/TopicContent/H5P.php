@@ -58,7 +58,7 @@ class H5P extends AbstractTopicContent
         }
         $destinationPath = $disk->path($destination);
         $concurrentDirectory = dirname($destinationPath);
-        if (!is_dir($concurrentDirectory) && !mkdir($concurrentDirectory, 0777, true)) {
+        if (!is_dir($concurrentDirectory) && !mkdir($concurrentDirectory, 0755, true)) {
             throw new DirectoryNotFoundException(
                 sprintf('Directory "%s" was not created', $concurrentDirectory)
             );
