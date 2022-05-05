@@ -230,6 +230,9 @@ class TopicTypesTutorCreateApiTest extends TestCase
 
     public function testCreateTopicCmi5Au()
     {
+        if (!class_exists(\EscolaLms\Cmi5\EscolaLmsCmi5ServiceProvider::class)) {
+            $this->markTestSkipped('Require cmi5 package');
+        }
         Event::fake(TopicTypeChanged::class);
         $cmi5Au = Cmi5AuHelper::getCmi5Au();
 

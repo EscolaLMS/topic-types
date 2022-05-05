@@ -7,7 +7,6 @@ use EscolaLms\Courses\Models\Course;
 use EscolaLms\Courses\Models\Lesson;
 use EscolaLms\Courses\Models\Topic;
 use EscolaLms\TopicTypes\Models\TopicContent\Audio;
-use EscolaLms\TopicTypes\Models\TopicContent\Cmi5Au;
 use EscolaLms\TopicTypes\Models\TopicContent\H5P;
 use EscolaLms\TopicTypes\Models\TopicContent\Image;
 use EscolaLms\TopicTypes\Models\TopicContent\OEmbed;
@@ -37,7 +36,7 @@ class TopicTypeClientApiTest extends TestCase
 
     public function topicTypeDataProvider(): array
     {
-        return [
+        $types = [
             [Audio::class],
             [H5P::class],
             [Image::class],
@@ -46,8 +45,11 @@ class TopicTypeClientApiTest extends TestCase
             [RichText::class],
             [ScormSco::class],
             [Video::class],
-            [Cmi5Au::class],
         ];
+        if (class_exists(\EscolaLms\Cmi5\EscolaLmsCmi5ServiceProvider::class)) {
+            $types[] = [\EscolaLms\TopicTypes\Models\TopicContent\Cmi5Au::class];
+        }
+        return $types;
     }
 
     /**

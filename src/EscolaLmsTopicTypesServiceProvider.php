@@ -2,6 +2,7 @@
 
 namespace EscolaLms\TopicTypes;
 
+use EscolaLms\Cmi5\EscolaLmsCmi5ServiceProvider;
 use EscolaLms\Courses\Facades\Topic;
 use EscolaLms\HeadlessH5P\Http\Resources\ContentIndexResource;
 use EscolaLms\HeadlessH5P\Repositories\H5PContentRepository;
@@ -79,7 +80,6 @@ class EscolaLmsTopicTypesServiceProvider extends ServiceProvider
             OEmbed::class,
             PDF::class,
             ScormSco::class,
-            Cmi5Au::class,
         ]);
         Topic::registerResourceClasses(Audio::class, [
             'client' => ClientAudioResource::class,
@@ -121,11 +121,16 @@ class EscolaLmsTopicTypesServiceProvider extends ServiceProvider
             'admin' => AdminScormScoResource::class,
             'export' => ExportScormScoResource::class,
         ]);
-        Topic::registerResourceClasses(Cmi5Au::class, [
-            'client' => ClientCmi5AuResource::class,
-            'admin' => AdminCmi5AuResource::class,
-            'export' => ExportCmi5AuResource::class,
-        ]);
+        if (class_exists(EscolaLmsCmi5ServiceProvider::class)) {
+            Topic::registerContentClasses([
+                Cmi5Au::class
+            ]);
+            Topic::registerResourceClasses(Cmi5Au::class, [
+                'client' => ClientCmi5AuResource::class,
+                'admin' => AdminCmi5AuResource::class,
+                'export' => ExportCmi5AuResource::class,
+            ]);
+        }
     }
 
     public function register()

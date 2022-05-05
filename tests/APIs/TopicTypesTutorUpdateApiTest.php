@@ -619,6 +619,9 @@ class TopicTypesTutorUpdateApiTest extends TestCase
 
     public function testUpdateTopicCmi5Au(): void
     {
+        if (!class_exists(\EscolaLms\Cmi5\EscolaLmsCmi5ServiceProvider::class)) {
+            $this->markTestSkipped('Require cmi5 package');
+        }
         Storage::fake('local');
         Event::fake(TopicTypeChanged::class);
 

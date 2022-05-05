@@ -5,7 +5,6 @@ namespace EscolaLms\TopicTypes\Tests;
 use EscolaLms\Auth\EscolaLmsAuthServiceProvider;
 use EscolaLms\Auth\Tests\Models\Client;
 use EscolaLms\Categories\EscolaLmsCategoriesServiceProvider;
-use EscolaLms\Cmi5\EscolaLmsCmi5ServiceProvider;
 use EscolaLms\Courses\AuthServiceProvider;
 use EscolaLms\Courses\EscolaLmsCourseServiceProvider;
 use EscolaLms\Courses\Tests\Models\User as UserTest;
@@ -31,7 +30,7 @@ class TestCase extends \EscolaLms\Courses\Tests\TestCase
 
     protected function getPackageProviders($app)
     {
-        return [
+        $providers = [
             ...parent::getPackageProviders($app),
             EscolaLmsAuthServiceProvider::class,
             PermissionServiceProvider::class,
@@ -42,10 +41,13 @@ class TestCase extends \EscolaLms\Courses\Tests\TestCase
             EscolaLmsScormServiceProvider::class,
             EscolaLmsTagsServiceProvider::class,
             HeadlessH5PServiceProvider::class,
-            EscolaLmsCmi5ServiceProvider::class,
             EscolaLmsTopicTypesServiceProvider::class,
             EscolaLmsCoursesImportExportServiceProvider::class,
         ];
+        if (class_exists(\EscolaLms\Cmi5\EscolaLmsCmi5ServiceProvider::class)) {
+            $providers[] = \EscolaLms\Cmi5\EscolaLmsCmi5ServiceProvider::class;
+        }
+        return $providers;
     }
 
     protected function getEnvironmentSetUp($app)
