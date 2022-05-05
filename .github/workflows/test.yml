@@ -33,7 +33,7 @@ jobs:
       - name: create folder for passport keys
         run: |
           mkdir storage
-          mkdir vendor/escolalms/lrs/src/../../storage/
+          mkdir src/../../storage/
 
       - name: Clear config
         run: vendor/bin/testbench config:clear
