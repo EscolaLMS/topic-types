@@ -2,6 +2,7 @@
 
 namespace EscolaLms\TopicTypes;
 
+use EscolaLms\Cmi5\EscolaLmsCmi5ServiceProvider;
 use EscolaLms\Courses\Facades\Topic;
 use EscolaLms\HeadlessH5P\Http\Resources\ContentIndexResource;
 use EscolaLms\HeadlessH5P\Repositories\H5PContentRepository;
@@ -14,23 +15,30 @@ use EscolaLms\TopicTypes\Http\Resources\TopicType\Admin\H5PResource as AdminH5PR
 use EscolaLms\TopicTypes\Http\Resources\TopicType\Admin\ImageResource as AdminImageResource;
 use EscolaLms\TopicTypes\Http\Resources\TopicType\Admin\OEmbedResource as AdminOEmbedResource;
 use EscolaLms\TopicTypes\Http\Resources\TopicType\Admin\PDFResource as AdminPDFResource;
+use EscolaLms\TopicTypes\Http\Resources\TopicType\Admin\RichTextResource as AdminRichTextResource;
 use EscolaLms\TopicTypes\Http\Resources\TopicType\Admin\VideoResource as AdminVideoResource;
 use EscolaLms\TopicTypes\Http\Resources\TopicType\Admin\ScormScoResource as AdminScormScoResource;
+use EscolaLms\TopicTypes\Http\Resources\TopicType\Admin\Cmi5AuResource as AdminCmi5AuResource;
 use EscolaLms\TopicTypes\Http\Resources\TopicType\Client\AudioResource as ClientAudioResource;
 use EscolaLms\TopicTypes\Http\Resources\TopicType\Client\H5PResource as ClientH5PResource;
 use EscolaLms\TopicTypes\Http\Resources\TopicType\Client\ImageResource as ClientImageResource;
 use EscolaLms\TopicTypes\Http\Resources\TopicType\Client\OEmbedResource as ClientOEmbedResource;
 use EscolaLms\TopicTypes\Http\Resources\TopicType\Client\PDFResource as ClientPDFResource;
+use EscolaLms\TopicTypes\Http\Resources\TopicType\Client\RichTextResource as ClientRichTextResource;
 use EscolaLms\TopicTypes\Http\Resources\TopicType\Client\VideoResource as ClientVideoResource;
 use EscolaLms\TopicTypes\Http\Resources\TopicType\Client\ScormScoResource as ClientScormScoResource;
+use EscolaLms\TopicTypes\Http\Resources\TopicType\Client\Cmi5AuResource as ClientCmi5AuResource;
 use EscolaLms\TopicTypes\Http\Resources\TopicType\Export\AudioResource as ExportAudioResource;
 use EscolaLms\TopicTypes\Http\Resources\TopicType\Export\H5PResource as ExportH5PResource;
 use EscolaLms\TopicTypes\Http\Resources\TopicType\Export\ImageResource as ExportImageResource;
 use EscolaLms\TopicTypes\Http\Resources\TopicType\Export\OEmbedResource as ExportOEmbedResource;
 use EscolaLms\TopicTypes\Http\Resources\TopicType\Export\PDFResource as ExportPDFResource;
+use EscolaLms\TopicTypes\Http\Resources\TopicType\Export\RichTextResource as ExportRichTextResource;
 use EscolaLms\TopicTypes\Http\Resources\TopicType\Export\VideoResource as ExportVideoResource;
 use EscolaLms\TopicTypes\Http\Resources\TopicType\Export\ScormScoResource as ExportScormScoResource;
+use EscolaLms\TopicTypes\Http\Resources\TopicType\Export\Cmi5AuResource as ExportCmi5AuResource;
 use EscolaLms\TopicTypes\Models\TopicContent\Audio;
+use EscolaLms\TopicTypes\Models\TopicContent\Cmi5Au;
 use EscolaLms\TopicTypes\Models\TopicContent\H5P;
 use EscolaLms\TopicTypes\Models\TopicContent\Image;
 use EscolaLms\TopicTypes\Models\TopicContent\OEmbed;
@@ -64,7 +72,14 @@ class EscolaLmsTopicTypesServiceProvider extends ServiceProvider
             ]);
         }
         Topic::registerContentClasses([
-            Audio::class, Video::class, Image::class, RichText::class, H5P::class, OEmbed::class, PDF::class, ScormSco::class
+            Audio::class,
+            Video::class,
+            Image::class,
+            RichText::class,
+            H5P::class,
+            OEmbed::class,
+            PDF::class,
+            ScormSco::class,
         ]);
         Topic::registerResourceClasses(Audio::class, [
             'client' => ClientAudioResource::class,
@@ -106,6 +121,16 @@ class EscolaLmsTopicTypesServiceProvider extends ServiceProvider
             'admin' => AdminScormScoResource::class,
             'export' => ExportScormScoResource::class,
         ]);
+        if (class_exists(EscolaLmsCmi5ServiceProvider::class)) {
+            Topic::registerContentClasses([
+                Cmi5Au::class
+            ]);
+            Topic::registerResourceClasses(Cmi5Au::class, [
+                'client' => ClientCmi5AuResource::class,
+                'admin' => AdminCmi5AuResource::class,
+                'export' => ExportCmi5AuResource::class,
+            ]);
+        }
     }
 
     public function register()

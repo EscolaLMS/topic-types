@@ -6,7 +6,16 @@ use EscolaLms\Courses\Database\Seeders\CoursesPermissionSeeder;
 use EscolaLms\Courses\Models\Course;
 use EscolaLms\Courses\Models\Lesson;
 use EscolaLms\Courses\Models\Topic;
+use EscolaLms\HeadlessH5P\Models\H5PContent;
+use EscolaLms\HeadlessH5P\Models\H5PLibrary;
+use EscolaLms\TopicTypes\Database\Factories\TopicContent\Components\Cmi5AuHelper;
+use EscolaLms\TopicTypes\Database\Factories\TopicContent\Components\ScormScoHelper;
 use EscolaLms\TopicTypes\Models\TopicContent\Audio;
+use EscolaLms\TopicTypes\Models\TopicContent\Cmi5Au;
+use EscolaLms\TopicTypes\Models\TopicContent\H5P;
+use EscolaLms\TopicTypes\Models\TopicContent\OEmbed;
+use EscolaLms\TopicTypes\Models\TopicContent\RichText;
+use EscolaLms\TopicTypes\Models\TopicContent\ScormSco;
 use EscolaLms\TopicTypes\Models\TopicContent\Video;
 use EscolaLms\TopicTypes\Tests\TestCase;
 use EscolaLms\TopicTypes\Events\TopicTypeChanged;
@@ -38,10 +47,7 @@ class TopicTypesTutorUpdateApiTest extends TestCase
         ]);
     }
 
-    /**
-     * @test
-     */
-    public function testUpdateTopicImage()
+    public function testUpdateTopicImage(): void
     {
         Storage::fake('local');
         Event::fake(TopicTypeChanged::class);
@@ -77,7 +83,7 @@ class TopicTypesTutorUpdateApiTest extends TestCase
         });
     }
 
-    public function testUpdateTopicAudio()
+    public function testUpdateTopicAudio(): void
     {
         Storage::fake('local');
         Event::fake(TopicTypeChanged::class);
@@ -112,7 +118,7 @@ class TopicTypesTutorUpdateApiTest extends TestCase
         });
     }
 
-    public function testUpdateTopicAudioWithNewFile()
+    public function testUpdateTopicAudioWithNewFile(): void
     {
         Storage::fake('local');
         Event::fake(TopicTypeChanged::class);
@@ -203,7 +209,7 @@ class TopicTypesTutorUpdateApiTest extends TestCase
         });
     }
 
-    public function testUpdateTopicVideo()
+    public function testUpdateTopicVideo(): void
     {
         Storage::fake('local');
         Event::fake(TopicTypeChanged::class);
@@ -241,7 +247,7 @@ class TopicTypesTutorUpdateApiTest extends TestCase
         });
     }
 
-    public function testUpdateTopicRichtext()
+    public function testUpdateTopicRichtext(): void
     {
         Event::fake(TopicTypeChanged::class);
         $this->response = $this->withHeaders([
@@ -272,7 +278,7 @@ class TopicTypesTutorUpdateApiTest extends TestCase
         });
     }
 
-    public function testUpdateTopicPdf()
+    public function testUpdateTopicPdf(): void
     {
         Storage::fake('local');
         Event::fake(TopicTypeChanged::class);
@@ -308,7 +314,7 @@ class TopicTypesTutorUpdateApiTest extends TestCase
         });
     }
 
-    public function testUpdateTopicWrongClass()
+    public function testUpdateTopicWrongClass(): void
     {
         $this->response = $this->withHeaders([
             'Content' => 'application/x-www-form-urlencoded',
@@ -326,7 +332,7 @@ class TopicTypesTutorUpdateApiTest extends TestCase
         $this->response->assertStatus(422);
     }
 
-    public function testUpdateTopicWithJson()
+    public function testUpdateTopicWithJson(): void
     {
         Event::fake(TopicTypeChanged::class);
         $this->response = $this->withHeaders([
@@ -378,7 +384,7 @@ class TopicTypesTutorUpdateApiTest extends TestCase
         });
     }
 
-    public function testUpdateTopicImageWithReusableFile()
+    public function testUpdateTopicImageWithReusableFile(): void
     {
         Storage::fake('local');
         Event::fake(TopicTypeChanged::class);
@@ -412,7 +418,7 @@ class TopicTypesTutorUpdateApiTest extends TestCase
         });
     }
 
-    public function testUpdateTopicAudioWithReusableFile()
+    public function testUpdateTopicAudioWithReusableFile(): void
     {
         Storage::fake('local');
         Event::fake(TopicTypeChanged::class);
@@ -446,7 +452,7 @@ class TopicTypesTutorUpdateApiTest extends TestCase
         });
     }
 
-    public function testUpdateTopicVideoWithReusableFile()
+    public function testUpdateTopicVideoWithReusableFile(): void
     {
         Storage::fake('local');
         Event::fake(TopicTypeChanged::class);
@@ -480,6 +486,163 @@ class TopicTypesTutorUpdateApiTest extends TestCase
         $this->assertDatabaseHas('topic_videos', [
             'value' => $videoPath,
             'poster' => $posterPath,
+        ]);
+
+        Event::assertDispatched(TopicTypeChanged::class, function ($event) {
+            return $event->getUser() === $this->user && $event->getTopicContent();
+        });
+    }
+
+    public function testUpdateTopicH5PWithReusableFile(): void
+    {
+        Storage::fake('local');
+        Event::fake(TopicTypeChanged::class);
+
+        $library = H5PLibrary::factory()
+            ->create(['runnable' => 1]);
+        $contentH5P = H5PContent::factory()
+            ->create([
+                'library_id' => $library->getKey()
+            ]);
+
+        $this->response = $this->actingAs($this->user, 'api')->postJson(
+            '/api/admin/topics/' . $this->topic->id,
+            [
+                'title' => 'Hello World',
+                'lesson_id' => $this->topic->lesson_id,
+                'topicable_type' => H5P::class,
+                'value' => $contentH5P->getKey(),
+            ]
+        );
+
+        $data = json_decode($this->response->getContent());
+        $contentH5PId = $data->data->topicable->value;
+
+        $this->assertEquals($contentH5P->getKey(), $contentH5PId);
+
+        $this->assertDatabaseHas('topic_h5ps', [
+            'value' => $contentH5PId,
+        ]);
+
+        Event::assertDispatched(TopicTypeChanged::class, function ($event) {
+            return $event->getUser() === $this->user && $event->getTopicContent();
+        });
+    }
+
+    public function testUpdateTopicOEmbed(): void
+    {
+        Storage::fake('local');
+        Event::fake(TopicTypeChanged::class);
+
+        $this->response = $this->actingAs($this->user, 'api')->postJson(
+            '/api/admin/topics/' . $this->topic->id,
+            [
+                'title' => 'Hello World',
+                'lesson_id' => $this->topic->lesson_id,
+                'topicable_type' => OEmbed::class,
+                'value' => 'abc',
+            ]
+        );
+
+        $data = json_decode($this->response->getContent());
+        $oEmbedResponseValue = $data->data->topicable->value;
+
+        $this->assertEquals('abc', $oEmbedResponseValue);
+
+        $this->assertDatabaseHas('topic_oembeds', [
+            'value' => 'abc',
+        ]);
+
+        Event::assertDispatched(TopicTypeChanged::class, function ($event) {
+            return $event->getUser() === $this->user && $event->getTopicContent();
+        });
+    }
+
+    public function testUpdateTopicRichTextNew(): void
+    {
+        Storage::fake('local');
+        Event::fake(TopicTypeChanged::class);
+
+        $this->response = $this->actingAs($this->user, 'api')->postJson(
+            '/api/admin/topics/' . $this->topic->id,
+            [
+                'title' => 'Hello World',
+                'lesson_id' => $this->topic->lesson_id,
+                'topicable_type' => RichText::class,
+                'value' => 'abc',
+            ]
+        );
+
+        $data = json_decode($this->response->getContent());
+        $richTextResponseValue = $data->data->topicable->value;
+
+        $this->assertEquals('abc', $richTextResponseValue);
+
+        $this->assertDatabaseHas('topic_richtexts', [
+            'value' => 'abc',
+        ]);
+
+        Event::assertDispatched(TopicTypeChanged::class, function ($event) {
+            return $event->getUser() === $this->user && $event->getTopicContent();
+        });
+    }
+
+    public function testUpdateTopicScormSco(): void
+    {
+        Storage::fake('local');
+        Event::fake(TopicTypeChanged::class);
+
+        $scormSco = ScormScoHelper::getScormSco();
+
+        $this->response = $this->actingAs($this->user, 'api')->postJson(
+            '/api/admin/topics/' . $this->topic->id,
+            [
+                'title' => 'Hello World',
+                'lesson_id' => $this->topic->lesson_id,
+                'topicable_type' => ScormSco::class,
+                'value' => $scormSco->getKey(),
+            ]
+        );
+
+        $value = $this->response->getData()->data->topicable->value;
+
+        $this->assertEquals($scormSco->getKey(), $value);
+
+        $this->assertDatabaseHas('topic_scorm_scos', [
+            'value' => $scormSco->getKey(),
+        ]);
+
+        Event::assertDispatched(TopicTypeChanged::class, function ($event) {
+            return $event->getUser() === $this->user && $event->getTopicContent();
+        });
+    }
+
+    public function testUpdateTopicCmi5Au(): void
+    {
+        if (!class_exists(\EscolaLms\Cmi5\EscolaLmsCmi5ServiceProvider::class)) {
+            $this->markTestSkipped('Require cmi5 package');
+        }
+        Storage::fake('local');
+        Event::fake(TopicTypeChanged::class);
+
+        $cmi5Au = Cmi5AuHelper::getCmi5Au();
+
+        $this->response = $this->actingAs($this->user, 'api')->postJson(
+            '/api/admin/topics/' . $this->topic->id,
+            [
+                'title' => 'Hello World',
+                'lesson_id' => $this->topic->lesson_id,
+                'topicable_type' => Cmi5Au::class,
+                'value' => $cmi5Au->getKey(),
+            ]
+        );
+
+        $value = $this->response->getData()->data->topicable->value;
+
+        $this->assertEquals($cmi5Au->getKey(), $value);
+
+        $this->assertDatabaseHas('topic_cmi5_aus', [
+            'value' => $cmi5Au->getKey(),
         ]);
 
         Event::assertDispatched(TopicTypeChanged::class, function ($event) {

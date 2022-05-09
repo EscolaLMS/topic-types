@@ -10,7 +10,7 @@ jobs:
 
     services:
       mysql:
-        image: mysql:5.7
+        image: mariadb:10.5
         env:
           MYSQL_ROOT_PASSWORD: root
           MYSQL_DATABASE: database
@@ -30,11 +30,20 @@ jobs:
       - name: Update composer
         run: composer update
 
+      - name: create folder for passport keys
+        run: |
+          mkdir storage
+
       - name: Clear config
         run: vendor/bin/testbench config:clear
 
       - name: Publish things
         run: vendor/bin/testbench migrate:fresh
+
+      - name: Generate keys
+        run: |
+          vendor/bin/testbench passport:keys --force
+          vendor/bin/testbench passport:client --personal --no-interaction
 
       - name: Run tests
         run: vendor/bin/phpunit
@@ -46,7 +55,7 @@ jobs:
 
     services:
       mysql:
-        image: mysql:5.7
+        image: mariadb:10.5
         env:
           MYSQL_ROOT_PASSWORD: root
           MYSQL_DATABASE: database
@@ -66,11 +75,20 @@ jobs:
       - name: Update composer
         run: composer update
 
+      - name: create folder for passport keys
+        run: |
+          mkdir storage
+
       - name: Clear config
         run: vendor/bin/testbench config:clear
 
       - name: Publish things
         run: vendor/bin/testbench migrate:fresh
+
+      - name: Generate keys
+        run: |
+          vendor/bin/testbench passport:keys --force
+          vendor/bin/testbench passport:client --personal --no-interaction
 
       - name: Run tests
         run: vendor/bin/phpunit
@@ -98,6 +116,10 @@ jobs:
       - name: Update composer
         run: composer update
 
+      - name: create folder for passport keys
+        run: |
+          mkdir storage
+
       - name: Setup environment
         run: cp env/postgres/* .
 
@@ -107,14 +129,10 @@ jobs:
       - name: Publish things
         run: vendor/bin/testbench migrate:fresh
 
-      - name: Run tests
-        run: vendor/bin/phpunit
-
-      - name: Clear config
-        run: vendor/bin/testbench config:clear
-
-      - name: Publish things
-        run: vendor/bin/testbench migrate:fresh
+      - name: Generate keys
+        run: |
+          vendor/bin/testbench passport:keys --force
+          vendor/bin/testbench passport:client --personal --no-interaction
 
       - name: Run tests
         run: vendor/bin/phpunit
@@ -142,6 +160,10 @@ jobs:
       - name: Update composer
         run: composer update
 
+      - name: create folder for passport keys
+        run: |
+          mkdir storage
+
       - name: Setup environment
         run: cp env/postgres/* .
 
@@ -150,6 +172,11 @@ jobs:
 
       - name: Publish things
         run: vendor/bin/testbench migrate:fresh
+
+      - name: Generate keys
+        run: |
+          vendor/bin/testbench passport:keys --force
+          vendor/bin/testbench passport:client --personal --no-interaction
 
       - name: Run tests
         run: vendor/bin/phpunit

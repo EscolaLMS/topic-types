@@ -36,7 +36,7 @@ class TopicTypeClientApiTest extends TestCase
 
     public function topicTypeDataProvider(): array
     {
-        return [
+        $types = [
             [Audio::class],
             [H5P::class],
             [Image::class],
@@ -46,12 +46,16 @@ class TopicTypeClientApiTest extends TestCase
             [ScormSco::class],
             [Video::class],
         ];
+        if (class_exists(\EscolaLms\Cmi5\EscolaLmsCmi5ServiceProvider::class)) {
+            $types[] = [\EscolaLms\TopicTypes\Models\TopicContent\Cmi5Au::class];
+        }
+        return $types;
     }
 
     /**
      * @dataProvider topicTypeDataProvider
      */
-    public function testGetTopic($class)
+    public function testGetTopic($class): void
     {
         $model = $class::factory()->create();
         $this->topic->topicable()->associate($model)->save();

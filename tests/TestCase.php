@@ -8,6 +8,7 @@ use EscolaLms\Categories\EscolaLmsCategoriesServiceProvider;
 use EscolaLms\Courses\AuthServiceProvider;
 use EscolaLms\Courses\EscolaLmsCourseServiceProvider;
 use EscolaLms\Courses\Tests\Models\User as UserTest;
+use EscolaLms\CoursesImportExport\EscolaLmsCoursesImportExportServiceProvider;
 use EscolaLms\HeadlessH5P\HeadlessH5PServiceProvider;
 use EscolaLms\Scorm\EscolaLmsScormServiceProvider;
 use EscolaLms\Tags\EscolaLmsTagsServiceProvider;
@@ -29,7 +30,7 @@ class TestCase extends \EscolaLms\Courses\Tests\TestCase
 
     protected function getPackageProviders($app)
     {
-        return [
+        $providers = [
             ...parent::getPackageProviders($app),
             EscolaLmsAuthServiceProvider::class,
             PermissionServiceProvider::class,
@@ -41,7 +42,12 @@ class TestCase extends \EscolaLms\Courses\Tests\TestCase
             EscolaLmsTagsServiceProvider::class,
             HeadlessH5PServiceProvider::class,
             EscolaLmsTopicTypesServiceProvider::class,
+            EscolaLmsCoursesImportExportServiceProvider::class,
         ];
+        if (class_exists(\EscolaLms\Cmi5\EscolaLmsCmi5ServiceProvider::class)) {
+            $providers[] = \EscolaLms\Cmi5\EscolaLmsCmi5ServiceProvider::class;
+        }
+        return $providers;
     }
 
     protected function getEnvironmentSetUp($app)
