@@ -34,8 +34,8 @@ class HelpersMethodTest extends TestCase
         $course = $topic->lesson->course;
         $file = 'test.jpg';
         $destinationPrefix = sprintf('course/%d/topic/%d/', $course->id, $topic->id);
-        Storage::disk('public')->makeDirectory($destinationPrefix);
-        copy(__DIR__ . '/test.jpg', Storage::disk('public')->path($destinationPrefix . $file));
+        Storage::disk('local')->makeDirectory($destinationPrefix);
+        copy(__DIR__ . '/test.jpg', Storage::disk('local')->path($destinationPrefix . $file));
         $result = Markdown::convertImagesPathsForImageApi("![Image] (api/images/img?path={$file})", $destinationPrefix);
         $this->assertArrayHasKey('results', $result);
         $this->assertTrue(is_array($result['results']));
