@@ -7,12 +7,11 @@
     "davidbadura/faker-markdown-generator": "^1.1",
     "escolalms/headless-h5p": "^0",
     "laravel/framework": ">=8.0",
-    "escolalms/courses": "^0"
+    "escolalms/courses": "^0.3.66"
   },
   "require-dev": {
     "phpunit/phpunit": "^9.0",
-    "orchestra/testbench": ">=5.0",
-    "escolalms/courses-import-export": "^0"
+    "orchestra/testbench": ">=5.0"
   },
   "suggest": {
     "escolalms/courses": "Topic types is a package related to escolalms/courses without which it may not work properly.",
