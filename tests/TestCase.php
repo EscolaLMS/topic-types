@@ -10,6 +10,7 @@ use EscolaLms\Courses\EscolaLmsCourseServiceProvider;
 use EscolaLms\Courses\Tests\Models\User as UserTest;
 use EscolaLms\CoursesImportExport\EscolaLmsCoursesImportExportServiceProvider;
 use EscolaLms\HeadlessH5P\HeadlessH5PServiceProvider;
+use EscolaLms\ModelFields\ModelFieldsServiceProvider;
 use EscolaLms\Scorm\EscolaLmsScormServiceProvider;
 use EscolaLms\Tags\EscolaLmsTagsServiceProvider;
 use EscolaLms\TopicTypes\EscolaLmsTopicTypesServiceProvider;
@@ -43,6 +44,7 @@ class TestCase extends \EscolaLms\Courses\Tests\TestCase
             HeadlessH5PServiceProvider::class,
             EscolaLmsTopicTypesServiceProvider::class,
             EscolaLmsCoursesImportExportServiceProvider::class,
+            ModelFieldsServiceProvider::class
         ];
         if (class_exists(\EscolaLms\Cmi5\EscolaLmsCmi5ServiceProvider::class)) {
             $providers[] = \EscolaLms\Cmi5\EscolaLmsCmi5ServiceProvider::class;
