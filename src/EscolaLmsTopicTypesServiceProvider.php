@@ -144,7 +144,15 @@ class EscolaLmsTopicTypesServiceProvider extends ServiceProvider
             'topic_h5ps'
         );
         H5PContentRepository::extendQueryGroupBy(
-            fn () => ['hh5p_contents.id', 'hh5p_contents.title', 'hh5p_contents.library_id'],
+            fn () => [
+                'hh5p_contents.id',
+                'hh5p_contents.uuid',
+                'hh5p_contents.title',
+                'hh5p_contents.library_id',
+                'hh5p_contents.user_id',
+                'hh5p_contents.author',
+                'hh5p_contents.created_at',
+            ],
             'topic_h5ps'
         );
         ContentIndexResource::extend(fn ($thisObj) => [
