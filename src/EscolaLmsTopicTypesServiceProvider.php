@@ -147,7 +147,6 @@ class EscolaLmsTopicTypesServiceProvider extends ServiceProvider
             fn () => [
                 'hh5p_contents.id',
                 'hh5p_contents.uuid',
-                'hh5p_contents.title',
                 'hh5p_contents.library_id',
                 'hh5p_contents.user_id',
                 'hh5p_contents.author',
