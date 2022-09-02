@@ -151,6 +151,7 @@ class EscolaLmsTopicTypesServiceProvider extends ServiceProvider
                 'hh5p_contents.user_id',
                 'hh5p_contents.author',
                 'hh5p_contents.created_at',
+                'hh5p_contents.parameters',
             ],
             'topic_h5ps'
         );
