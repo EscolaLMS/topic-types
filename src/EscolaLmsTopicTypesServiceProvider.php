@@ -48,6 +48,7 @@ use EscolaLms\TopicTypes\Models\TopicContent\ScormSco;
 use EscolaLms\TopicTypes\Models\TopicContent\Video;
 use EscolaLms\TopicTypes\Services\Contracts\TopicTypeServiceContract;
 use EscolaLms\TopicTypes\Services\TopicTypeService;
+use Illuminate\Database\PostgresConnection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\ServiceProvider;
 
@@ -150,8 +151,7 @@ class EscolaLmsTopicTypesServiceProvider extends ServiceProvider
                 'hh5p_contents.library_id',
                 'hh5p_contents.user_id',
                 'hh5p_contents.author',
-                'hh5p_contents.created_at',
-                'hh5p_contents.parameters',
+                DB::Connection() instanceof PostgresConnection ? 'hh5p_contents.parameters::jsonb' : 'hh5p_contents.parameters',
             ],
             'topic_h5ps'
         );
