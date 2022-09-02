@@ -151,6 +151,7 @@ class EscolaLmsTopicTypesServiceProvider extends ServiceProvider
                 'hh5p_contents.library_id',
                 'hh5p_contents.user_id',
                 'hh5p_contents.author',
+                'hh5p_contents.created_at',
                 DB::Connection() instanceof PostgresConnection ? 'hh5p_contents.parameters::jsonb' : 'hh5p_contents.parameters',
             ],
             'topic_h5ps'
