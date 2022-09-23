@@ -7,7 +7,6 @@ use EscolaLms\TopicTypes\Database\Factories\TopicContent\H5PFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Storage;
-use Symfony\Component\Finder\Exception\DirectoryNotFoundException;
 
 /**
  * @OA\Schema(
@@ -52,19 +51,15 @@ class H5P extends AbstractTopicContent
         $destination = sprintf('course/%d/topic/%d/%s', $course->id, $topic->id, 'export.h5p');
         $contentRepository = App::make(H5PContentRepositoryContract::class);
         $filepath = $contentRepository->download($this->value);
-        $disk = Storage::disk('local'); // this is always 'local' for h5p
-        if ($disk->exists($destination)) {
-            $disk->delete($destination);
+
+        if (Storage::exists($destination)) {
+            Storage::delete($destination);
         }
-        $destinationPath = $disk->path($destination);
-        $concurrentDirectory = dirname($destinationPath);
-        if (!is_dir($concurrentDirectory) && !mkdir($concurrentDirectory, 0755, true)) {
-            throw new DirectoryNotFoundException(
-                sprintf('Directory "%s" was not created', $concurrentDirectory)
-            );
-        }
-        copy($filepath, $destinationPath);
-        return [[$filepath, $destinationPath]];
+
+        $inputStream = fopen($filepath, 'r+');
+        Storage::getDriver()->writeStream($destination, $inputStream);
+
+        return [[$filepath, Storage::path($destination)]];
     }
 
     public function getMorphClass()

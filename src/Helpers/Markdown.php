@@ -76,8 +76,8 @@ class Markdown
         $filepath = $vars['path'];
         $basename = basename($filepath);
         $destination = sprintf($destinationPrefix . '%s', $basename);
-        if (!Storage::disk('public')->exists($destination)) {
-            Storage::disk('public')->move($filepath, $destination);
+        if (!Storage::exists($destination)) {
+            Storage::move($filepath, $destination);
         }
         $results = [$filepath, $destination];
         $destination = $this->unParseUrl(array_merge(

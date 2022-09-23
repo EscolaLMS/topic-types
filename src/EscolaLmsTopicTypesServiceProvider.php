@@ -48,6 +48,7 @@ use EscolaLms\TopicTypes\Models\TopicContent\ScormSco;
 use EscolaLms\TopicTypes\Models\TopicContent\Video;
 use EscolaLms\TopicTypes\Services\Contracts\TopicTypeServiceContract;
 use EscolaLms\TopicTypes\Services\TopicTypeService;
+use Illuminate\Database\PostgresConnection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\ServiceProvider;
 
@@ -144,7 +145,15 @@ class EscolaLmsTopicTypesServiceProvider extends ServiceProvider
             'topic_h5ps'
         );
         H5PContentRepository::extendQueryGroupBy(
-            fn () => ['hh5p_contents.id', 'hh5p_contents.title', 'hh5p_contents.library_id'],
+            fn () => [
+                'hh5p_contents.id',
+                'hh5p_contents.uuid',
+                'hh5p_contents.library_id',
+                'hh5p_contents.user_id',
+                'hh5p_contents.author',
+                'hh5p_contents.created_at',
+                DB::Connection() instanceof PostgresConnection ? 'hh5p_contents.parameters::jsonb' : 'hh5p_contents.parameters',
+            ],
             'topic_h5ps'
         );
         ContentIndexResource::extend(fn ($thisObj) => [

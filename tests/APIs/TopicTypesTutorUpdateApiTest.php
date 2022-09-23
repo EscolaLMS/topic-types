@@ -6,9 +6,8 @@ use EscolaLms\Courses\Database\Seeders\CoursesPermissionSeeder;
 use EscolaLms\Courses\Models\Course;
 use EscolaLms\Courses\Models\Lesson;
 use EscolaLms\Courses\Models\Topic;
-use EscolaLms\HeadlessH5P\Models\H5PContent;
-use EscolaLms\HeadlessH5P\Models\H5PLibrary;
 use EscolaLms\TopicTypes\Database\Factories\TopicContent\Components\Cmi5AuHelper;
+use EscolaLms\TopicTypes\Database\Factories\TopicContent\Components\H5PHelper;
 use EscolaLms\TopicTypes\Database\Factories\TopicContent\Components\ScormScoHelper;
 use EscolaLms\TopicTypes\Models\TopicContent\Audio;
 use EscolaLms\TopicTypes\Models\TopicContent\Cmi5Au;
@@ -498,12 +497,7 @@ class TopicTypesTutorUpdateApiTest extends TestCase
         Storage::fake('local');
         Event::fake(TopicTypeChanged::class);
 
-        $library = H5PLibrary::factory()
-            ->create(['runnable' => 1]);
-        $contentH5P = H5PContent::factory()
-            ->create([
-                'library_id' => $library->getKey()
-            ]);
+        $contentH5P = H5PHelper::createH5PContent();
 
         $this->response = $this->actingAs($this->user, 'api')->postJson(
             '/api/admin/topics/' . $this->topic->id,

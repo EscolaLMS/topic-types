@@ -31,7 +31,7 @@ class PDF extends AbstractTopicFileContent
     public static function rules(): array
     {
         return [
-            'value' => ['required', 'file', 'mimes:pdf'],
+            'value' => ['required', 'mimes:pdf'],
         ];
     }
 

@@ -6,7 +6,6 @@ use EscolaLms\Scorm\Services\Contracts\ScormServiceContract;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Facades\Storage;
 use Peopleaps\Scorm\Model\ScormScoModel;
-use Symfony\Component\Finder\Exception\DirectoryNotFoundException;
 
 /**
  * @OA\Schema(
@@ -78,18 +77,11 @@ class ScormSco extends AbstractTopicContent
         if (Storage::exists($destination)) {
             Storage::delete($destination);
         }
-        $destinationPath = $destination;
-        $concurrentDirectory = dirname($destinationPath);
 
-        if (!is_dir($concurrentDirectory) && !mkdir($concurrentDirectory, 0755, true)) {
-            throw new DirectoryNotFoundException(
-                sprintf('Directory "%s" was not created', $concurrentDirectory)
-            );
-        }
+        $inputStream = Storage::disk('local')->getDriver()->readStream($zipPath);
+        Storage::getDriver()->writeStream($destination, $inputStream);
 
-        Storage::move($zipPath, $destinationPath);
-
-        return [[$zipPath, $destinationPath]];
+        return [[$zipPath, $destination]];
     }
 
     public function getMorphClass()

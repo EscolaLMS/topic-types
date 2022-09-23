@@ -20,7 +20,7 @@ class ScormScoHelper
             $scormService = app()->make(ScormServiceContract::class);
             return $scormService->uploadScormArchive($file);
         } catch (\Exception $err) {
-            echo $err->getMessage();
+            echo 'Error | File: ' . $err->getFile() . ' | Line: ' . $err->getLine() . ' | Message: ' . $err->getMessage();
         } finally {
             if (is_file($tmpPath)) {
                 unlink($tmpPath);
