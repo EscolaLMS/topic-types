@@ -18,7 +18,9 @@ abstract class AbstractTopicFileContent extends AbstractTopicContent implements 
         return Collection::make($this->rules())
             ->filter(function ($fieldRules) {
                 if (is_array($fieldRules)) {
-                    return in_array('file', $fieldRules) || in_array('image', $fieldRules);
+                    return in_array('file', $fieldRules) ||
+                        in_array('image', $fieldRules) ||
+                        collect($fieldRules)->filter(fn($rule) => strpos($rule, 'mimes') !== false)->count();
                 }
 
                 return  strpos('file', $fieldRules) !== false ||
