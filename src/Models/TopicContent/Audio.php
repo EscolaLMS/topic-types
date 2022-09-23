@@ -42,7 +42,7 @@ class Audio extends AbstractTopicFileContent
     public static function rules(): array
     {
         return [
-            'value' => ['required', 'file', 'mimes:mp3,ogg'],
+            'value' => ['required', 'mimes:mp3,ogg'],
             'length' => ['sometimes', 'integer'],
         ];
     }
