@@ -53,7 +53,7 @@ class Video extends AbstractTopicFileContent
     public static function rules(): array
     {
         return [
-            'value' => ['required', 'file', 'mimes:mp4,ogg,webm'],
+            'value' => ['required', 'mimes:mp4,ogg,webm'],
             'poster' => ['file', 'image'],
         ];
     }

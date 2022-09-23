@@ -6,8 +6,6 @@ use EscolaLms\Courses\Database\Seeders\CoursesPermissionSeeder;
 use EscolaLms\Courses\Models\Course;
 use EscolaLms\Courses\Models\Lesson;
 use EscolaLms\Courses\Models\Topic;
-use EscolaLms\HeadlessH5P\Models\H5PContent;
-use EscolaLms\HeadlessH5P\Models\H5PLibrary;
 use EscolaLms\TopicTypes\Database\Factories\TopicContent\Components\Cmi5AuHelper;
 use EscolaLms\TopicTypes\Database\Factories\TopicContent\Components\ScormScoHelper;
 use EscolaLms\TopicTypes\Models\TopicContent\Audio;
