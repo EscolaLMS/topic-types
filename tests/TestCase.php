@@ -59,6 +59,7 @@ class TestCase extends \EscolaLms\Courses\Tests\TestCase
         $app['config']->set('database.connections.mysql.strict', false);
         $app['config']->set('app.debug', (bool) env('APP_DEBUG', true));
         $app['config']->set('escolalms.tags.ignore_migrations', false);
+        $app['config']->set('hh5p.h5p_export', true);
 
         $app['config']->set('scorm', [
             'table_names' => [
