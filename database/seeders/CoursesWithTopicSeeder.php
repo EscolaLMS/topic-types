@@ -21,6 +21,7 @@ use EscolaLms\TopicTypes\Models\TopicContent\RichText;
 use EscolaLms\TopicTypes\Models\TopicContent\ScormSco;
 use EscolaLms\TopicTypes\Models\TopicContent\Video;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Seeder;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -73,28 +74,41 @@ class CoursesWithTopicSeeder extends Seeder
                 'path_avatar' => 'tutor_avatar.jpg',
             ]);
         }
+
         $courses = Course::factory()
             ->count(random_int(5, 10))
-            ->afterCreating(function (Course $course) use ($hasH5P) {
-                Lesson::factory()
-                    ->count(random_int(2, 5))
-                    ->afterCreating(function (Lesson $lesson) use ($hasH5P) {
-                        Topic::factory()
-                            ->count(random_int(4, 8))
-                            ->afterCreating(function (Topic $topic) use ($hasH5P) {
-                                $content = $this->getRandomRichContent($hasH5P);
-                                if (method_exists($content, 'updatePath')) {
-                                    $content = $content->updatePath($topic->id);
-                                }
-                                $content = $content->create();
-                                $topic->topicable()->associate($content)->save();
-                                TopicResource::factory()->count(random_int(1, 3))->forTopic($topic)->create();
+            ->has(Lesson::factory()
+                ->count(random_int(2, 3))
+                ->state(new Sequence(fn(Sequence $sequence) => ['title' => 'Subject ' . $this->faker->word]))
+                ->has(Lesson::factory()
+                    ->count(random_int(2, 3))
+                    ->state(new Sequence(fn(Sequence $sequence) => ['title' => 'Module ' . $this->faker->word]))
+                    ->has(Lesson::factory()
+                        ->count(random_int(2, 3))
+                        ->state(new Sequence(fn(Sequence $sequence) => ['title' => 'Topic ' . $this->faker->word]))
+                        ->has(Lesson::factory()
+                            ->count(random_int(2, 3))
+                            ->state(new Sequence(fn(Sequence $sequence) => ['title' => 'Lesson ' . $this->faker->word]))
+                            ->afterCreating(function (Lesson $lesson) use ($hasH5P) {
+                                Topic::factory()
+                                    ->count(random_int(2, 5))
+                                    ->afterCreating(function (Topic $topic) use ($hasH5P) {
+                                        $content = $this->getRandomRichContent($hasH5P);
+                                        if (method_exists($content, 'updatePath')) {
+                                            $content = $content->updatePath($topic->id);
+                                        }
+                                        $content = $content->create();
+                                        $topic->topicable()->associate($content)->save();
+                                        TopicResource::factory()->count(random_int(1, 3))->forTopic($topic)->create();
+                                    })
+                                    ->create(['lesson_id' => $lesson->id]);
                             })
-                            ->create(['lesson_id' => $lesson->id]);
-                    })
-                    ->create(['course_id' => $course->id]);
-            })
+                        )
+                    )
+                )
+            )
             ->create();
+
         /** @var Course $course */
         foreach ($courses as $course) {
             $this->seedTags($course, $randomTags);
