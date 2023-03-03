@@ -12,6 +12,7 @@ use EscolaLms\TopicTypes\Models\TopicContent\Audio;
 use EscolaLms\TopicTypes\Models\TopicContent\H5P;
 use EscolaLms\TopicTypes\Models\TopicContent\OEmbed;
 use EscolaLms\TopicTypes\Models\TopicContent\PDF;
+use EscolaLms\TopicTypes\Models\TopicContent\Project;
 use EscolaLms\TopicTypes\Models\TopicContent\RichText;
 use EscolaLms\TopicTypes\Models\TopicContent\Video;
 use EscolaLms\TopicTypes\Tests\TestCase;
@@ -55,7 +56,7 @@ class TopicTypesAdminExportApiTest extends TestCase
             'course_id' => $this->course->id,
         ]);
 
-        $prepareDataArray = ['audio' => null, 'image' => null, 'pdf' => null, 'video' => null, 'richtext' => null, 'oembed' => null, 'h5p' => null];
+        $prepareDataArray = ['audio' => null, 'image' => null, 'pdf' => null, 'video' => null, 'richtext' => null, 'oembed' => null, 'h5p' => null, 'project' => null];
         foreach ($prepareDataArray as &$type) {
             $type = Topic::factory()->create([
                 'lesson_id' => $lesson->id,
@@ -76,6 +77,7 @@ class TopicTypesAdminExportApiTest extends TestCase
             'poster' => 'dummy.png',
         ]);
         $topicable_richtext = RichText::factory()->create();
+        $topicable_project = Project::factory()->create();
         $topicable_oembed = OEmbed::factory()->create();
         $topicable_h5p = H5P::factory()->create([
             'value' => $this->h5p->id
@@ -88,6 +90,7 @@ class TopicTypesAdminExportApiTest extends TestCase
         $prepareDataArray['richtext']->topicable()->associate($topicable_richtext)->save();
         $prepareDataArray['oembed']->topicable()->associate($topicable_oembed)->save();
         $prepareDataArray['h5p']->topicable()->associate($topicable_h5p)->save();
+        $prepareDataArray['project']->topicable()->associate($topicable_project)->save();
     }
 
     public function testExportTopic(): void

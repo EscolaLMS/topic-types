@@ -15,6 +15,7 @@ use EscolaLms\TopicTypes\Http\Resources\TopicType\Admin\H5PResource as AdminH5PR
 use EscolaLms\TopicTypes\Http\Resources\TopicType\Admin\ImageResource as AdminImageResource;
 use EscolaLms\TopicTypes\Http\Resources\TopicType\Admin\OEmbedResource as AdminOEmbedResource;
 use EscolaLms\TopicTypes\Http\Resources\TopicType\Admin\PDFResource as AdminPDFResource;
+use EscolaLms\TopicTypes\Http\Resources\TopicType\Admin\ProjectResource as AdminProjectResource;
 use EscolaLms\TopicTypes\Http\Resources\TopicType\Admin\RichTextResource as AdminRichTextResource;
 use EscolaLms\TopicTypes\Http\Resources\TopicType\Admin\VideoResource as AdminVideoResource;
 use EscolaLms\TopicTypes\Http\Resources\TopicType\Admin\ScormScoResource as AdminScormScoResource;
@@ -24,6 +25,7 @@ use EscolaLms\TopicTypes\Http\Resources\TopicType\Client\H5PResource as ClientH5
 use EscolaLms\TopicTypes\Http\Resources\TopicType\Client\ImageResource as ClientImageResource;
 use EscolaLms\TopicTypes\Http\Resources\TopicType\Client\OEmbedResource as ClientOEmbedResource;
 use EscolaLms\TopicTypes\Http\Resources\TopicType\Client\PDFResource as ClientPDFResource;
+use EscolaLms\TopicTypes\Http\Resources\TopicType\Client\ProjectResource as ClientProjectResource;
 use EscolaLms\TopicTypes\Http\Resources\TopicType\Client\RichTextResource as ClientRichTextResource;
 use EscolaLms\TopicTypes\Http\Resources\TopicType\Client\VideoResource as ClientVideoResource;
 use EscolaLms\TopicTypes\Http\Resources\TopicType\Client\ScormScoResource as ClientScormScoResource;
@@ -33,6 +35,7 @@ use EscolaLms\TopicTypes\Http\Resources\TopicType\Export\H5PResource as ExportH5
 use EscolaLms\TopicTypes\Http\Resources\TopicType\Export\ImageResource as ExportImageResource;
 use EscolaLms\TopicTypes\Http\Resources\TopicType\Export\OEmbedResource as ExportOEmbedResource;
 use EscolaLms\TopicTypes\Http\Resources\TopicType\Export\PDFResource as ExportPDFResource;
+use EscolaLms\TopicTypes\Http\Resources\TopicType\Export\ProjectResource as ExportProjectResource;
 use EscolaLms\TopicTypes\Http\Resources\TopicType\Export\RichTextResource as ExportRichTextResource;
 use EscolaLms\TopicTypes\Http\Resources\TopicType\Export\VideoResource as ExportVideoResource;
 use EscolaLms\TopicTypes\Http\Resources\TopicType\Export\ScormScoResource as ExportScormScoResource;
@@ -43,6 +46,7 @@ use EscolaLms\TopicTypes\Models\TopicContent\H5P;
 use EscolaLms\TopicTypes\Models\TopicContent\Image;
 use EscolaLms\TopicTypes\Models\TopicContent\OEmbed;
 use EscolaLms\TopicTypes\Models\TopicContent\PDF;
+use EscolaLms\TopicTypes\Models\TopicContent\Project;
 use EscolaLms\TopicTypes\Models\TopicContent\RichText;
 use EscolaLms\TopicTypes\Models\TopicContent\ScormSco;
 use EscolaLms\TopicTypes\Models\TopicContent\Video;
@@ -81,6 +85,7 @@ class EscolaLmsTopicTypesServiceProvider extends ServiceProvider
             OEmbed::class,
             PDF::class,
             ScormSco::class,
+            Project::class,
         ]);
         Topic::registerResourceClasses(Audio::class, [
             'client' => ClientAudioResource::class,
@@ -121,6 +126,11 @@ class EscolaLmsTopicTypesServiceProvider extends ServiceProvider
             'client' => ClientScormScoResource::class,
             'admin' => AdminScormScoResource::class,
             'export' => ExportScormScoResource::class,
+        ]);
+        Topic::registerResourceClasses(Project::class, [
+            'client' => ClientProjectResource::class,
+            'admin' => AdminProjectResource::class,
+            'export' => ExportProjectResource::class,
         ]);
         if (class_exists(EscolaLmsCmi5ServiceProvider::class)) {
             Topic::registerContentClasses([

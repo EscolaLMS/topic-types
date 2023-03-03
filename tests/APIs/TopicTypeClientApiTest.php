@@ -11,6 +11,7 @@ use EscolaLms\TopicTypes\Models\TopicContent\H5P;
 use EscolaLms\TopicTypes\Models\TopicContent\Image;
 use EscolaLms\TopicTypes\Models\TopicContent\OEmbed;
 use EscolaLms\TopicTypes\Models\TopicContent\PDF;
+use EscolaLms\TopicTypes\Models\TopicContent\Project;
 use EscolaLms\TopicTypes\Models\TopicContent\RichText;
 use EscolaLms\TopicTypes\Models\TopicContent\ScormSco;
 use EscolaLms\TopicTypes\Models\TopicContent\Video;
@@ -45,6 +46,7 @@ class TopicTypeClientApiTest extends TestCase
             [RichText::class],
             [ScormSco::class],
             [Video::class],
+            [Project::class],
         ];
         if (class_exists(\EscolaLms\Cmi5\EscolaLmsCmi5ServiceProvider::class)) {
             $types[] = [\EscolaLms\TopicTypes\Models\TopicContent\Cmi5Au::class];

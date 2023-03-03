@@ -13,6 +13,7 @@ use EscolaLms\TopicTypes\Models\TopicContent\Audio;
 use EscolaLms\TopicTypes\Models\TopicContent\Cmi5Au;
 use EscolaLms\TopicTypes\Models\TopicContent\H5P;
 use EscolaLms\TopicTypes\Models\TopicContent\OEmbed;
+use EscolaLms\TopicTypes\Models\TopicContent\Project;
 use EscolaLms\TopicTypes\Models\TopicContent\RichText;
 use EscolaLms\TopicTypes\Models\TopicContent\ScormSco;
 use EscolaLms\TopicTypes\Models\TopicContent\Video;
@@ -639,6 +640,31 @@ class TopicTypesTutorUpdateApiTest extends TestCase
             'value' => $cmi5Au->getKey(),
         ]);
 
+        Event::assertDispatched(TopicTypeChanged::class, function ($event) {
+            return $event->getUser() === $this->user && $event->getTopicContent();
+        });
+    }
+
+    public function testUpdateTopicProject(): void
+    {
+        Event::fake([TopicTypeChanged::class]);
+        $this->response = $this->actingAs($this->user, 'api')
+            ->postJson('/api/admin/topics/' . $this->topic->id, [
+                'title' => 'Hello World',
+                'lesson_id' => $this->topic->lesson_id,
+                'topicable_type' => Project::class,
+                'value' => 'lorem ipsum',
+            ]
+        )->assertOk();
+
+        $data = $this->response->getData()->data;
+        $value = $data->topicable->value;
+
+        $this->topicId = $data->id;
+
+        $this->assertDatabaseHas('topic_projects', [
+            'value' => $value,
+        ]);
         Event::assertDispatched(TopicTypeChanged::class, function ($event) {
             return $event->getUser() === $this->user && $event->getTopicContent();
         });

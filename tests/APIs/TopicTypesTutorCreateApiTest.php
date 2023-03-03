@@ -11,6 +11,7 @@ use EscolaLms\TopicTypes\Database\Factories\TopicContent\Components\ScormScoHelp
 use EscolaLms\TopicTypes\Models\TopicContent\Cmi5Au;
 use EscolaLms\TopicTypes\Models\TopicContent\H5P;
 use EscolaLms\TopicTypes\Models\TopicContent\OEmbed;
+use EscolaLms\TopicTypes\Models\TopicContent\Project;
 use EscolaLms\TopicTypes\Models\TopicContent\ScormSco;
 use EscolaLms\TopicTypes\Models\TopicContent\Video;
 use EscolaLms\TopicTypes\Tests\TestCase;
@@ -277,6 +278,25 @@ class TopicTypesTutorCreateApiTest extends TestCase
         ]);
 
         Event::assertDispatched(TopicTypeChanged::class);
+    }
+
+    public function testCreateTopicProject(): void
+    {
+        $this->response = $this->actingAs($this->user, 'api')
+            ->postJson('/api/admin/topics', [
+                'title' => 'Hello World',
+                'lesson_id' => $this->lesson->id,
+                'topicable_type' => Project::class,
+                'value' => 'lorem ipsum',
+            ])
+            ->assertCreated();
+
+        $data = $this->response->getData()->data;
+        $value = $data->topicable->value;
+
+        $this->assertDatabaseHas('topic_projects', [
+            'value' => $value,
+        ]);
     }
 
     public function testCreateTopicNoLesson()
