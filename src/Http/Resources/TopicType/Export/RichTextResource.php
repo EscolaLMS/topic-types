@@ -13,6 +13,7 @@ class RichTextResource extends JsonResource implements TopicTypeResourceContract
     {
         return [
             'value' => Path::sanitizePathForExport(Markdown::getImagesPathsWithoutImageApi($this->value)),
+            'asset_folder' => $this->topic->getKey(),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];
