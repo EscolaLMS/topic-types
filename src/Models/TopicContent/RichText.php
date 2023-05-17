@@ -47,7 +47,7 @@ class RichText extends AbstractTopicContent
         $course = $topic->lesson->course;
         $destinationPrefix = sprintf('course/%d/topic/%d/', $course->id, $topic->id);
 
-        $result = Markdown::convertImagesPathsForImageApi($this->value, $destinationPrefix);
+        $result = Markdown::convertAssetPaths($this->value, $destinationPrefix);
 
         if ($result['value'] !== $this->value) {
             $this->value = $result['value'];

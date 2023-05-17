@@ -9,6 +9,7 @@ class Markdown
 {
     public const EXT_STRING_NAME = 'extension';
     public const QUERY_STRING_NAME = 'query';
+    public const PATH_STRING_NAME = 'path';
 
     public const SCHEME_STRING_NAME = 'scheme';
     public const PORT_STRING_NAME = 'port';
@@ -36,24 +37,25 @@ class Markdown
         return implode($parsedUrl);
     }
 
-    public function convertImagesPathsForImageApi(string $input, string $destinationPrefix): array
+    public function convertAssetPaths(string $input, string $destinationPrefix): array
     {
         $results = [];
         // https://gist.github.com/rohit00082002/2773368 might be better
         $value = preg_replace_callback(
-            '/!\[(.*)\]\s?\((.*)()(.*)\)/',
+            '/(!?)\[(.*)\]\s?\(([^)]+)\)/',
             function ($match) use ($destinationPrefix, &$results) {
-                $filepath = $match[2] ?? null;
+                $filepath = $match[3] ?? null;
                 $basename = basename($filepath);
                 $destination = sprintf($destinationPrefix . '%s', $basename);
                 // three scenarios
-                if (strpos($filepath, 'api/images/img') !== false) {
-                    $results[] = $this->convertFilePathByApiPattern($destinationPrefix, $filepath, $destination);
-                } elseif (strpos($filepath, 'http') !== false) {
-                    $results[] = $this->convertFilePathByHttp($destinationPrefix, $filepath, $destination);
-                }
 
-                return str_replace($match[2], $destination, $match[0]);
+                match (true) {
+                    str_contains($filepath, 'api/images/img') => $results[] = $this->convertFilePathByApiPattern($destinationPrefix, $filepath, $destination),
+                    str_contains($filepath, 'storage') => $results[] = $this->convertFilePathByStorage($filepath, $destination),
+                    str_contains($filepath, 'http') => $results[] = $this->convertFilePathByHttp($destinationPrefix, $filepath, $destination),
+                };
+
+                return str_replace($match[3], $destination, $match[0]);
             },
             $input
         );
@@ -68,7 +70,8 @@ class Markdown
         string $destinationPrefix,
         string $filepath,
         string &$destination
-    ): array {
+    ): array
+    {
         // image is served by images API, default, just checking path
         $string = $filepath;
         $pattern = parse_url($string);
@@ -118,6 +121,17 @@ class Markdown
             $destination = $destination . '.' . $ext[1];
         }
         $destination = url('api/images/img?path=') . $destination;
+
+        return [$filepath, $destination];
+    }
+
+    private function convertFilePathByStorage(
+        string $filepath,
+        string &$destination
+    ): array {
+        $pattern = parse_url($filepath);
+        $filepath = ltrim($pattern[self::PATH_STRING_NAME], '/storage');
+        Storage::move($filepath, $destination);
 
         return [$filepath, $destination];
     }

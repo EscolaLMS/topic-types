@@ -36,7 +36,7 @@ class HelpersMethodTest extends TestCase
         $destinationPrefix = sprintf('course/%d/topic/%d/', $course->id, $topic->id);
         Storage::disk('local')->makeDirectory($destinationPrefix);
         copy(__DIR__ . '/test.jpg', Storage::disk('local')->path($destinationPrefix . $file));
-        $result = Markdown::convertImagesPathsForImageApi("![Image] (api/images/img?path={$file})", $destinationPrefix);
+        $result = Markdown::convertAssetPaths("![Image] (api/images/img?path={$file})", $destinationPrefix);
         $this->assertArrayHasKey('results', $result);
         $this->assertTrue(is_array($result['results']));
         $this->assertTrue(isset($result['results'][0]) && is_array($result['results'][0]));
@@ -69,7 +69,7 @@ class HelpersMethodTest extends TestCase
         $course = $topic->lesson->course;
         $destinationPrefix = sprintf('course/%d/topic/%d/', $course->id, $topic->id);
         Storage::disk('public')->makeDirectory($destinationPrefix);
-        $result = Markdown::convertImagesPathsForImageApi("![Image] (https://www.google.com/images/branding/googlelogo/2x/googlelogo_light_color_272x92dp.png)", $destinationPrefix);
+        $result = Markdown::convertAssetPaths("![Image] (https://www.google.com/images/branding/googlelogo/2x/googlelogo_light_color_272x92dp.png)", $destinationPrefix);
         $this->assertArrayHasKey('results', $result);
         $this->assertTrue(is_array($result['results']));
         $this->assertTrue(isset($result['results'][0]) && is_array($result['results'][0]));
