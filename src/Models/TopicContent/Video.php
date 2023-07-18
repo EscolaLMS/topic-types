@@ -70,18 +70,12 @@ class Video extends AbstractTopicFileContent
 
     protected function processUploadedFiles(): void
     {
-        if (!$this->value) {
-            return;
-        }
-
         try {
             $media = FFMpeg::open($this->value);
 
             $this->height = $media->getVideoStream()->getDimensions()->getHeight();
             $this->width = $media->getVideoStream()->getDimensions()->getWidth();
             $this->duration = $media->getDurationInMiliseconds();
-
-            $this->save();
         } catch (Exception $exception) {
             Log::error($exception->getMessage());
         }

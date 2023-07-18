@@ -57,14 +57,11 @@ class Audio extends AbstractTopicFileContent
 
     protected function processUploadedFiles(): void
     {
-        if (!$this->value) {
-            return;
-        }
-
         try {
             $media = FFMpeg::open($this->value);
             $this->length = $media->getDurationInMiliseconds();
         } catch (Exception $exception) {
+            $this->length = 0;
             Log::error($exception->getMessage());
         }
     }
