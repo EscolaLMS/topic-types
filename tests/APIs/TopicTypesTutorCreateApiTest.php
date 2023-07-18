@@ -22,8 +22,6 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Storage;
-use EscolaLms\HeadlessH5P\Models\H5PContent;
-use EscolaLms\HeadlessH5P\Models\H5PLibrary;
 
 class TopicTypesTutorCreateApiTest extends TestCase
 {
@@ -95,6 +93,7 @@ class TopicTypesTutorCreateApiTest extends TestCase
         Storage::disk('local')->assertExists('/' . $path);
         $this->assertDatabaseHas('topic_audios', [
             'value' => $path,
+            'length' => 1410
         ]);
     }
 
@@ -145,9 +144,13 @@ class TopicTypesTutorCreateApiTest extends TestCase
         $data = $this->response->getData()->data;
         $path = $data->topicable->value;
 
+
         Storage::disk('local')->assertExists('/' . $path);
         $this->assertDatabaseHas('topic_videos', [
             'value' => $path,
+            'width' => 240,
+            'height' => 240,
+            'duration' => 3666
         ]);
 
         Event::assertDispatched(TopicTypeChanged::class);

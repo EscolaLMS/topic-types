@@ -111,6 +111,7 @@ class TopicTypesTutorUpdateApiTest extends TestCase
 
         $this->assertDatabaseHas('topic_audios', [
             'value' => $path,
+            'length' => 1410
         ]);
         Event::assertDispatched(TopicTypeChanged::class, function ($event) {
             return $event->getUser() === $this->user && $event->getTopicContent();
@@ -239,6 +240,9 @@ class TopicTypesTutorUpdateApiTest extends TestCase
 
         $this->assertDatabaseHas('topic_videos', [
             'value' => $path,
+            'width' => 240,
+            'height' => 240,
+            'duration' => 3666
         ]);
 
         Event::assertDispatched(TopicTypeChanged::class, function ($event) {
