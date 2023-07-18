@@ -18,6 +18,7 @@ use Illuminate\Testing\TestResponse;
 use Laravel\Passport\Passport;
 use Laravel\Passport\PassportServiceProvider;
 use Spatie\Permission\PermissionServiceProvider;
+use ProtoneMedia\LaravelFFMpeg\Support\ServiceProvider as FFMpegServiceProvider;
 
 class TestCase extends \EscolaLms\Courses\Tests\TestCase
 {
@@ -44,7 +45,8 @@ class TestCase extends \EscolaLms\Courses\Tests\TestCase
             HeadlessH5PServiceProvider::class,
             EscolaLmsTopicTypesServiceProvider::class,
             EscolaLmsCoursesImportExportServiceProvider::class,
-            ModelFieldsServiceProvider::class
+            ModelFieldsServiceProvider::class,
+            FFMpegServiceProvider::class,
         ];
         if (class_exists(\EscolaLms\Cmi5\EscolaLmsCmi5ServiceProvider::class)) {
             $providers[] = \EscolaLms\Cmi5\EscolaLmsCmi5ServiceProvider::class;

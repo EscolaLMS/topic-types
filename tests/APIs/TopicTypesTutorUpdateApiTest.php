@@ -86,7 +86,7 @@ class TopicTypesTutorUpdateApiTest extends TestCase
     {
         Storage::fake('local');
         Event::fake(TopicTypeChanged::class);
-        $file = UploadedFile::fake()->create('avatar.mp3');
+        $file = new UploadedFile(__DIR__ . '/../mocks/audio.mp3', 'audio.mp3', 'audio/mpeg', null, true);
 
         $this->response = $this->withHeaders([
             'Accept' => 'application/json',
@@ -111,6 +111,7 @@ class TopicTypesTutorUpdateApiTest extends TestCase
 
         $this->assertDatabaseHas('topic_audios', [
             'value' => $path,
+            'length' => 1410
         ]);
         Event::assertDispatched(TopicTypeChanged::class, function ($event) {
             return $event->getUser() === $this->user && $event->getTopicContent();
@@ -213,7 +214,7 @@ class TopicTypesTutorUpdateApiTest extends TestCase
         Storage::fake('local');
         Event::fake(TopicTypeChanged::class);
 
-        $file = UploadedFile::fake()->create('avatar.mp4');
+        $file = new UploadedFile(__DIR__ . '/../mocks/video.mp4', 'video.mp4', 'video/mp4', null, true);
 
         $this->response = $this->withHeaders([
             'Content' => 'application/x-www-form-urlencoded',
@@ -239,6 +240,9 @@ class TopicTypesTutorUpdateApiTest extends TestCase
 
         $this->assertDatabaseHas('topic_videos', [
             'value' => $path,
+            'width' => 240,
+            'height' => 240,
+            'length' => 3666
         ]);
 
         Event::assertDispatched(TopicTypeChanged::class, function ($event) {

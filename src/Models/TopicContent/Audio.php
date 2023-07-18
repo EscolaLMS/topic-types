@@ -2,7 +2,10 @@
 
 namespace EscolaLms\TopicTypes\Models\TopicContent;
 
+use Exception;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\Log;
+use ProtoneMedia\LaravelFFMpeg\Support\FFMpeg;
 
 /**
  * @OA\Schema(
@@ -54,7 +57,13 @@ class Audio extends AbstractTopicFileContent
 
     protected function processUploadedFiles(): void
     {
-        $this->length = 0;
+        try {
+            $media = FFMpeg::open($this->value);
+            $this->length = $media->getDurationInMiliseconds();
+        } catch (Exception $exception) {
+            $this->length = 0;
+            Log::error($exception->getMessage());
+        }
     }
 
     public function getStoragePathFinalSegment(): string
