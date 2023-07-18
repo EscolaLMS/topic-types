@@ -4,19 +4,19 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddDurationColumnToTopicVideosTable extends Migration
+class AddLengthColumnToTopicVideosTable extends Migration
 {
     public function up(): void
     {
         Schema::table('topic_videos', function (Blueprint $table) {
-            $table->bigInteger('duration')->nullable();
+            $table->bigInteger('length')->nullable();
         });
     }
 
     public function down(): void
     {
         Schema::table('topic_videos', function (Blueprint $table) {
-            $table->dropColumn('duration');
+            $table->dropColumn('length');
         });
     }
 }

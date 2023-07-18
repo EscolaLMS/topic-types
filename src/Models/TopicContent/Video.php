@@ -75,7 +75,7 @@ class Video extends AbstractTopicFileContent
 
             $this->height = $media->getVideoStream()->getDimensions()->getHeight();
             $this->width = $media->getVideoStream()->getDimensions()->getWidth();
-            $this->duration = $media->getDurationInMiliseconds();
+            $this->length = $media->getDurationInMiliseconds();
         } catch (Exception $exception) {
             Log::error($exception->getMessage());
         }
