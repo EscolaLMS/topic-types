@@ -3,8 +3,11 @@
 namespace EscolaLms\TopicTypes\Models\TopicContent;
 
 use EscolaLms\TopicTypes\Database\Factories\TopicContent\VideoFactory;
+use Exception;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use ProtoneMedia\LaravelFFMpeg\Support\FFMpeg;
 
 /**
  * @OA\Schema(
@@ -63,6 +66,25 @@ class Video extends AbstractTopicFileContent
     protected static function newFactory()
     {
         return VideoFactory::new();
+    }
+
+    protected function processUploadedFiles(): void
+    {
+        if (!$this->value) {
+            return;
+        }
+
+        try {
+            $media = FFMpeg::open($this->value);
+
+            $this->height = $media->getVideoStream()->getDimensions()->getHeight();
+            $this->width = $media->getVideoStream()->getDimensions()->getWidth();
+            $this->duration = $media->getDurationInMiliseconds();
+
+            $this->save();
+        } catch (Exception $exception) {
+            Log::error($exception->getMessage());
+        }
     }
 
     public function getStoragePathFinalSegment(): string

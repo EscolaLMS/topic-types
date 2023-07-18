@@ -86,7 +86,7 @@ class TopicTypesTutorUpdateApiTest extends TestCase
     {
         Storage::fake('local');
         Event::fake(TopicTypeChanged::class);
-        $file = UploadedFile::fake()->create('avatar.mp3');
+        $file = new UploadedFile(__DIR__ . '/../mocks/audio.mp3', 'audio.mp3', 'audio/mpeg', null, true);
 
         $this->response = $this->withHeaders([
             'Accept' => 'application/json',
@@ -213,7 +213,7 @@ class TopicTypesTutorUpdateApiTest extends TestCase
         Storage::fake('local');
         Event::fake(TopicTypeChanged::class);
 
-        $file = UploadedFile::fake()->create('avatar.mp4');
+        $file = new UploadedFile(__DIR__ . '/../mocks/video.mp4', 'video.mp4', 'video/mp4', null, true);
 
         $this->response = $this->withHeaders([
             'Content' => 'application/x-www-form-urlencoded',
