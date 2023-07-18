@@ -100,9 +100,15 @@ class TopicTypesTutorCreateApiTest extends TestCase
 
     public function testCreateTopicPdf()
     {
-        Storage::fake('local');
+        Storage::fake();
 
-        $file = UploadedFile::fake()->create('test.pdf');
+        $file = new UploadedFile(
+            __DIR__ . '/../mocks/pdf.pdf',
+            'pdf.pdf',
+            null,
+            null,
+            true
+        );
 
         $this->response = $this->actingAs($this->user, 'api')
             ->withHeaders(['Accept' => 'application/json'])
@@ -111,16 +117,18 @@ class TopicTypesTutorCreateApiTest extends TestCase
                 'lesson_id' => $this->lesson->id,
                 'topicable_type' => 'EscolaLms\TopicTypes\Models\TopicContent\PDF',
                 'value' => $file,
-            ]);
-
-        $this->response->assertStatus(201);
+            ])
+            ->assertStatus(201);
 
         $data = $this->response->getData()->data;
         $path = $data->topicable->value;
 
-        Storage::disk('local')->assertExists('/'.$path);
+        Storage::assertExists($path);
+
         $this->assertDatabaseHas('topic_pdfs', [
             'value' => $path,
+            'length' => 949,
+            'page_count' => 2,
         ]);
     }
 
@@ -170,6 +178,7 @@ class TopicTypesTutorCreateApiTest extends TestCase
 
         $this->assertDatabaseHas('topic_richtexts', [
             'value' => $value,
+            'length' => 11,
         ]);
     }
 

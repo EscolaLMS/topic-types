@@ -2,8 +2,10 @@
 
 namespace EscolaLms\TopicTypes\Models\TopicContent;
 
+use EscolaLms\TopicTypes\Events\TopicTypeChanged;
 use EscolaLms\TopicTypes\Facades\Markdown;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * @OA\Schema(
@@ -20,7 +22,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  *          property="value",
  *          description="value",
  *          type="string"
- *      )
+ *      ),
+ *      @OA\Property(
+ *          property="length",
+ *          description="length",
+ *          type="integer"
+ *      ),
  * )
  */
 class RichText extends AbstractTopicContent
@@ -55,6 +62,14 @@ class RichText extends AbstractTopicContent
         }
 
         return $result['results'];
+    }
+
+    protected static function booted(): void
+    {
+        parent::booted();
+        static::saving(function (RichText $topic) {
+            $topic->length = strlen($topic->value);
+        });
     }
 
     public function getMorphClass()

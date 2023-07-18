@@ -2,7 +2,11 @@
 
 namespace EscolaLms\TopicTypes\Models\TopicContent;
 
+use Exception;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
+use Smalot\PdfParser\Parser;
 
 /**
  * @OA\Schema(
@@ -19,6 +23,16 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
  *          property="value",
  *          description="value",
  *          type="string"
+ *      ),
+ *      @OA\Property(
+ *          property="length",
+ *          description="length",
+ *          type="integer"
+ *      ),
+ *      @OA\Property(
+ *          property="page_count",
+ *          description="page_count",
+ *          type="integer"
  *      )
  * )
  */
@@ -43,6 +57,17 @@ class PDF extends AbstractTopicFileContent
     public function getStoragePathFinalSegment(): string
     {
         return 'pdf';
+    }
+
+    protected function processUploadedFiles(): void
+    {
+        try {
+            $pdf = (new Parser())->parseFile(Storage::path($this->value));
+            $this->length = strlen($pdf->getText());
+            $this->page_count = count($pdf->getPages());
+        } catch (Exception $e) {
+            Log::error($e->getMessage());
+        }
     }
 
     public function getMorphClass()

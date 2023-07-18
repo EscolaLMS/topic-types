@@ -12,6 +12,7 @@ class RichTextResource extends JsonResource implements TopicTypeResourceContract
         return [
             'id' => $this->id,
             'value' => $this->value,
+            'length' => $this->length,
         ];
     }
 }
