@@ -242,7 +242,7 @@ class TopicTypesTutorUpdateApiTest extends TestCase
             'value' => $path,
             'width' => 240,
             'height' => 240,
-            'length' => 3666
+            'length' => 3667
         ]);
 
         Event::assertDispatched(TopicTypeChanged::class, function ($event) {
