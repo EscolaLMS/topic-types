@@ -6,6 +6,7 @@ use EscolaLms\Cmi5\EscolaLmsCmi5ServiceProvider;
 use EscolaLms\Courses\Facades\Topic;
 use EscolaLms\HeadlessH5P\Http\Resources\ContentIndexResource;
 use EscolaLms\HeadlessH5P\Repositories\H5PContentRepository;
+use EscolaLms\TopicTypes\Commands\FillTopicTypeMetadataCommand;
 use EscolaLms\TopicTypes\Commands\FixAssetPathsCommand;
 use EscolaLms\TopicTypes\Commands\FixTopicTypeColumnName;
 use EscolaLms\TopicTypes\Helpers\Markdown;
@@ -70,6 +71,7 @@ class EscolaLmsTopicTypesServiceProvider extends ServiceProvider
             $this->commands([
                 FixTopicTypeColumnName::class,
                 FixAssetPathsCommand::class,
+                FillTopicTypeMetadataCommand::class,
             ]);
         }
         Topic::registerContentClasses([

@@ -66,6 +66,11 @@ class Audio extends AbstractTopicFileContent
         }
     }
 
+    public function processMetadataInfo(): void
+    {
+        $this->processUploadedFiles();
+    }
+
     public function getStoragePathFinalSegment(): string
     {
         return 'audio';

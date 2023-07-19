@@ -72,4 +72,6 @@ abstract class AbstractTopicFileContent extends AbstractTopicContent implements 
 
         return $this->{$key};
     }
+
+    abstract public function processMetadataInfo(): void;
 }

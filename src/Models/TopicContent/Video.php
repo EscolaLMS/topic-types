@@ -43,6 +43,7 @@ class Video extends AbstractTopicFileContent
         'poster',
         'width',
         'height',
+        'length'
     ];
 
     protected $casts = [
@@ -51,6 +52,7 @@ class Video extends AbstractTopicFileContent
         'poster' => 'string',
         'width' => 'integer',
         'height' => 'integer',
+        'length' => 'integer',
     ];
 
     public static function rules(): array
@@ -79,6 +81,11 @@ class Video extends AbstractTopicFileContent
         } catch (Exception $exception) {
             Log::error($exception->getMessage());
         }
+    }
+
+    public function processMetadataInfo(): void
+    {
+        $this->processUploadedFiles();
     }
 
     public function getStoragePathFinalSegment(): string

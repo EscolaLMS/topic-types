@@ -70,6 +70,11 @@ class PDF extends AbstractTopicFileContent
         }
     }
 
+    public function processMetadataInfo(): void
+    {
+        $this->processUploadedFiles();
+    }
+
     public function getMorphClass()
     {
         return self::class;

@@ -77,6 +77,11 @@ class Image extends AbstractTopicFileContent
         }
     }
 
+    public function processMetadataInfo(): void
+    {
+        $this->processUploadedFiles();
+    }
+
     public function getMorphClass()
     {
         return self::class;

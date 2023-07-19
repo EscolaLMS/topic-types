@@ -64,6 +64,11 @@ class RichText extends AbstractTopicContent
         return $result['results'];
     }
 
+    public function processMetadataInfo(): void
+    {
+        $this->length = strlen($this->value);
+    }
+
     protected static function booted(): void
     {
         parent::booted();
