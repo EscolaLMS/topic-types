@@ -5,8 +5,11 @@ namespace EscolaLms\TopicTypes\Models\TopicContent;
 use EscolaLms\HeadlessH5P\Repositories\Contracts\H5PContentRepositoryContract;
 use EscolaLms\TopicTypes\Database\Factories\TopicContent\H5PFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Storage;
+use Throwable;
 
 /**
  * @OA\Schema(
@@ -60,6 +63,23 @@ class H5P extends AbstractTopicContent
         Storage::getDriver()->writeStream($destination, $inputStream);
 
         return [[$filepath, Storage::path($destination)]];
+    }
+
+    public function getLengthAttribute(): ?int
+    {
+        try {
+            $contentRepository = App::make(H5PContentRepositoryContract::class);
+            $content = $contentRepository->show($this->value);
+            $library = $content->library;
+            $parameters = json_decode($content->parameters, true);
+
+            $keys = Config::get('topic-h5p');
+            $lengthKey = $keys[$library->uberName] ?? null;
+
+            return isset($lengthKey['length_key']) ? count(Arr::get($parameters, $lengthKey['length_key'])) : $lengthKey['default_length'];
+        } catch (Throwable $e) {
+            return null;
+        }
     }
 
     public function getMorphClass()

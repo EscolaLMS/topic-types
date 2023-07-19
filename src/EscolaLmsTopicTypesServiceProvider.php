@@ -66,6 +66,7 @@ class EscolaLmsTopicTypesServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
+        $this->mergeConfigFrom(__DIR__ . '/../config/topic-h5p.php', 'topic-h5p');
         if ($this->app->runningInConsole()) {
             $this->commands([
                 FixTopicTypeColumnName::class,

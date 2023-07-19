@@ -9,9 +9,11 @@ use EscolaLms\HeadlessH5P\Dtos\ContentFilterCriteriaDto;
 use EscolaLms\HeadlessH5P\Models\H5PContent;
 use EscolaLms\HeadlessH5P\Models\H5PLibrary;
 use EscolaLms\HeadlessH5P\Repositories\H5PContentRepository;
+use EscolaLms\HeadlessH5P\Tests\Traits\H5PTestingTrait;
 use EscolaLms\TopicTypes\Models\TopicContent\H5P;
 use EscolaLms\TopicTypes\Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
 
 class TopicTypeH5PTest extends TestCase
@@ -50,5 +52,41 @@ class TopicTypeH5PTest extends TestCase
 
         $this->assertEquals(H5P::query()->where('value', '=', $list[0]->id)->count(), $list[0]->count_h5p);
         $this->assertEquals(H5P::query()->where('value', '=', $list[1]->id)->count(), $list[1]->count_h5p);
+    }
+
+    /**
+     * @dataProvider h5pProvider
+     */
+    public function testH5PLength(string $filename, int $length): void
+    {
+        $filepath = realpath(__DIR__.'/../mocks/'.$filename);
+        $storage_path = storage_path($filename);
+        copy($filepath, $storage_path);
+
+        /** @var H5PContentRepository $repository */
+        $repository = app(H5PContentRepository::class);
+        $content = $repository->upload(new UploadedFile($storage_path, $filename, null, null, true));
+
+        $h5p = H5P::factory()->create(['value' => $content->id]);
+
+        $this->assertEquals($length, $h5p->length);
+    }
+
+    public function h5pProvider(): array
+    {
+        return [
+            [
+                'filename' => 'accordion.h5p',
+                'length' => 4,
+            ],
+            [
+                'filename' => 'agamotto.h5p',
+                'length' => 3,
+            ],
+            [
+                'filename' => 'find-the-hotspot.h5p',
+                'length' => 1,
+            ],
+        ];
     }
 }
