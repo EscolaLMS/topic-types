@@ -44,5 +44,8 @@ abstract class AbstractTopicContent extends AbstractTopicContentExtend implement
         return '';
     }
 
-    abstract public function processMetadataInfo(): void;
+    public function processMetadataInfo(): void
+    {
+        // do sth
+    }
 }
