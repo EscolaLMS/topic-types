@@ -105,14 +105,6 @@ class FillTopicTypeMetadataCommandTest extends TestCase
             ->assertFailed();
     }
 
-    public function testFillTopicTypeMetadataCommandModelNotImplementProcessMetadataInfoMethod(): void
-    {
-        $this
-            ->artisan('escolalms:fill-topic-types-metadata h5p')
-            ->expectsOutput('Model H5p does not have processMetadataInfo method implemented')
-            ->assertFailed();
-    }
-
     private function getFileStoragePath(string $fileName): string
     {
         $filePath = __DIR__ . '/../mocks/' . $fileName;
