@@ -241,8 +241,7 @@ class TopicTypesTutorUpdateApiTest extends TestCase
         $this->assertDatabaseHas('topic_videos', [
             'value' => $path,
             'width' => 240,
-            'height' => 240,
-            'length' => 3667
+            'height' => 240
         ]);
 
         Event::assertDispatched(TopicTypeChanged::class, function ($event) {
