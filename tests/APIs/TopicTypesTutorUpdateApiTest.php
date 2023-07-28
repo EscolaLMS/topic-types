@@ -216,18 +216,32 @@ class TopicTypesTutorUpdateApiTest extends TestCase
 
         $file = new UploadedFile(__DIR__ . '/../mocks/video.mp4', 'video.mp4', 'video/mp4', null, true);
 
-        $this->response = $this->withHeaders([
-            'Content' => 'application/x-www-form-urlencoded',
-            'Accept' => 'application/json',
-        ])->actingAs($this->user, 'api')->post(
-            '/api/admin/topics/'.$this->topic->id,
-            [
+        $this->response = $this
+            ->withHeaders([
+                'Content' => 'application/x-www-form-urlencoded',
+                'Accept' => 'application/json',
+            ])
+            ->actingAs($this->user, 'api')
+            ->post('/api/admin/topics/' . $this->topic->id, [
                 'title' => 'Hello World',
                 'lesson_id' => $this->topic->lesson_id,
                 'topicable_type' => 'EscolaLms\TopicTypes\Models\TopicContent\Video',
-                'value' => $file,
-            ]
-        );
+                'value' => $file
+            ])
+            ->assertJsonStructure([
+                'data' => [
+                    'topicable' => [
+                        'id',
+                        'value',
+                        'url',
+                        'poster',
+                        'poster_url',
+                        'width',
+                        'height',
+                        'length'
+                    ]
+                ]
+            ]);
 
         $this->response->assertStatus(200);
 
@@ -237,12 +251,9 @@ class TopicTypesTutorUpdateApiTest extends TestCase
         $path = $data->data->topicable->value;
 
         Storage::disk('local')->assertExists('/'.$path);
-
-        $this->assertDatabaseHas('topic_videos', [
-            'value' => $path,
-            'width' => 240,
-            'height' => 240
-        ]);
+        $this->assertEquals(240, $data->data->topicable->height);
+        $this->assertEquals(240, $data->data->topicable->width);
+        $this->assertEqualsWithDelta(3666, $data->data->topicable->length, 1);
 
         Event::assertDispatched(TopicTypeChanged::class, function ($event) {
             return $event->getUser() === $this->user && $event->getTopicContent();

@@ -44,7 +44,7 @@ class TopicTypesTutorCreateApiTest extends TestCase
     /**
      * @test
      */
-    public function testCreateTopicImage()
+    public function testCreateTopicImage(): void
     {
         Storage::fake('local');
 
@@ -70,7 +70,7 @@ class TopicTypesTutorCreateApiTest extends TestCase
         ]);
     }
 
-    public function testCreateTopicAudio()
+    public function testCreateTopicAudio(): void
     {
         Storage::fake('local');
 
@@ -97,7 +97,7 @@ class TopicTypesTutorCreateApiTest extends TestCase
         ]);
     }
 
-    public function testCreateTopicPdf()
+    public function testCreateTopicPdf(): void
     {
         Storage::fake();
 
@@ -131,20 +131,35 @@ class TopicTypesTutorCreateApiTest extends TestCase
         ]);
     }
 
-    public function testCreateTopicVideo()
+    public function testCreateTopicVideo(): void
     {
         Storage::fake('local');
         Event::fake(TopicTypeChanged::class);
 
         $file = new UploadedFile(__DIR__ . '/../mocks/video.mp4', 'video.mp4', 'video/mp4', null, true);
 
-        $this->response = $this->actingAs($this->user, 'api')
+        $this->response = $this
+            ->actingAs($this->user, 'api')
             ->withHeaders(['Accept' => 'application/json'])
             ->post('/api/admin/topics', [
                 'title' => 'Hello World',
                 'lesson_id' => $this->lesson->id,
                 'topicable_type' => Video::class,
                 'value' => $file,
+            ])
+            ->assertJsonStructure([
+                'data' => [
+                    'topicable' => [
+                        'id',
+                        'value',
+                        'url',
+                        'poster',
+                        'poster_url',
+                        'width',
+                        'height',
+                        'length'
+                    ]
+                ]
             ]);
 
         $this->response->assertStatus(201);
@@ -152,18 +167,15 @@ class TopicTypesTutorCreateApiTest extends TestCase
         $data = $this->response->getData()->data;
         $path = $data->topicable->value;
 
-
         Storage::disk('local')->assertExists('/' . $path);
-        $this->assertDatabaseHas('topic_videos', [
-            'value' => $path,
-            'width' => 240,
-            'height' => 240,
-        ]);
+        $this->assertEquals(240, $data->topicable->height);
+        $this->assertEquals(240, $data->topicable->width);
+        $this->assertEqualsWithDelta(3666, $data->topicable->length, 1);
 
         Event::assertDispatched(TopicTypeChanged::class);
     }
 
-    public function testCreateTopicRichtext()
+    public function testCreateTopicRichtext(): void
     {
         $this->response = $this->actingAs($this->user, 'api')
             ->withHeaders(['Accept' => 'application/json'])
@@ -184,7 +196,7 @@ class TopicTypesTutorCreateApiTest extends TestCase
         ]);
     }
 
-    public function testCreateTopicH5P()
+    public function testCreateTopicH5P(): void
     {
         Event::fake(TopicTypeChanged::class);
 
@@ -210,7 +222,7 @@ class TopicTypesTutorCreateApiTest extends TestCase
         Event::assertDispatched(TopicTypeChanged::class);
     }
 
-    public function testCreateTopicScormSco()
+    public function testCreateTopicScormSco(): void
     {
         Event::fake(TopicTypeChanged::class);
         $scormSco = ScormScoHelper::getScormSco();
@@ -236,7 +248,7 @@ class TopicTypesTutorCreateApiTest extends TestCase
         Event::assertDispatched(TopicTypeChanged::class);
     }
 
-    public function testCreateTopicCmi5Au()
+    public function testCreateTopicCmi5Au(): void
     {
         if (!class_exists(\EscolaLms\Cmi5\EscolaLmsCmi5ServiceProvider::class)) {
             $this->markTestSkipped('Require cmi5 package');
@@ -265,7 +277,7 @@ class TopicTypesTutorCreateApiTest extends TestCase
         Event::assertDispatched(TopicTypeChanged::class);
     }
 
-    public function testCreateTopicOEmbed()
+    public function testCreateTopicOEmbed(): void
     {
         Event::fake(TopicTypeChanged::class);
 
@@ -290,7 +302,7 @@ class TopicTypesTutorCreateApiTest extends TestCase
         Event::assertDispatched(TopicTypeChanged::class);
     }
 
-    public function testCreateTopicNoLesson()
+    public function testCreateTopicNoLesson(): void
     {
         $this->response = $this->withHeaders([
             'Accept' => 'application/json',
@@ -306,7 +318,7 @@ class TopicTypesTutorCreateApiTest extends TestCase
         $this->response->assertStatus(401);
     }
 
-    public function testCreateTopicImageNoFile()
+    public function testCreateTopicImageNoFile(): void
     {
         $this->response = $this->actingAs($this->user, 'api')->withHeaders([
             'Accept' => 'application/json',
@@ -323,7 +335,7 @@ class TopicTypesTutorCreateApiTest extends TestCase
         $this->response->assertStatus(422);
     }
 
-    public function testCreateTopicAudioNoFile()
+    public function testCreateTopicAudioNoFile(): void
     {
         $this->response = $this->actingAs($this->user, 'api')->withHeaders([
             'Accept' => 'application/json',
@@ -340,7 +352,7 @@ class TopicTypesTutorCreateApiTest extends TestCase
         $this->response->assertStatus(422);
     }
 
-    public function testCreateTopicVideoNoFile()
+    public function testCreateTopicVideoNoFile(): void
     {
         $course = Course::factory()->create();
 
@@ -359,7 +371,7 @@ class TopicTypesTutorCreateApiTest extends TestCase
         $this->response->assertStatus(422);
     }
 
-    public function testCreateTopicWrongClass()
+    public function testCreateTopicWrongClass(): void
     {
         $this->response = $this->actingAs($this->user, 'api')->withHeaders([
             'Accept' => 'application/json',

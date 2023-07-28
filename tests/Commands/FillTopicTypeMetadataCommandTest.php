@@ -84,6 +84,7 @@ class FillTopicTypeMetadataCommandTest extends TestCase
         $this->assertNotNull($topicable_video->length);
         $this->assertEquals(240, $topicable_video->width);
         $this->assertEquals(240, $topicable_video->height);
+        $this->assertEqualsWithDelta(3666, $topicable_video->length, 1);
 
         // pdf
         $this->assertNotNull($topicable_pdf->length);
