@@ -72,20 +72,41 @@ class TopicTypeH5PTest extends TestCase
         $this->assertEquals($length, $h5p->length);
     }
 
+    /**
+     * @dataProvider h5pProvider
+     */
+    public function testH5PLibraryName(string $filename, int $length, string $libraryName): void
+    {
+        $filepath = realpath(__DIR__.'/../mocks/'.$filename);
+        $storage_path = storage_path($filename);
+        copy($filepath, $storage_path);
+
+        /** @var H5PContentRepository $repository */
+        $repository = app(H5PContentRepository::class);
+        $content = $repository->upload(new UploadedFile($storage_path, $filename, null, null, true));
+
+        $h5p = H5P::factory()->create(['value' => $content->id]);
+
+        $this->assertEquals($libraryName, $h5p->libraryName);
+    }
+
     public function h5pProvider(): array
     {
         return [
             [
                 'filename' => 'accordion.h5p',
                 'length' => 4,
+                'libraryName' => 'H5P.Accordion',
             ],
             [
                 'filename' => 'agamotto.h5p',
                 'length' => 3,
+                'libraryName' => 'H5P.Agamotto',
             ],
             [
                 'filename' => 'find-the-hotspot.h5p',
                 'length' => 1,
+                'libraryName' => 'H5P.ImageHotspotQuestion',
             ],
         ];
     }
