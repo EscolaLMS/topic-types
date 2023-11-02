@@ -82,6 +82,19 @@ class H5P extends AbstractTopicContent
         }
     }
 
+    public function getLibraryNameAttribute(): ?string
+    {
+        try {
+            $contentRepository = App::make(H5PContentRepositoryContract::class);
+            $content = $contentRepository->show($this->value);
+            $library = $content->library;
+
+            return isset($library) ? $library->name : null;
+        } catch (Throwable $e) {
+            return null;
+        }
+    }
+
     public function getMorphClass()
     {
         return self::class;
