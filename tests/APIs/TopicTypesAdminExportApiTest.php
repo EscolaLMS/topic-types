@@ -28,6 +28,11 @@ class TopicTypesAdminExportApiTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+
+        if (!class_exists(\EscolaLms\CoursesImportExport\EscolaLmsCoursesImportExportServiceProvider::class)) {
+            $this->markTestSkipped('Course Import Export package not installed');
+        }
+
         $this->seed(CoursesPermissionSeeder::class);
         $this->seed(CoursesExportImportPermissionSeeder::class);
 
