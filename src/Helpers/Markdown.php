@@ -48,7 +48,7 @@ class Markdown
                 $basename = basename($filepath);
                 $destination = sprintf($destinationPrefix . '%s', $basename);
 
-                if(!str_starts_with($filepath, url('/'))) {
+                if(str_contains($filepath, 'http') && !str_starts_with($filepath, url('/'))) {
                   return str_replace($match[3], $match[3], $match[0]);
                 }
 
