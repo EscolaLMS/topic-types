@@ -47,8 +47,12 @@ class Markdown
                 $filepath = $match[3] ?? null;
                 $basename = basename($filepath);
                 $destination = sprintf($destinationPrefix . '%s', $basename);
-                // three scenarios
 
+                if(!str_starts_with($filepath, url('/'))) {
+                  return str_replace($match[3], $match[3], $match[0]);
+                }
+
+                // three scenarios
                 match (true) {
                     str_contains($filepath, 'api/images/img') => $results[] = $this->convertFilePathByApiPattern($destinationPrefix, $filepath, $destination),
                     str_contains($filepath, 'storage') => $results[] = $this->convertFilePathByStorage($filepath, $destination),
