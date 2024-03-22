@@ -5,6 +5,7 @@ namespace EscolaLms\TopicTypes\Database\Factories\TopicContent\Components;
 use EscolaLms\Courses\Models\Topic;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\Finder\Exception\DirectoryNotFoundException;
+use Illuminate\Http\File;
 
 class FileHelper
 {
@@ -18,7 +19,9 @@ class FileHelper
             throw new DirectoryNotFoundException(sprintf('Directory "%s" was not created', $destDir));
         }
         $mockPath = realpath(__DIR__.'/../../../mocks');
-        copy($mockPath . '/1.' . $ext, $dest);
+      
+        //copy($mockPath . '/1.' . $ext, $dest);
+        Storage::putFileAs($topic->storage_directory, new File($mockPath . '/1.' . $ext), $name . '.' . $ext);
 
         return [
             'value' => $filename,
