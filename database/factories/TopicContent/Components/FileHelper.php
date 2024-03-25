@@ -14,13 +14,8 @@ class FileHelper
         $topic = Topic::find($topicId);
         $filename = $topic->storage_directory . $name . '.' . $ext;
         $dest = Storage::path($filename);
-        $destDir = dirname($dest);
-        if (!is_dir($destDir) && (mkdir($destDir, 0777, true) && !is_dir($destDir))) {
-            throw new DirectoryNotFoundException(sprintf('Directory "%s" was not created', $destDir));
-        }
+        $destDir = dirname($dest);        
         $mockPath = realpath(__DIR__.'/../../../mocks');
-      
-        //copy($mockPath . '/1.' . $ext, $dest);
         Storage::putFileAs($topic->storage_directory, new File($mockPath . '/1.' . $ext), $name . '.' . $ext);
 
         return [
