@@ -7,6 +7,7 @@ use EscolaLms\TopicTypes\Models\TopicContent\Video;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\Finder\Exception\DirectoryNotFoundException;
+use Illuminate\Http\File;
 
 class VideoFactory extends Factory
 {
@@ -42,13 +43,11 @@ class VideoFactory extends Factory
             $filenamePoster = $topic->storage_directory . $word . '.jpg';
             $dest = Storage::disk('public')->path($filename);
             $destPoster = Storage::disk('public')->path($filenamePoster);
-            $destDir = dirname($dest);
-            if (!is_dir($destDir) && (mkdir($destDir, 0777, true) && !is_dir($destDir))) {
-                throw new DirectoryNotFoundException(sprintf('Directory "%s" was not created', $destDir));
-            }
+            $destDir = dirname($dest);           
             $mocksPath = realpath(__DIR__.'/../../mocks');
-            copy($mocksPath . '/1.mp4', $dest);
-            copy($mocksPath . '/poster.jpg', $destPoster);
+            
+            Storage::putFileAs($topic->storage_directory, new File($mocksPath . '/1.mp4'), $word . '.mp4');            
+            Storage::putFileAs($topic->storage_directory, new File($mocksPath . '/poster.jpg'), $word . '.jpg');
 
             return [
                 'value' => $filename,

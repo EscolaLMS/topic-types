@@ -7,6 +7,7 @@ use EscolaLms\Courses\Models\TopicResource;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\Finder\Exception\DirectoryNotFoundException;
+use Illuminate\Http\File;
 
 class TopicResourceFactory extends Factory
 {
@@ -38,10 +39,8 @@ class TopicResourceFactory extends Factory
             $filename = "{$this->faker->word}.pdf";
             $dest = Storage::disk('public')->path($path . $filename);
             $destDir = dirname($dest);
-            if (!is_dir($destDir) && (mkdir($destDir, 0777, true) && !is_dir($destDir))) {
-                throw new DirectoryNotFoundException(sprintf('Directory "%s" was not created', $destDir));
-            }
-            copy(realpath(__DIR__.'/../mocks/1.pdf'), $dest);
+            
+            Storage::putFileAs($path, new File(realpath(__DIR__.'/../mocks/1.pdf'), $filename);
 
             return [
                 'topic_id' => $topic,
