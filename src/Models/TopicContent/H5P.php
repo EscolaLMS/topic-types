@@ -59,6 +59,7 @@ class H5P extends AbstractTopicContent
             Storage::delete($destination);
         }
 
+        $filepath = file_exists($filepath) ? $filepath : Storage::path($filepath);
         $inputStream = fopen($filepath, 'r+');
         Storage::getDriver()->writeStream($destination, $inputStream);
 
