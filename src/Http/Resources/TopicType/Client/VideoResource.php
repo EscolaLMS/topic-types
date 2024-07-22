@@ -14,14 +14,14 @@ class VideoResource extends JsonResource implements TopicTypeResourceContract
     public function toArray($request)
     {
         $fields = [
-            'id' => $this->id,
-            'value' => $this->value,
-            'url' => $this->value ? Storage::url($this->value) : null,
-            'poster' => $this->poster,
-            'poster_url' => $this->poster ? Storage::url($this->poster) : null,
-            'width' => $this->width,
-            'height' => $this->height,
-            'length' => $this->length,
+            'id' => $this->resource->id,
+            'value' => $this->resource->value,
+            'url' => $this->resource->value ? Storage::url($this->resource->value) : null,
+            'poster' => $this->resource->poster,
+            'poster_url' => $this->resource->poster ? Storage::url($this->resource->poster) : null,
+            'width' => $this->resource->width,
+            'height' => $this->resource->height,
+            'length' => $this->resource->length,
         ];
 
         return self::apply($fields, $this);

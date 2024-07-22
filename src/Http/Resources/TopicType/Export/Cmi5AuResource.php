@@ -10,18 +10,18 @@ class Cmi5AuResource extends JsonResource implements TopicTypeResourceContract
 {
     public function toArray($request)
     {
-        $topic = $this->topic;
-        $destination = sprintf('topic/%d/%s', $topic->id, 'export.zip');
-        $cmi5Au = Cmi5Au::find($this->value);
+        $topic = $this->resource->topic;
+        $destination = sprintf('topic/%d/%s', $topic->resource->id, 'export.zip');
+        $cmi5Au = Cmi5Au::find($this->resource->value);
 
         return [
-            'id' => $this->id,
-            'value' => $this->value,
-            'iri' => $cmi5Au ? $cmi5Au->iri : null,
-            'url' => $cmi5Au ? $cmi5Au->url : null,
+            'id' => $this->resource->id,
+            'value' => $this->resource->value,
+            'iri' => $cmi5Au ? $cmi5Au->resource->iri : null,
+            'url' => $cmi5Au ? $cmi5Au->resource->url : null,
             'cmi5_file' => $destination,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
+            'created_at' => $this->resource->created_at,
+            'updated_at' => $this->resource->updated_at,
         ];
     }
 }

@@ -10,12 +10,12 @@ class ScormScoResource extends JsonResource implements TopicTypeResourceContract
 {
     public function toArray($request)
     {
-        $scormSco = ScormScoModel::find($this->value);
+        $scormSco = ScormScoModel::find($this->resource->value);
 
         return [
-            'id' => $this->id,
-            'value' => $this->value,
-            'uuid' => $scormSco ? $scormSco->uuid : null,
+            'id' => $this->resource->id,
+            'value' => $this->resource->value,
+            'uuid' => $scormSco ? $scormSco->resource->uuid : null,
         ];
     }
 }

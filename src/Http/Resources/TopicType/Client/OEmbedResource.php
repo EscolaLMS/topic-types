@@ -10,8 +10,8 @@ class OEmbedResource extends JsonResource implements TopicTypeResourceContract
     public function toArray($request)
     {
         return [
-            'id' => $this->id,
-            'value' => $this->value,
+            'id' => $this->resource->id,
+            'value' => $this->resource->value,
         ];
     }
 }

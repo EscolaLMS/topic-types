@@ -11,9 +11,9 @@ class ImageResource extends JsonResource implements TopicTypeResourceContract
     public function toArray($request)
     {
         return [
-            'value' => TopicTypeService::sanitizePath($this->value),
-            'width' => $this->width,
-            'height' => $this->height,
+            'value' => TopicTypeService::sanitizePath($this->resource->value),
+            'width' => $this->resource->width,
+            'height' => $this->resource->height,
         ];
     }
 }

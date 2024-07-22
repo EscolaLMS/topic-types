@@ -10,18 +10,18 @@ class ScormScoResource extends JsonResource implements TopicTypeResourceContract
 {
     public function toArray($request)
     {
-        $topic = $this->topic;
-        $destination = sprintf('topic/%d/%s', $topic->id, 'export.zip');
-        $scormSco = ScormScoModel::find($this->value);
+        $topic = $this->resource->topic;
+        $destination = sprintf('topic/%d/%s', $topic->resource->id, 'export.zip');
+        $scormSco = ScormScoModel::find($this->resource->value);
 
         return [
-            'id' => $this->id,
-            'value' => $this->value,
-            'uuid' => $scormSco ? $scormSco->uuid : null,
-            'identifier' => $scormSco ? $scormSco->identifier : null,
+            'id' => $this->resource->id,
+            'value' => $this->resource->value,
+            'uuid' => $scormSco ? $scormSco->resource->uuid : null,
+            'identifier' => $scormSco ? $scormSco->resource->identifier : null,
             'scorm_file' => $destination,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
+            'created_at' => $this->resource->created_at,
+            'updated_at' => $this->resource->updated_at,
         ];
     }
 }
