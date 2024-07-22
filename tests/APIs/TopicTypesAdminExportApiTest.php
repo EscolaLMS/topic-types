@@ -20,6 +20,7 @@ use EscolaLms\TopicTypes\Models\TopicContent\Image;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Storage;
+use Throwable;
 
 class TopicTypesAdminExportApiTest extends TestCase
 {
@@ -100,9 +101,14 @@ class TopicTypesAdminExportApiTest extends TestCase
         Storage::fake('local');
         Event::fake(TopicTypeChanged::class);
 
-        $this->response = $this->actingAs($this->user, 'api')->get(
-            '/api/admin/courses/' . $this->course->getKey() . '/export'
-        );
+        try {
+            $this->response = $this->actingAs($this->user, 'api')->get(
+                '/api/admin/courses/' . $this->course->getKey() . '/export'
+            );
+        } catch (Throwable $e) {
+            echo $e->getMessage();
+        }
+
 
         $this->response->assertStatus(200);
     }
