@@ -11,7 +11,7 @@ class H5PResource extends JsonResource implements TopicTypeResourceContract
     public function toArray($request)
     {
         $topic = $this->resource->topic;
-        $destination = sprintf('topic/%d/%s', $topic->resource->id, 'export.h5p');
+        $destination = sprintf('topic/%d/%s', $topic->id, 'export.h5p');
 
         return [
             'value' => $this->resource->value,

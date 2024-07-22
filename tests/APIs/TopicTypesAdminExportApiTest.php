@@ -104,8 +104,6 @@ class TopicTypesAdminExportApiTest extends TestCase
             '/api/admin/courses/' . $this->course->getKey() . '/export'
         );
 
-        echo json_encode($this->response->json());
-
         $this->response->assertStatus(200);
     }
 }
