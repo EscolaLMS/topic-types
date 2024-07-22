@@ -2,8 +2,8 @@
 
 namespace EscolaLms\TopicTypes\Http\Resources\TopicType\Export;
 
-use EscolaLms\Cmi5\Models\Cmi5Au;
 use EscolaLms\TopicTypes\Http\Resources\TopicType\Contacts\TopicTypeResourceContract;
+use EscolaLms\TopicTypes\Models\TopicContent\Cmi5Au;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class Cmi5AuResource extends JsonResource implements TopicTypeResourceContract

@@ -9,6 +9,9 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 
+/**
+ * @property mixed $value
+ */
 abstract class AbstractTopicFileContent extends AbstractTopicContent implements TopicFileContentContract
 {
     protected $appends = ['url'];

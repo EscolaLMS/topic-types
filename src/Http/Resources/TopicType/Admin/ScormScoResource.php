@@ -15,7 +15,7 @@ class ScormScoResource extends JsonResource implements TopicTypeResourceContract
         return [
             'id' => $this->resource->id,
             'value' => $this->resource->value,
-            'uuid' => $scormSco ? $scormSco->resource->uuid : null,
+            'uuid' => $scormSco ? $scormSco->uuid : null,
             'created_at' => $this->resource->created_at,
             'updated_at' => $this->resource->updated_at,
         ];
