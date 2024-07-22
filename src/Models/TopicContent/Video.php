@@ -31,6 +31,11 @@ use ProtoneMedia\LaravelFFMpeg\Support\FFMpeg;
  *          type="string"
  *      )
  * )
+ *
+ * @property int $height
+ * @property int $width
+ * @property int $length
+ * @property string $poster
  */
 class Video extends AbstractTopicFileContent
 {

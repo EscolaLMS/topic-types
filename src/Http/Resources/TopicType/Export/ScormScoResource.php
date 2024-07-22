@@ -17,7 +17,9 @@ class ScormScoResource extends JsonResource implements TopicTypeResourceContract
         return [
             'id' => $this->resource->id,
             'value' => $this->resource->value,
+            // @phpstan-ignore-next-line
             'uuid' => $scormSco ? $scormSco->uuid : null,
+            // @phpstan-ignore-next-line
             'identifier' => $scormSco ? $scormSco->identifier : null,
             'scorm_file' => $destination,
             'created_at' => $this->resource->created_at,

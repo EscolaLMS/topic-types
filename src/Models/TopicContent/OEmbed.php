@@ -31,7 +31,7 @@ class OEmbed extends AbstractTopicContent
     /**
      * Validation rules.
      *
-     * @var array
+     * @return array<string, array<int, string>>
      */
     public static function rules(): array
     {

@@ -23,6 +23,9 @@ use Illuminate\Support\Facades\Storage;
  *          type="string"
  *      )
  * )
+ *
+ * @property int $width
+ * @property int $height
  */
 class Image extends AbstractTopicFileContent
 {

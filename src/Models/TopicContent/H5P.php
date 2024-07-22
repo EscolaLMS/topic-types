@@ -72,6 +72,7 @@ class H5P extends AbstractTopicContent
             $contentRepository = App::make(H5PContentRepositoryContract::class);
             $content = $contentRepository->show($this->value);
             $library = $content->library;
+            // @phpstan-ignore-next-line
             $parameters = json_decode($content->parameters, true);
 
             $keys = Config::get('topic-h5p');
@@ -90,7 +91,7 @@ class H5P extends AbstractTopicContent
             $content = $contentRepository->show($this->value);
             $library = $content->library;
 
-            return isset($library) ? $library->name : null;
+            return $library->name;
         } catch (Throwable $e) {
             return null;
         }

@@ -29,6 +29,8 @@ use Illuminate\Support\Facades\Auth;
  *          type="integer"
  *      ),
  * )
+ *
+ * @property int $length
  */
 class RichText extends AbstractTopicContent
 {
