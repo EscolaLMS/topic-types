@@ -8,6 +8,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use EscolaLms\Courses\Models\TopicContent\AbstractTopicContent as AbstractTopicContentExtend;
 
+/**
+ * @property mixed $value
+ */
 abstract class AbstractTopicContent extends AbstractTopicContentExtend implements TopicContentContract
 {
     protected static function booted()

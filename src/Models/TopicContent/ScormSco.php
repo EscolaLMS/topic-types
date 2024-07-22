@@ -72,6 +72,7 @@ class ScormSco extends AbstractTopicContent
 
         /** @var ScormServiceContract $service */
         $service = app(ScormServiceContract::class);
+        // @phpstan-ignore-next-line
         $zipPath = $service->zipScorm(ScormScoModel::find($this->value)->scorm->getKey());
 
         if (Storage::exists($destination)) {

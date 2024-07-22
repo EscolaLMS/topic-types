@@ -24,6 +24,8 @@ use ProtoneMedia\LaravelFFMpeg\Support\FFMpeg;
  *          type="string"
  *      )
  * )
+ *
+ * @property int $length
  */
 class Audio extends AbstractTopicFileContent
 {

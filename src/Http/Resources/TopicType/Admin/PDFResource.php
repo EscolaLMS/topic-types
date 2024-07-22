@@ -11,13 +11,13 @@ class PDFResource extends JsonResource implements TopicTypeResourceContract
     public function toArray($request)
     {
         return [
-            'id' => $this->id,
-            'value' => $this->value,
-            'length' => $this->length,
-            'page_count' => $this->page_count,
-            'url' => Storage::url($this->value),
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
+            'id' => $this->resource->id,
+            'value' => $this->resource->value,
+            'length' => $this->resource->length,
+            'page_count' => $this->resource->page_count,
+            'url' => Storage::url($this->resource->value),
+            'created_at' => $this->resource->created_at,
+            'updated_at' => $this->resource->updated_at,
         ];
     }
 }

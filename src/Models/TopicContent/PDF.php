@@ -35,6 +35,9 @@ use Smalot\PdfParser\Parser;
  *          type="integer"
  *      )
  * )
+ *
+ * @property int $length
+ * @property int $page_count
  */
 class PDF extends AbstractTopicFileContent
 {

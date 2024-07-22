@@ -11,12 +11,12 @@ class AudioResource extends JsonResource implements TopicTypeResourceContract
     public function toArray($request)
     {
         return [
-            'id' => $this->id,
-            'value' => $this->value,
-            'url' => Storage::url($this->value),
-            'length' => $this->length,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
+            'id' => $this->resource->id,
+            'value' => $this->resource->value,
+            'url' => Storage::url($this->resource->value),
+            'length' => $this->resource->length,
+            'created_at' => $this->resource->created_at,
+            'updated_at' => $this->resource->updated_at,
         ];
     }
 }

@@ -10,15 +10,15 @@ class H5PResource extends JsonResource implements TopicTypeResourceContract
 {
     public function toArray($request)
     {
-        $topic = $this->topic;
+        $topic = $this->resource->topic;
         $destination = sprintf('topic/%d/%s', $topic->id, 'export.h5p');
 
         return [
-            'value' => $this->value,
+            'value' => $this->resource->value,
             // 'content' => H5PContent::find($this->value),
             'h5p_file' => $destination,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
+            'created_at' => $this->resource->created_at,
+            'updated_at' => $this->resource->updated_at,
         ];
     }
 }

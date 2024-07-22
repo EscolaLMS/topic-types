@@ -11,9 +11,9 @@ class PDFResource extends JsonResource implements TopicTypeResourceContract
     public function toArray($request)
     {
         return [
-            'value' => TopicTypeService::sanitizePath($this->value),
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
+            'value' => TopicTypeService::sanitizePath($this->resource->value),
+            'created_at' => $this->resource->created_at,
+            'updated_at' => $this->resource->updated_at,
         ];
     }
 }

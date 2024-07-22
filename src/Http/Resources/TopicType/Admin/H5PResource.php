@@ -11,11 +11,11 @@ class H5PResource extends JsonResource implements TopicTypeResourceContract
     public function toArray($request)
     {
         return [
-            'id' => $this->id,
-            'value' => $this->value,
-            'content' => isset($this->value) ? app(HeadlessH5PServiceContract::class)->getContentSettings($this->value) : null,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
+            'id' => $this->resource->id,
+            'value' => $this->resource->value,
+            'content' => isset($this->resource->value) ? app(HeadlessH5PServiceContract::class)->getContentSettings($this->resource->value) : null,
+            'created_at' => $this->resource->created_at,
+            'updated_at' => $this->resource->updated_at,
         ];
     }
 }

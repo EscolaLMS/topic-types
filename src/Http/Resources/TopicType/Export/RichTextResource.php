@@ -12,10 +12,10 @@ class RichTextResource extends JsonResource implements TopicTypeResourceContract
     public function toArray($request)
     {
         return [
-            'value' => Path::sanitizePathForExport(Markdown::getImagesPathsWithoutImageApi($this->value)),
-            'asset_folder' => $this->topic->getKey(),
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
+            'value' => Path::sanitizePathForExport(Markdown::getImagesPathsWithoutImageApi($this->resource->value)),
+            'asset_folder' => $this->resource->topic->getKey(),
+            'created_at' => $this->resource->created_at,
+            'updated_at' => $this->resource->updated_at,
         ];
     }
 }

@@ -11,13 +11,13 @@ class ImageResource extends JsonResource implements TopicTypeResourceContract
     public function toArray($request)
     {
         return [
-            'id' => $this->id,
-            'value' => $this->value,
-            'url' => $this->value ? Storage::url($this->value) : null,
-            'width' => $this->width,
-            'height' => $this->height,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
+            'id' => $this->resource->id,
+            'value' => $this->resource->value,
+            'url' => $this->resource->value ? Storage::url($this->resource->value) : null,
+            'width' => $this->resource->width,
+            'height' => $this->resource->height,
+            'created_at' => $this->resource->created_at,
+            'updated_at' => $this->resource->updated_at,
         ];
     }
 }

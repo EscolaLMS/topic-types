@@ -10,9 +10,9 @@ class RichTextResource extends JsonResource implements TopicTypeResourceContract
     public function toArray($request)
     {
         return [
-            'id' => $this->id,
-            'value' => $this->value,
-            'length' => $this->length,
+            'id' => $this->resource->id,
+            'value' => $this->resource->value,
+            'length' => $this->resource->length,
         ];
     }
 }
