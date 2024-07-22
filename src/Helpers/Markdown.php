@@ -57,6 +57,7 @@ class Markdown
                     str_contains($filepath, 'api/images/img') => $results[] = $this->convertFilePathByApiPattern($destinationPrefix, $filepath, $destination),
                     str_contains($filepath, 'storage') => $results[] = $this->convertFilePathByStorage($filepath, $destination),
                     str_contains($filepath, 'http') => $results[] = $this->convertFilePathByHttp($destinationPrefix, $filepath, $destination),
+                    default => $results[] = null,
                 };
 
                 return str_replace($match[3], $destination, $match[0]);
