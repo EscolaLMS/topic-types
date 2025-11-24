@@ -124,14 +124,14 @@ class Video extends AbstractTopicFileContent
             basename($this->poster)
         );
         $results = [];
-        if (strpos($this->value, $destinationValue) === false && Storage::exists($this->value)) {
+        if ($this->value && strpos($this->value, $destinationValue) === false && Storage::exists($this->value)) {
             if (!Storage::exists($destinationValue)) {
                 Storage::move($this->value, $destinationValue);
             }
             $results[] = [$this->value, $destinationValue];
             $this->value = $destinationValue;
         }
-        if (strpos($this->poster, $destinationPoster) === false && Storage::exists($this->poster)) {
+        if ($this->poster && strpos($this->poster, $destinationPoster) === false && Storage::exists($this->poster)) {
             if (!Storage::exists($destinationPoster)) {
                 Storage::move($this->poster, $destinationPoster);
             }
