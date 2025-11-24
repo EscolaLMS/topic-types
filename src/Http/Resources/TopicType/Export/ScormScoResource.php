@@ -11,7 +11,7 @@ class ScormScoResource extends JsonResource implements TopicTypeResourceContract
     public function toArray($request)
     {
         $topic = $this->resource->topic;
-        $destination = sprintf('topic/%d/%s', $topic->resource->id, 'export.zip');
+        $destination = sprintf('topic/%d/%s', $topic->id, 'export.zip');
         $scormSco = ScormScoModel::find($this->resource->value);
 
         return [
