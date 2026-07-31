@@ -18,8 +18,8 @@ class TopicTypeService implements TopicTypeServiceContract
         // I hate imperative programming, but I'm so lazy ....
         foreach (Topic::all() as $topic) {
             $topicable = $topic->topicable;
-            if (isset($topicable)) {
-                foreach ($topic->topicable->fixAssetPaths() as $fix) {
+            if (isset($topicable) && method_exists($topicable, 'fixAssetPaths')) {
+                foreach ($topicable->fixAssetPaths() as $fix) {
                     $results[] = $fix;
                 }
             }

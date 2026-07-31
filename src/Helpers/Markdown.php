@@ -44,7 +44,7 @@ class Markdown
         $value = preg_replace_callback(
             '/(!?)\[(.*)\]\s?\(([^)]+)\)/',
             function ($match) use ($destinationPrefix, &$results) {
-                $filepath = $match[3] ?? null;
+                $filepath = $match[3];
                 $basename = basename($filepath);
                 $destination = sprintf($destinationPrefix . '%s', $basename);
 
