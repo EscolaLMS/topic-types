@@ -60,10 +60,20 @@ class Video extends AbstractTopicFileContent
         'length' => 'integer',
     ];
 
+    public const CODEC_RULE_BINDING = 'escolalms.topic-content.video.codec-rule';
+
     public static function rules(): array
     {
+        $valueRules = ['required', 'mimes:mp4,ogg,webm,mov'];
+
+        // Optional codec validation contributed by the Video package (kept out of this
+        // core package to avoid a reverse dependency); resolved by binding key only.
+        if (app()->bound(self::CODEC_RULE_BINDING)) {
+            $valueRules[] = app(self::CODEC_RULE_BINDING);
+        }
+
         return [
-            'value' => ['required', 'mimes:mp4,ogg,webm,mov'],
+            'value' => $valueRules,
             'poster' => ['file', 'image'],
         ];
     }
